@@ -1,0 +1,30 @@
+baseURL = "https://js2264.github.io/Developing-R-Bioconductor-packages/"
+publishDir = "docs"
+languageCode = "en-US"
+defaultContentLanguage = "en"
+
+title = "NGS analysis for gene regulation and epigenomics"
+theme = "hugo-theme-learn"
+metaDataFormat = "yaml"
+defaultContentLanguageInSubdir= true
+
+[params]
+  editURL = "https://github.com/js2264/Developing-R-Bioconductor-packages/blob/master/content/"
+  packageBaseUrl = "Developing-R-Bioconductor-packages/"
+  description = "Developing R/Bioconductor packages"
+  author = "Jacques Serizay"
+  showVisitedLinks = false
+  disableBreadcrumb = true
+  disableNextPrev = true
+  disableLandingPageButton = true
+  titleSeparator = "::"
+  themeVariant = "red"
+  ordersectionsby = "title"
+  disableSearch = true
+  disableInlineCopyToClipBoard = true
+
+[blackfriday]
+  hrefTargetBlank = true
+
+[markup.goldmark.renderer]
+  unsafe= true

@@ -1,0 +1,273 @@
+---
+title: "Ex. 03-1: Processing ChIP-seq data with Nextflow"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+---
+
+## 1. Running the nf-core/chipseq pipeline
+
+### Documentation 
+
+Go to the [nf-core project webpage](https://nf-co.re/) and find the ChIP-seq processing workflow.  
+
+> Have a look at each processing step and understand what each step does. 
+
+> Find the command to execute a test `nf-core/chipseq` workflow.  
+
+> What are the different possible ways to execute this workflow? How are dependencies managed? 
+
+> How do you specify the computing requirements (CPU, memory)?  
+
+> Write a command to test the `nf-core/chipseq` workflow, using 2 CPUs and 8Gb memory (do not run it!). 
+
+Check `nf-core/chipseq` online documentation to see how to set up a test run. The command should look like: 
+
+`nextflow <cmd> <pipeline_name> <options>`
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answer</summary><p>
+```{sh eval = FALSE}
+nextflow run nf-core/chipseq \
+    -profile test,singularity \
+    --max_cpus '2' \
+    --max_memory '8.GB'
+```
+</p></details><br>
+
+### Run pipeline on data 
+
+#### Launching pipeline
+
+This is what the `nf-core/chipseq` pipeline input datasheet looks like for a real set of paired-end ChIP-seq experiments.
+
+```{sh eval = FALSE}
+cat ~/Share/day03/ChIP-seq_design.csv
+```
+
+This sample sheet describes many different ChIP-seq experiments. It would definitely take more than few minutes to process all of these experiments. 
+For now, we can focus on a single experiment. 
+
+Let's subset the original input datasheet to only keep the header, the `Reb1` associated experiment and the `control_ChIP-Exo`. 
+
+> Extract (with `grep`) the lines from the `~/Share/day03/ChIP-seq_design.csv` file containing information about `Reb1` sample or the `ChIP-Exo` control experiments. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answer</summary><p>
+```{sh eval = FALSE}
+grep -P "^group|^Reb1|^control_ChIP-Exo" ~/Share/day03/ChIP-seq_design.csv > ChIP-seq_subset_design.csv
+cat ChIP-seq_subset_design.csv
+```
+</p></details><br>
+
+Now we will run the Nextflow `nf-core/chipseq` workflow on this subset of the experiments. 
+
+> What are the required arguments when running the workflow not as a test?
+
+When running the `nextflow` command for today, several optional arguments will be necessary, for a matter of time: 
+
+```
+--save_trimmed false
+--narrow_peak true
+--skip_plot_fingerprint
+--skip_spp
+```
+
+> What is the purpose of these extra arguments? Check documentation.
+
+On top of that, several bash variables need to be defined: 
+
+```{sh}
+NXF_OPTS='-Xms4g -Xmx8g'
+```
+
+**Make sure you create these variables by copying-pasting the 2 lines hereabove.**
+
+> What is the purpose of these 2 variables? You should find information on the general `nextflow` documentation and elsewhere.
+
+The full command for today is detailed below: 
+
+```{sh eval = FALSE}
+conda activate nextflow 
+nextflow run nf-core/chipseq \
+    -profile singularity \
+    -with-singularity /home/ubuntu/work/singularity/nfcore-chipseq-1.2.2.img \
+    --input ChIP-seq_subset_design.csv \
+    --genome 'R64-1-1' \
+    --max_cpus '2' \
+    --max_memory '4.GB' \
+    --save_trimmed false \
+    --narrow_peak true \
+    --skip_plot_fingerprint \
+    --skip_spp
+```
+
+> Execute it and wait until it finishes. Monitor the progress!
+
+This may take ~10 minutes to run. And as always, feel free to ask any question you may have while waiting.  
+In the meantime, you can also keep reading these instructions. 
+
+#### Launching pipeline for single-end libraries
+
+> Can this nf-core workflow work with single-end sequencing reads? What is the required argument for this to work? Read the documentation online to answer this.  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answer</summary><p>
+<p>
+The only modification to the Nextflow `run` command is the additional `--single_end` parameter. Easy!
+(Don't run it though, the input fastq files are not provided here).
+</p>
+```{sh eval = FALSE}
+NXF_OPTS='-Xms1g -Xmx4g'
+nextflow run nf-core/chipseq \
+    -profile singularity \
+    -with-singularity /home/ubuntu/work/singularity/nfcore-chipseq-1.2.2.img \
+    --input ~/Share/day03/ChIP-seq_design_2.csv \
+    --genome 'R64-1-1' \
+    --single_end \
+    --max_cpus '2' \
+    --max_memory '8.GB' \
+    --save_trimmed false \
+    --narrow_peak true \
+    --skip_plot_fingerprint \
+    --skip_spp
+```
+</p></details><br>
+
+> How the input datasheet should be formatted in this case?  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answer</summary><p>
+```{sh eval = FALSE}
+cat ~/Share/day03/ChIP-seq_design_2.csv
+```
+</p></details><br>
+
+## 2. Inspecting output of Nextflow workflow
+
+We have processed all the ChIP-seq experiments for you. Their output is in `~/Share/day03/nf-chip-results`.  
+
+### Efficiency of adaptor trimming 
+
+Sequenced libraries can sometimes be contaminated with adapters, which are initially ligated to 
+pulled-down DNA fragments to enable fragment hybridization on Illumina sequencing chips. 
+`trim_galore` is a tool designed to remove suched contaminating adapter sequences. It scans `.fastq` files 
+and trim each read if an adapter sequence is found in it. 
+
+`trim_galore` has been executed as a part of the nextflow pipeline.
+
+> Have a look at the `Cse4` fastQC reports before and after adapter trimming with `trim_galore` (generated by nextflow).  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answer</summary><p>
+<p>
+The file you are looking for is in `~/Share/day03/nf-chip-results/multiqc/narrowPeak/multiqc_report.html`.  
+Check the "Overrepresented sequences" in the `FastQC (raw)` and `FastQC (trimmed)` sections.
+</p>
+</p></details><br>
+
+> What type of adapter was found over-represented and at which ratio? 
+
+> How efficient does `trim_galore` seem to be?  
+
+### Other contaminating sequences
+
+> Inspect Hsf1 ChIP-seq library (replicate 2). Has `trim_galore` removed all the adapter sequences?  
+
+> What about other contaminating sequences? 
+
+> Is there any difference in the experimental approaches used to ChIP Hsf1 and Cse4? Check the `ChIP-seq_samples.txt` file in `~/Share/day03/`... Can you speculate on the origin of the contaminating sequences in each sample?  
+
+<details><summary>Show answer</summary>
+<p>
+</p>
+```{sh eval = FALSE}
+cat ~/Share/day03/ChIP-seq_samples.txt | grep -P 'Hsf1|Cse4'
+```
+</details><br>
+
+### ChIP-seq coverage
+
+#### bigWig files
+
+When performing ChIP-seq, one usually tries to profile genome-wide transcription factor binding patterns.  
+One of the most important outputs of this pipeline is the `.bigwig` files. These files are essentially 
+a long array of numerical values representing the (normalized) genome-wide coverage of the ChIP-seq 
+library. 
+
+> How exactly is `.bigWig` file structure? Is there a more "human-readable" version of `.bigWig` files? 
+
+<details><summary>Show answer</summary>
+<p>
+Check out documentation provided by UCSC:  
+See [bigWig](http://genome.ucsc.edu/goldenPath/help/bigWig.html) and [wig](http://genome.ucsc.edu/goldenPath/help/wiggle.html) documentation.
+</p>
+</details><br>
+
+> How comparable is the ChIP-seq coverage, from one `.bigwig` file to another? 
+
+<details><summary>Show answer</summary>
+```{sh eval = FALSE}
+ls -lh ~/Share/day03/nf-chip-results/bwa/mergedLibrary/bigwig/scale/
+```
+</details><br>
+
+> How can you parse a `.bigWig` file in R? 
+
+<details><summary>Show answer</summary>
+<p>
+Check out `rtracklayer` package [import documentation](https://kasperdanielhansen.github.io/genbioconductor/html/rtracklayer_Import.html).</p>
+```{R eval = FALSE}
+x <- rtracklayer::import('~/Share/day03/nf-chip-results/bwa/mergedLibrary/bigwig/Cse4_R1.bigWig')
+y <- rtracklayer::import('~/Share/day03/nf-chip-results/bwa/mergedLibrary/bigwig/Cse4_R1.bigWig', as = 'Rle')
+x
+y
+```
+</details><br>
+
+> What are the advantages of importing `bigwig` files as a `Rle` vector rather than GRanges? 
+
+<details><summary>Show answer</summary>
+```{R eval = FALSE}
+object.size(x)
+object.size(y)
+```
+</details><br>
+
+#### Enrichment over gene features
+
+ChIP-seq coverage over specific gene features (e.g. TSS, TTS or gene bodies) is typically plotted as average signal or as a heatmap. 
+
+> Have a look at the metaplots of different TFs. Can you observe differences in the enrichment profiles for different factors? If so, comment on the differences. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answer</summary><p>
+<p>
+The files you are looking for are in `~/Share/day03/nf-chip-results/bwa/mergedLibrary/deepTools/plotProfile/`.  
+</p>
+</p></details><br>
+
+> Check the profiles for the different control experiments. Comment.
+
+### ChIP-seq patterns
+
+You can also load the tracks directly in IGV and visually inspect them.  
+
+> Do you see differences in the background levels?  
+
+> Visually, can you detect specific peak patterns?
+
+<details><summary>Show answer</summary>
+<p>
+Load all the tracks from `Reja et al., 2015`. Which type of genes have peaks? And which combinations of factors can you identify?  
+Load the tracks from `Cook et al., 2012`. What do you observe?  
+Now load Cse4 track. Is the coverage different? Where is it enriched at? Where is Cse4 supposed to be enriched in nuclei?  
+</p>
+</details><br>
+
+## Conclusions 
+
+> Can you make preliminary conclusions on which factors are co-localizing on the chromatin?  
+
+> How can you decide whether a given ChIP-seq library was successful or not?  
+
+> Can you draw general conclusions on whether a specific ChIP-seq assay may be better than the others?  
+

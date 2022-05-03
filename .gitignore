@@ -1,0 +1,16 @@
+.vscode
+results
+meme_out
+streme_out
+_yapc-files
+*fastq.gz
+*.fa
+*.bw
+*.bam
+*.bam.bai
+*.tab
+*.pptx
+*.gff
+Icon*
+notes.md
+invoice*

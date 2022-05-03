@@ -1,0 +1,170 @@
+---
+title: "Ex. 03-3: Integrating ChIP-seq results together"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+---
+
+## 1. Aggregating all datasets together
+
+Let's load all the peaks in R, using `rtracklayer` package.
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+TFs <- list.files(pattern = '*.narrowPeak$', path = '~/Share/day03/nf-chip-results/bwa/mergedLibrary/macs/narrowPeak')
+TFs <- unique(gsub('_.*', '', TFs))
+require(rtracklayer)
+list_TF_peaks <- lapply(TFs, function(TF) {
+    TF_files <- list.files(pattern = paste0(TF, '.*narrowPeak$'), path = '~/Share/day03/nf-chip-results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE)
+    peaks <- GenomicRanges::reduce(do.call(c, lapply(TF_files, rtracklayer::import)))
+    return(peaks)
+})
+names(list_TF_peaks) <- TFs
+all_peaks <- GenomicRanges::reduce(do.call(c, lapply(
+    list.files(pattern = '.*narrowPeak$', path = '~/Share/day03/nf-chip-results/bwa/mergedLibrary/macs/narrowPeak', full.names = TRUE), rtracklayer::import
+)))
+```
+</p></details><br>
+
+> Is there redundancy in TF binding? 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+length(all_peaks)
+sum(lengths(list_TF_peaks))
+```
+</p></details><br>
+
+> How can we summarize all the TF binding events in a single data.frame? 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+`%over%` <- IRanges::`%over%`
+df <- lapply(names(list_TF_peaks), function(TF) {
+    d <- data.frame(
+        TF = all_peaks %over% IRanges::subsetByOverlaps(all_peaks, list_TF_peaks[[TF]])
+    )
+    colnames(d) <- TF
+    return(d)
+}) 
+df <- do.call(cbind, df)
+#
+dim(df)
+colSums(df)
+table(rowSums(df))
+```
+</p></details><br>
+
+## 2. Calculating an enrichment of binding between pairs of TFs
+
+> Calculate the odds ratio between (1) binding of Hog1 and (2) binding of Hot1, over all the bound peaks  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+TF1 <-'Hot1'
+TF2 <-'Hog1'
+peaks_with_both <- sum(df[, 'Hot1'] & df[, 'Hog1'])
+peaks_with_1 <- sum(df[, 'Hot1'] & !df[, 'Hog1'])
+peaks_with_2 <- sum(!df[, 'Hot1'] & df[, 'Hog1'])
+peaks_with_none <- sum(!df[, 'Hot1'] & !df[, 'Hog1'])
+mat <- matrix(c(peaks_with_both, peaks_with_1, peaks_with_2, peaks_with_none), ncol = 2)
+fisher.test(mat)
+```
+</p></details><br>
+
+> Generalize it for all TFs  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+d <- lapply(TFs,  function(TF1) {
+    df <- data.frame(lapply(TFs, function(TF2) {
+        if (TF1 == TF2) {
+            NA
+        } else {
+            peaks_with_both <- sum(df[, TF1] & df[, TF2])
+            peaks_with_1 <- sum(df[, TF1] & !df[, TF2])
+            peaks_with_2 <- sum(!df[, TF1] & df[, TF2])
+            peaks_with_none <- sum(!df[, TF1] & !df[, TF2])
+            mat <- matrix(c(peaks_with_both, peaks_with_1, peaks_with_2, peaks_with_none), ncol = 2)
+            fisher.test(mat)$estimate
+        }
+    }))
+    colnames(df) <- TFs
+    rownames(df) <- TF1
+    return(df)
+}) 
+d <- do.call(rbind, d)
+```
+</p></details><br>
+
+> Plot results as a heatmap  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+library(tidyverse)
+dd <- d %>% 
+    rownames_to_column('TF1') %>% 
+    gather('TF2', 'odds_ratio', -TF1)
+p <- ggplot(dd, aes(x = TF1, y = TF2, fill = odds_ratio)) + 
+    geom_tile() + 
+    theme_bw() + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
+    scale_fill_gradientn(colours = c('white', 'orange', 'darkred'))
+p
+# Clamp values to a certain range
+q_max <- quantile(dd$odds_ratio, 0.95, na.rm = TRUE)
+dd$odds_ratio[dd$odds_ratio > q_max] <- q_max
+# Order rows
+d[is.na(d)] <- 0
+o <- hclust(dist(d))$order
+o <- hclust(dist(t(df)))$order
+dd %<>% mutate(TF1 = factor(TF1, levels = TFs[o])) %>% 
+    mutate(TF2 = factor(TF2, levels = TFs[o]))
+# Re-plot
+p <- ggplot(dd, aes(x = TF1, y = TF2, fill = odds_ratio)) + 
+    geom_tile() + 
+    theme_bw() + 
+    theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5)) + 
+    scale_fill_gradientn(colours = c('white', 'orange', 'darkred'))
+p
+```
+</p></details><br>
+
+> Plot results as a graph  
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+d_counts <- lapply(TFs,  function(TF1) {
+    vec <- data.frame(lapply(TFs, function(TF2) {
+        ifelse(
+            which(TFs == TF2) <= which(TFs == TF1), 
+            0, 
+            sum(df[, TF1] & df[, TF2]) / sum(df[, TF2] | df[, TF1])
+        )
+    }))
+    names(vec) <- TFs
+    return(vec)
+}) 
+d_counts <- do.call(rbind, d_counts)
+row.names(d_counts) <- TFs
+#
+dd <- d_counts %>% 
+    rownames_to_column('TF1') %>% 
+    gather('TF2', 'weight', -TF1) %>% 
+    # mutate(weight = ifelse(weight < 0.1, 0, weight)) %>% 
+    filter(weight > 0.15 & weight < 1) %>% 
+    filter(TF1 != 'Rsc9-TAP' & TF2 != 'Rsc9-TAP')
+gr <- igraph::graph_from_data_frame(dd, directed = FALSE)
+plot(gr)
+```
+</p></details><br>
+
+## Conclusions
+
+> Can you speculate on how the transcription factors combine on the chromatin? 
+
+> What was your initial hypothesis regarding the different types of peak sets (Ex. 03-1)? Does this match your observations here? 
