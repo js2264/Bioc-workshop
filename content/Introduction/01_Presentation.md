@@ -12,9 +12,9 @@ This course will be held online.
 
 ## Overview
 
-This course aims at making R/Bioconductor package development at one's reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using R/Bioconductor packages and who wish to expand their programatic toolkit. 
+This course aims at making `Bioconductor` package development at one's reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using `R/Bioconductor` packages and who wish to expand their programatic toolkit. 
 
-Overall, this course will help the attendees gain accurate insights in fundamental notions required for proper R/Bioconductor package development. We will cover key theory concepts about package development and Bioconductor ecosystem, supported by a range of demonstration and exercises, to get a complete understanding of all the steps of package development. 
+Overall, this course will help the attendees gain accurate insights in the fundamental notions required for proper `R/Bioconductor` package development. We will cover key theory concepts about package development and `Bioconductor` ecosystem, supported by a range of demonstration and exercises, to get a complete understanding of all the steps of package development. 
 
 Throughout this workshop, we will put an emphasis on the best practices for developing a package embedded in the `R/Bioconductor` ecosystem. 
 
@@ -51,8 +51,8 @@ Because he originally comes from the bench, the examples demonstrated in this co
 
 At the end of this course, you should be able to:
 
-- Leverage `Bioconductor` principle of interoperability (a.k.a "do-not-reinvent-the-wheel!")
-- Write sets of interconnected functions for genomics
+- Leverage `Bioconductor` principles of interoperability (a.k.a "do-not-reinvent-the-wheel!")
+- Write sets of interconnected functions for genomic data
 - Document and test functions
 - Manage package dependencies 
 - Manage package versions

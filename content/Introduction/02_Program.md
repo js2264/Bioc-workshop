@@ -11,37 +11,35 @@ Classes are from:
 
 ## Monday:
 
-### Lecture 1
-
-### Lab 1
+- Writing functions
+- Introduction to package building
+- Local development with devtools
+- Introduction to Github Actions and Continuous Integration
 
 --- 
 
 ## Tuesday: 
 
-### Lecture 2
-
-### Lab2
+- Documenting functions
+- Testing functions and pacakge
+- Managing dependencies & namespace
 
 --- 
 
 ## Wednesday: 
 
-### Lecture 3
-
-### Lab 3
+- Introduction to `Bioconductor`: interoperability and other key notions
+- Creating custom `Bioconductor` objects
+- Including data to packages
 
 ## Thursday: 
 
-### Lecture 4
-
-### Lab 4
+- Package vignettes: demonstrating how to use your package
+- Submitting/releasing/maintaining a `Bioconductor` package
 
 --- 
 
 ## Friday: 
 
-### Lecture 5
-
-### Lab 5
-
+- Other types of `Bioconductor` packages: datasets, workflows, ...
+- Disseminating your package: package support website, JOSS, rOpenSci...
