@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.81.0" />
+    <meta name="description" content="Developing R/Bioconductor packages">
+<meta name="author" content="Jacques Serizay">
+
+    <link rel="icon" href="/Developing-R-Bioconductor-packages/images/favicon.png" type="image/png">
+
+    <title>1. Day 01 :: NGS analysis for gene regulation and epigenomics</title>
+
+    
+    <link href="/Developing-R-Bioconductor-packages/css/nucleus.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/fontawesome-all.min.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/hybrid.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/featherlight.min.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/perfect-scrollbar.min.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/auto-complete.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/atom-one-dark-reasonable.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/theme.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/hugo-theme.css?1651653728" rel="stylesheet">
+    
+    <link href="/Developing-R-Bioconductor-packages/css/theme-red.css?1651653728" rel="stylesheet">
+    
+    
+
+    <script src="/Developing-R-Bioconductor-packages/js/jquery-3.3.1.min.js?1651653728"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/Developing-R-Bioconductor-packages/day01/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo">
+
+
+
+</a>
+
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/" title=" Developing R/Bioconductor packages" class="dd-item
+        
+        
+        
+        ">
+      <a href="/Developing-R-Bioconductor-packages/introduction/">
+           Developing R/Bioconductor packages
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/01_presentation/" title="1. Presentation" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/01_presentation/">
+        1. Presentation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/02_program/" title="2. Program" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/02_program/">
+        2. Program
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/03_contacts/" title="3. Contacts" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/03_contacts/">
+        3. Contacts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/04_prerequisites/" title="4. Prerequisites and required local config" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/04_prerequisites/">
+        4. Prerequisites and required local config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/Developing-R-Bioconductor-packages/day01/" title="1. Day 01" class="dd-item
+        parent
+        active
+        
+        ">
+      <a href="/Developing-R-Bioconductor-packages/day01/">
+          1. Day 01
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/Developing-R-Bioconductor-packages/extra-resources/" title="Extra resources" class="dd-item
+        
+        
+        
+        ">
+      <a href="/Developing-R-Bioconductor-packages/extra-resources/">
+          Extra resources
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <center>
+
+    <p>Created by J. Serizay and A. Bignaud</p>
+    <p>Copyright 2022</p>
+
+</center>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              1. Day 01
+            </h1>
+          
+
+        
+
+
+
+	<hr>
+<h2 id="presentations-for-hahahugoshortcode-s0-hbhb">Presentations for Day 01</h2>
+<ul>
+<li>Introduction to Hi-C <strong>[40min]</strong>: <a href="/Developing-R-Bioconductor-packages/
+Presentations/day01/intro_hic.html" target="_blank">HTML</a>
+ | <a href="/Developing-R-Bioconductor-packages/
+Presentations/day01/NGS_analysis.pdf" target="_blank">PDF</a>
+</li>
+<li>Streamlining NGS processing pipelines with Snakemake <strong>[20min]</strong>: <a href="/Developing-R-Bioconductor-packages/
+Presentations/day01/snakemake_pipelines.html" target="_blank">HTML</a>
+ | <a href="/Developing-R-Bioconductor-packages/
+Presentations/day01/snakemake_pipelines.pdf" target="_blank">PDF</a>
+</li>
+</ul>
+<hr>
+<h2 id="demonstrations-for-hahahugoshortcode-s5-hbhb">Demonstrations for Day 01</h2>
+<ul>
+<li>
+<p>Processing Hi-C data from the start <strong>[60min]</strong> [<a href="/Developing-R-Bioconductor-packages/
+Exercices/day01/1-1_processing_hic.html" target="_blank">HTML</a>
+ | <a href="/Developing-R-Bioconductor-packages/
+Exercices/day01/1-1_processing_hic.Rmd" target="_blank">Rmd</a>
+]</p>
+<p>You will be working with published wild type yeast (<em>S. cerevisiae</em>) data from <a href="https://www.cell.com/molecular-cell/fulltext/S1097-2765%2820%2930040-X" target="_blank">Dauban, L. et al., 2020</a>
+. The dataset we will use is subsampled from <a href="https://www.ncbi.nlm.nih.gov/sra/SRR10687276[accn]" target="_blank">SRR10687276</a>
+.</p>
+</li>
+<li>
+<p>Improving the workflow with snakemake <strong>[60min]</strong> [<a href="/Developing-R-Bioconductor-packages/
+Exercices/day01/1-2_snakemake_pipeline.html" target="_blank">HTML</a>
+ | <a href="/Developing-R-Bioconductor-packages/
+Exercices/day01/1-2_snakemake_pipeline.Rmd" target="_blank">Rmd</a>
+]</p>
+<p>You will be streamlining the process from the previous exercise to make it more reproducible, easily tweak parameters or add new samples. We will be adding another yeast library in M phase (<a href="https://www.ncbi.nlm.nih.gov/sra/SRR8769549[accn]" target="_blank">SRR8769549</a>
+) and doing basic comparisons between the conditions.</p>
+</li>
+</ul>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/Developing-R-Bioconductor-packages/js/clipboard.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/perfect-scrollbar.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/perfect-scrollbar.jquery.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/jquery.sticky.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/featherlight.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/highlight.pack.js?1651653728"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/Developing-R-Bioconductor-packages/js/modernizr.custom-3.6.0.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/learn.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/hugo-learn.js?1651653728"></script>
+    
+        
+            <script src="/Developing-R-Bioconductor-packages/mermaid/mermaid.js?1651653728"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105947713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>

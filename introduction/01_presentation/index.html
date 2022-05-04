@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.81.0" />
+    <meta name="description" content="Developing R/Bioconductor packages">
+<meta name="author" content="Jacques Serizay">
+
+    <link rel="icon" href="/Developing-R-Bioconductor-packages/images/favicon.png" type="image/png">
+
+    <title>1. Presentation :: NGS analysis for gene regulation and epigenomics</title>
+
+    
+    <link href="/Developing-R-Bioconductor-packages/css/nucleus.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/fontawesome-all.min.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/hybrid.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/featherlight.min.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/perfect-scrollbar.min.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/auto-complete.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/atom-one-dark-reasonable.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/theme.css?1651653728" rel="stylesheet">
+    <link href="/Developing-R-Bioconductor-packages/css/hugo-theme.css?1651653728" rel="stylesheet">
+    
+    <link href="/Developing-R-Bioconductor-packages/css/theme-red.css?1651653728" rel="stylesheet">
+    
+    
+
+    <script src="/Developing-R-Bioconductor-packages/js/jquery-3.3.1.min.js?1651653728"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/Developing-R-Bioconductor-packages/introduction/01_presentation/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo">
+
+
+
+</a>
+
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/" title=" Developing R/Bioconductor packages" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/Developing-R-Bioconductor-packages/introduction/">
+           Developing R/Bioconductor packages
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/01_presentation/" title="1. Presentation" class="dd-item active">
+        <a href="/Developing-R-Bioconductor-packages/introduction/01_presentation/">
+        1. Presentation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/02_program/" title="2. Program" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/02_program/">
+        2. Program
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/03_contacts/" title="3. Contacts" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/03_contacts/">
+        3. Contacts
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/Developing-R-Bioconductor-packages/introduction/04_prerequisites/" title="4. Prerequisites and required local config" class="dd-item ">
+        <a href="/Developing-R-Bioconductor-packages/introduction/04_prerequisites/">
+        4. Prerequisites and required local config
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/Developing-R-Bioconductor-packages/day01/" title="1. Day 01" class="dd-item
+        
+        
+        
+        ">
+      <a href="/Developing-R-Bioconductor-packages/day01/">
+          1. Day 01
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/Developing-R-Bioconductor-packages/extra-resources/" title="Extra resources" class="dd-item
+        
+        
+        
+        ">
+      <a href="/Developing-R-Bioconductor-packages/extra-resources/">
+          Extra resources
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <center>
+
+    <p>Created by J. Serizay and A. Bignaud</p>
+    <p>Copyright 2022</p>
+
+</center>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              1. Presentation
+            </h1>
+          
+
+        
+
+
+<h2 id="dates">Dates</h2>
+<p><em>General topic: Developing R/Bioconductor packages</em></p>
+<h2 id="where">Where</h2>
+<p>This course will be held online.</p>
+<h2 id="overview">Overview</h2>
+<p>This course aims at making <code>Bioconductor</code> package development at one&rsquo;s reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using <code>R/Bioconductor</code> packages and who wish to expand their programatic toolkit.</p>
+<p>Overall, this course will help the attendees gain accurate insights in the fundamental notions required for proper <code>R/Bioconductor</code> package development. We will cover key theory concepts about package development and <code>Bioconductor</code> ecosystem, supported by a range of demonstration and exercises, to get a complete understanding of all the steps of package development.</p>
+<p>Throughout this workshop, we will put an emphasis on the best practices for developing a package embedded in the <code>R/Bioconductor</code> ecosystem.</p>
+<h2 id="format">Format</h2>
+<p>The course is structured in modules over five days. Each day will contain a mix of formal lectures, demonstration, and hands-on exercises.</p>
+<ul>
+<li>Formal lectures will cover the key theory required to understand the principles of scRNA-seq analysis (~2h).</li>
+<li>Following these lectures, practical examples will be shown to illustrate how to translate the acquired knowledge into a real-life <code>R/Bioconductor</code> package. At this stage, trainees will get acquainted with state-of-the-art <code>Bioconductor</code> ecosystem as well as the best coding practices in bioinformatics.</li>
+<li>During the rest of the daily sessions, trainees will work by themselves, following
+guided exercises to practice their package development skills. Hints and solution are provided for each exercise. The exercises will mainly focus on specific concepts introducted earlier that day.</li>
+</ul>
+<p>Office hours will take place during the last hour of the exercises. An instructor will be available to answer individual questions related to daily exercises.</p>
+<p>A Slack channel will also be available so that Q&amp;A are available for everybody.</p>
+<h2 id="targeted-audience-and-required-background">Targeted audience and required background</h2>
+<p>The material is suitable both for experimentalists who want to learn more about <code>R/Bioconductor</code> ecosystem as well as computational biologists who want to expand their set of coding skills. However, the course will be mostly beneficial to those who have already been familiarized to the R environment.</p>
+<p>The requirements for this course are:</p>
+<ol>
+<li>Working knowledge of Unix / command line interface (managing files, running programs, reading manuals!). Basic bash commands (<code>cd</code>, <code>ls</code>, <code>cp</code>, &hellip;) and CLI usage will <em>not</em> be covered in this course. We advice attendees to not register if they lack fundamental experience in CLI;</li>
+<li>Knowledge of next-generation sequencing data processing and formats;</li>
+<li>Programming experience in <code>R</code> (writing a function, basic I/O operations, variable types, using packages). <code>Bioconductor</code> experience is a plus, though is not formally required</li>
+</ol>
+<h2 id="about-the-instructor">About the instructor</h2>
+<p>Jacques owns a PhD in Genomics from Cambridge University (UK). His formal training is in experimental biology, which means that he understands the challenges and issues associated with bench troubleshooting and optimization. However, his primary focus shifted towards large-scale genomic analysis years ago, and he now has a deep knowledge of the range of genome-wide datasets (bulk and single-cell!) that are available out there.</p>
+<p>Because he originally comes from the bench, the examples demonstrated in this course will be designed from &ldquo;real-life&rdquo; situations. You may even find yourself using the package you will create during this course for your own analyses!</p>
+<h2 id="learning-outcomes">Learning outcomes</h2>
+<p>At the end of this course, you should be able to:</p>
+<ul>
+<li>Leverage <code>Bioconductor</code> principles of interoperability (a.k.a &ldquo;do-not-reinvent-the-wheel!&quot;)</li>
+<li>Write sets of interconnected functions for genomic data</li>
+<li>Document and test functions</li>
+<li>Manage package dependencies</li>
+<li>Manage package versions</li>
+<li>Manage package continuous integration</li>
+<li>Build a dedicated website for your package</li>
+<li>Submitting/releasing/maintaining your package</li>
+<li>Disseminating your package (publish it!)</li>
+</ul>
+<hr>
+<h2 id="instructors">Instructors</h2>
+<p>Dr. Jacques Serizay</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/Developing-R-Bioconductor-packages/js/clipboard.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/perfect-scrollbar.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/perfect-scrollbar.jquery.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/jquery.sticky.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/featherlight.min.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/highlight.pack.js?1651653728"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/Developing-R-Bioconductor-packages/js/modernizr.custom-3.6.0.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/learn.js?1651653728"></script>
+    <script src="/Developing-R-Bioconductor-packages/js/hugo-learn.js?1651653728"></script>
+    
+        
+            <script src="/Developing-R-Bioconductor-packages/mermaid/mermaid.js?1651653728"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105947713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
+
