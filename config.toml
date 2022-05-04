@@ -1,4 +1,4 @@
-baseURL = "https://js2264.github.io/Developing-R-Bioconductor-packages/"
+baseURL = "https://js2264.github.io/Bioc-workshop/"
 publishDir = "docs"
 languageCode = "en-US"
 defaultContentLanguage = "en"
@@ -9,8 +9,8 @@ metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
 
 [params]
-  editURL = "https://github.com/js2264/Developing-R-Bioconductor-packages/blob/master/content/"
-  packageBaseUrl = "Developing-R-Bioconductor-packages/"
+  editURL = "https://github.com/js2264/Bioc-workshop/blob/master/content/"
+  packageBaseUrl = "Bioc-workshop/"
   description = "Developing R/Bioconductor packages"
   author = "Jacques Serizay"
   showVisitedLinks = false

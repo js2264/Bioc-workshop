@@ -19,8 +19,6 @@ domains that specifically recognize a particular DNA sequence, based on their fo
 
 Have a look at MEME homepage: 
 
-[![](.img/2020-12-23-10-48-51.png)](http://meme-suite.org/)
-
 > Which tool do you think will be useful in our case? 
 
 For an extensive explanation of MEME internal computation steps, you can read the excellent in-depth presentation 

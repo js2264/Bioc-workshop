@@ -12,7 +12,7 @@ day: "Day 01"
 
 ---
 
-## Exercises for {{< param "day" >}}
+## Demonstrations for {{< param "day" >}}
 
 - Processing Hi-C data from the start **\[60min\]** [[HTML](/{{<myPackageUrl>}}Exercices/day01/1-1_processing_hic.html) | [Rmd](/{{<myPackageUrl>}}Exercices/day01/1-1_processing_hic.Rmd)]
 

@@ -1,7 +1,7 @@
 on:
   push:
      branches:
-       - master
+       - main
 
 name: build_and_goto_gh_pages
 
@@ -26,5 +26,5 @@ jobs:
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITH_PAT }}
           publish_dir: ./docs
