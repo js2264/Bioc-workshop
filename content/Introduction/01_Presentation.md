@@ -4,7 +4,7 @@ title: "1. Presentation"
 
 ## Dates
 
-_General topic: Developing R/Bioconductor packages_
+_General topic: Developing R/Bioconductor packages for bioinformatics_
 
 ## Where
 
@@ -37,15 +37,10 @@ The material is suitable both for experimentalists who want to learn more about 
 
 The requirements for this course are: 
 
-1. Working knowledge of Unix / command line interface (managing files, running programs, reading manuals!). Basic bash commands (`cd`, `ls`, `cp`, ...) and CLI usage will _not_ be covered in this course. We advice attendees to not register if they lack fundamental experience in CLI; 
-2. Knowledge of next-generation sequencing data processing and formats; 
-3. Programming experience in `R` (writing a function, basic I/O operations, variable types, using packages). `Bioconductor` experience is a plus, though is not formally required
-
-## About the instructor 
-
-Jacques owns a PhD in Genomics from Cambridge University (UK). His formal training is in experimental biology, which means that he understands the challenges and issues associated with bench troubleshooting and optimization. However, his primary focus shifted towards large-scale genomic analysis years ago, and he now has a deep knowledge of the range of genome-wide datasets (bulk and single-cell!) that are available out there. 
-
-Because he originally comes from the bench, the examples demonstrated in this course will be designed from "real-life" situations. You may even find yourself using the package you will create during this course for your own analyses!
+1. Knowledge of next-generation sequencing data processing and formats; 
+2. Basic programming experience in `R` (writing a function, variable types, loading packages);
+3. Working knowledge of Unix / command line interface (managing files, running programs, reading manuals!) is recommended (basic bash commands `cd`, `ls`, `cp`, ...), though is not formally required;
+4. `Bioconductor` experience is a plus, though is not formally required.
 
 ## Learning outcomes
 
@@ -63,6 +58,9 @@ At the end of this course, you should be able to:
 
 --- 
 
-## Instructors
+## About the instructor 
 
-Dr. Jacques Serizay
+Jacques owns a PhD in Genomics from Cambridge University (UK). His formal training is in experimental biology, which means that he understands the challenges and issues associated with bench troubleshooting and optimization. However, his primary focus shifted towards large-scale genomic analysis years ago, and he now has a deep knowledge of the range of genome-wide datasets (bulk and single-cell!) that are available out there. 
+
+Because he originally comes from the bench, the examples demonstrated in this course will be designed from "real-life" situations. You may even find yourself using the package you will create during this course for your own analyses!
+
