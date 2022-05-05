@@ -12,10 +12,10 @@
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://js2264.github.io/Bioc-workshop/introduction/01_presentation/</guid>
-      <description>Dates General topic: Developing R/Bioconductor packages
+      <description>Dates General topic: Developing R/Bioconductor packages for bioinformatics
 Where This course will be held online.
 Overview This course aims at making Bioconductor package development at one&amp;rsquo;s reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using R/Bioconductor packages and who wish to expand their programatic toolkit.
-Overall, this course will help the attendees gain accurate insights in the fundamental notions required for proper R/Bioconductor package development. We will cover key theory concepts about package development and Bioconductor ecosystem, supported by a range of demonstration and exercises, to get a complete understanding of all the steps of package development.</description>
+Overall, this course will help the attendees gain accurate insights in the fundamental notions required for proper R/Bioconductor package development.</description>
     </item>
     
     <item>
