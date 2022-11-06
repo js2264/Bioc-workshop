@@ -11,6 +11,7 @@ Classes are from:
 
 ## Monday:
 
+- Development environment (R, RStudio, dev. packages)
 - Writing functions
 - Introduction to package building
 - Local development with devtools

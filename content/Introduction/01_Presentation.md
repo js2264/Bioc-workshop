@@ -22,10 +22,10 @@ Throughout this workshop, we will put an emphasis on the best practices for deve
 
 The course is structured in modules over five days. Each day will contain a mix of formal lectures, demonstration, and hands-on exercises. 
 
-- Formal lectures will cover the key theory required to understand the principles of scRNA-seq analysis (~2h).
+- Formal lectures will cover the key theory required to understand the principles of package development (~2h).
 - Following these lectures, practical examples will be shown to illustrate how to translate the acquired knowledge into a real-life `R/Bioconductor` package. At this stage, trainees will get acquainted with state-of-the-art `Bioconductor` ecosystem as well as the best coding practices in bioinformatics. 
 - During the rest of the daily sessions, trainees will work by themselves, following 
-guided exercises to practice their package development skills. Hints and solution are provided for each exercise. The exercises will mainly focus on specific concepts introducted earlier that day. 
+guided exercises to practice their package development skills. Hints and solution are provided for each exercise. The exercises will mainly focus on specific concepts introduced earlier that day. 
 
 Office hours will take place during the last hour of the exercises. An instructor will be available to answer individual questions related to daily exercises. 
 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title> Lectures on NGS analysis for gene regulation and epigenomics</title>
+    <link>https://js2264.github.io/Bioc-workshop/introduction/</link>
+    <description>Recent content in  Lectures on NGS analysis for gene regulation and epigenomics</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="https://js2264.github.io/Bioc-workshop/introduction/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>1. Presentation</title>
+      <link>https://js2264.github.io/Bioc-workshop/introduction/01_presentation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/Bioc-workshop/introduction/01_presentation/</guid>
+      <description>Dates General topic: Developing R/Bioconductor packages for bioinformatics
+Where This course will be held online.
+Overview This course aims at making Bioconductor package development at one&amp;rsquo;s reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using R/Bioconductor packages and who wish to expand their programatic toolkit.
+Overall, this course will help the attendees gain accurate insights in the fundamental notions required for proper R/Bioconductor package development.</description>
+    </item>
+    
+    <item>
+      <title>2. Program</title>
+      <link>https://js2264.github.io/Bioc-workshop/introduction/02_program/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/Bioc-workshop/introduction/02_program/</guid>
+      <description>Classes are from:
+2 to 8 pm Paris time. 1 to 7 pm London time. 8 am to 2 pm NY time. 5 am to 11 am SF time. Monday: Development environment (R, RStudio, dev. packages) Writing functions Introduction to package building Local development with devtools Introduction to Github Actions and Continuous Integration Tuesday: Documenting functions Testing functions and pacakge Managing dependencies &amp;amp; namespace Wednesday: Introduction to Bioconductor: interoperability and other key notions Creating custom Bioconductor objects Including data to packages Thursday: Package vignettes: demonstrating how to use your package Submitting/releasing/maintaining a Bioconductor package Friday: Other types of Bioconductor packages: datasets, workflows, &amp;hellip; Disseminating your package: package support website, JOSS, rOpenSci&amp;hellip; </description>
+    </item>
+    
+    <item>
+      <title>3. Contacts</title>
+      <link>https://js2264.github.io/Bioc-workshop/introduction/03_contacts/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/Bioc-workshop/introduction/03_contacts/</guid>
+      <description>Contacts Jacques Serizay: jacques.serizay@pasteur.fr </description>
+    </item>
+    
+    <item>
+      <title>4. Prerequisites and required local config</title>
+      <link>https://js2264.github.io/Bioc-workshop/introduction/04_prerequisites/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/Bioc-workshop/introduction/04_prerequisites/</guid>
+      <description>R version You will need the R-devel version (R4.3) for this workshop!
+Find instructions on how to install it here:
+macOS Windows Linux R packages Bioconductor: version 3.17 rtracklayer Biostrings SummarizedExperiment RStudio Latest version ideally</description>
+    </item>
+    
+  </channel>
+</rss>

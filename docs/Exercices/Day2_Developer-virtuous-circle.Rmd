@@ -1,0 +1,439 @@
+---
+title: "Day 2: The developer virtuous circle"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../custom.css
+---
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+library(devtools)
+library(usethis)
+library(biocthis)
+```
+
+- **Overarching goal:** Getting started with package development
+- **Specific aims:** 
+
+    - Kickstart an R package 
+    - Write and document functions
+    - Check package 
+    
+**At any time, if you are lost or do not understand how functions in the**
+**proposed solution work, type `?<function>` in the R console **
+**and a help menu will appear.**
+
+## 0. Proposed package functionalities {#package-functions}
+
+In this section, we are going to create a package which aims at: 
+
+- Importing `.bigwig` coverage track files as well as `.bed` files of genomic coordinates
+- Filtering imported `GRanges` to make sure they all are contained within the coverage tracks 
+- Calculating the average (+/- quantiles) of coverage of the `.bigwig` file over the `GRanges` of interest
+- Plot a plot of the aggregated `.bigwig` coverage over the `GRanges` of interest 
+
+Eventually, the functions shipped in this package should be able to turn a pair of `.bigwig`/`.bed` files into this type of plot:
+
+...
+
+## 1. Starting a new package
+
+To start developing a new package, one may want to make sure all useful 
+developer resources are already set-up. 
+
+> Make sure to install the developer toolkit packages!
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+install.packages("remotes")
+remotes::install_cran(
+    c(
+        "available",
+        "devtools",
+        "rcmdcheck", 
+        "knitr",
+        "pkgdown",
+        "RefManageR",
+        "rmarkdown",
+        "rstudioapi",
+        "sessioninfo",
+        "styler",
+        "usethis",
+        "gert"
+    )
+)
+BiocManager::install(c("BiocStyle", "BiocCheck", "biocthis"))
+```
+</p></details><br>
+
+Now the time has come to create your very first package! But first, you need to make sure that your package name is available!
+
+> To keep a coherent cohorte, we'll create a package named `<YOURNAME>TestPackage`. Verify that this name is appropriate with the `available` package.
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+available::available("JacquesTestPackage")
+```
+</p></details><br>
+
+> If this name is available, let's create your package! Make sure to use `create_package()` function from `devtools`.
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+library(devtools)
+create_package("JacquesTestPackage")
+```
+</p></details><br>
+
+When creating your package, `devtools`+`RStudio` combo automatically opens a new `RStudio` window, with the package's project automatically activated. Navigate to your package RStudio project window and re-open this instruction sheet. 
+
+> Make sure you're in the right project using the appropriate function from `rstudioapi` package.
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+rstudioapi::getActiveProject()
+```
+</p></details><br>
+
+Explore the newly created folder architecture. Do you recognize all the files and directories? 
+
+The DESCRIPTION file automatically created does not exactly match Bioconductor requirements. You should replace it by a better-fitted DESCRIPTION file. 
+
+> Find the appropriate function from `biocthis` to replace the current DESCRIPTION file by one fitting BIOCONDUCTOR's requirements. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+biocthis::use_bioc_description()
+```
+</p></details><br>
+
+Don't forget to manually edit the important fields from your new DESCRIPTION file: Title & Author. The remaining fields will be filled out later on. 
+
+> Now add a LICENSE file to specify under which license you wish to publish your package. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+usethis::use_mit_license()
+```
+</p></details><br>
+
+A nice touch is to systematically provide a README file. This provides a good overview of your package when browsed e.g. in GitHub, and for non-R specialists, who don't necessarily know about DESCRIPTION and vignettes. And since you are developing an R package, let's stick with the Rmd format for your README.
+
+> What are the benefits of having a `README.Rmd` file? 
+
+> Which function from `biocthis` can create a `.Rmd` README file? 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+biocthis::use_bioc_readme_rmd()
+```
+</p></details><br>
+
+That being said, package submission requires that a `REAMDE.md` file only is present in the repository. A way to provide this is to 1) `devtools::build_readme()` to parse `README.Rmd` into `README.md` (with R chunks processed!), and 2) add `README.Rmd` to .gitignore. 
+
+> Parse your `README.Rmd` into `README.md` and check the differences. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+devtools::load_all('.')
+devtools::build_readme()
+rstudioapi::documentOpen("README.Rmd")
+rstudioapi::documentOpen("README.md")
+```
+</p></details><br>
+
+A bunch of extra useful commands from `bioc/usethis` can be performed at this stage, e.g. to add a NEWS file, a Code of Conduct, a citation file, etc... Beware, each command creates/modify one/several files. Pay attention to the comments printed in the R console!
+
+> Run each of the following commands one by one and make sure to fulfill each required action highlighted in the R console. 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r}
+biocthis::use_bioc_news_md()  ## To add a NEWS.md file
+biocthis::use_bioc_coc()  ## To add a .github/CODE_OF_CONDUCT.md file
+biocthis::use_bioc_support()  ## To add a .github/SUPPORT.md file
+biocthis::use_bioc_issue_template()  ## To add a .github/ISSUE_TEMPLATE/issue_template.md file
+biocthis::use_bioc_citation()  ## To add a inst/CITATION file
+usethis::use_lifecycle_badge("Experimental")  ## To add a "Experimental" badge to your README.Rmd
+devtools::build_readme()  ## To rebuild README.md
+```
+</p></details><br>
+
+## 2. Write functions to populate your package.
+
+To write your first package function, you can either create an `R/<name>.R` file manually, or run `usethis::use_r(name)`.
+
+Now is time to write! Refer to the functionalities (descriped in [Section 0](#package-functions)) that we are aiming to provide in this package, and start writing 4 to 5 functions which, together, can fulfill these functionalities. Briefly, we suggest to design functions to: 
+
+1. `import` a coverage track and a set of genomic features (scaled to a fixed width) together in a list;
+2. `filter` the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);
+3. `compute` the mean coverage and its confidence interval, for each position within the features' width;
+4. `plot` the results with `ggplot2`.
+
+...
+
+The content of the proposed function files is shown [at the end of this instruction sheet](#answers2). These files provides an example of implementation to fulfill our package's requirements. 
+
+
+## 3. Add function documentation
+
+Write oxygen tags (`title`, `description`, `@param`, `@return`, ...) for each function. 
+Don't forget to add runnable examples!  
+
+Once you have documented each function, you can 1) regenerate the documentation and 2) run examples to make sure everything is ok. 
+
+```{r}
+document()
+run_examples()
+```
+
+...
+
+The content of the proposed function files is shown [at the end of this instruction sheet](#answers2). These files provides an example of implementation to fulfill our package's requirements, with documentation added.
+
+## 4. Check your package!
+
+```{r}
+check()
+BiocCheck()
+rcmdcheck::rcmdcheck()
+```
+
+## Session Info
+
+```{r eval = TRUE}
+sessionInfo()
+```
+
+---
+
+## Section 2 answers {#answers2}
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answers</summary><p>
+> Content of `R/import.R`
+
+```{r}
+importFiles <- function(coverage_path, features_path, width) {
+    cov <- rtracklayer::import(coverage_path, as = "Rle")
+    feat <- rtracklayer::import(features_path)
+    feat <- GenomicRanges::resize(feat, width = width, fix = 'center')
+    return(
+        list(coverage = cov, features = feat)
+    )
+}
+```
+
+> Content of `R/filter`
+
+```{r}
+filterGRanges <- function(l) {
+    covered_genome <- GenomicRanges::reduce(as(l[['coverage']], 'GRanges'))
+    n_feats <- length(l[['features']])
+    l[['features']] <- IRanges::subsetByOverlaps(l[['features']], covered_genome, type = "within")
+    message(length(l[['features']]), ' features retained out of ', n_feats)
+    return(l)
+}
+```
+
+> Content of `R/compute`
+
+```{r}
+computeCoverage <- function(l) {
+    feats <- l[['features']]
+    x <- as.matrix(l[['coverage']][l[['features']]]) |> as.data.frame()
+    scores <- t(x) |>
+        tibble::as_tibble() |>
+        dplyr::mutate(coord = seq(-ncol(x)/2, ncol(x)/2-1, 1)) |>
+        tidyr::pivot_longer(cols = -coord, names_to = 'peak', values_to = 'cov') |>
+        dplyr::group_by(coord) |>
+        dplyr::summarize(
+            score = mean(cov, na.rm = TRUE),
+            median = median(cov, na.rm = TRUE),
+            sd = sd(cov, na.rm = TRUE),
+            count = dplyr::n()
+        ) |>
+        dplyr::mutate(
+            se = sd/sqrt(count),
+            ci_low = score - qt(1 - (0.05 / 2), count - 1) * se,
+            ci_high = score + qt(1 - (0.05 / 2), count - 1) * se
+        )
+    return(scores)
+}
+```
+
+> Content of `R/plot`
+
+```{r}
+plotCoverage <- function(x) {
+    p <- ggplot(x, mapping = aes(
+        x = coord, y = score, ymin = ci_low, ymax = ci_high
+    )) +
+        geom_line() +
+        geom_ribbon(alpha = 0.1)
+    return(p)
+}
+```
+</p></details><br>
+
+## Section 3 answers {#answers3}
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show answers</summary><p>
+> Content of `R/import.R`
+
+```{r}
+#' importFiles
+#'
+#' This function parses a coverage track and a features file
+#' (bed, narrowPeaks, gtf, ...) and returns a list of the two
+#' objects imported in R.
+#'
+#' @param coverage_path Path to coverage track (bigwig)
+#' @param features_path Path to features file (bed, narrowPeaks, gtf, ...)
+#' @param width width at which each feature will be rescaled
+#' @return named list of 2: coverage and features
+#'
+#' @importFrom rtracklayer import
+#' @importFrom GenomicRanges resize
+#' @export
+#'
+#' @examples
+#' importFiles(
+#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),
+#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),
+#'   width = 2000
+#' )
+
+importFiles <- function(coverage_path, features_path, width) {
+    cov <- rtracklayer::import(coverage_path, as = "Rle")
+    feat <- rtracklayer::import(features_path)
+    feat <- GenomicRanges::resize(feat, width = width, fix = 'center')
+    return(
+        list(coverage = cov, features = feat)
+    )
+}
+```
+
+> Content of `R/filter`
+
+```{r}
+#' filterGRanges
+#'
+#' This function takes a named list of 2 (coverage and features) and filters
+#' out the features which are not strictly contained within the coverage track.
+#'
+#' @param l named list of 2 (coverage and features)
+#' @return named list of 2 (coverage and features)
+#'
+#' @importFrom methods as
+#' @importFrom GenomicRanges reduce
+#' @importFrom IRanges subsetByOverlaps
+#' @export
+#'
+#' @examples
+#' l <- importFiles(
+#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),
+#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),
+#'   width = 2000
+#' )
+#' filterGRanges(l)
+
+filterGRanges <- function(l) {
+    covered_genome <- GenomicRanges::reduce(as(l[['coverage']], 'GRanges'))
+    n_feats <- length(l[['features']])
+    l[['features']] <- IRanges::subsetByOverlaps(l[['features']], covered_genome, type = "within")
+    message(length(l[['features']]), ' features retained out of ', n_feats)
+    return(l)
+}
+```
+
+> Content of `R/compute`
+
+```{r}
+#' filterGRanges
+#' computeCoverage
+#'
+#' This function takes a named list of 2 (coverage and features) and extracts
+#' the coverage over each feature, centered at the center of each feature.
+#'
+#' @param l named list of 2 (coverage and features)
+#' @return a tibble describing average coverage +/- CI over the set of features
+#' from `l`
+#'
+#' @importFrom tibble as_tibble
+#' @importFrom dplyr mutate
+#' @importFrom dplyr group_by
+#' @importFrom dplyr summarize
+#' @importFrom dplyr n
+#' @importFrom tidyr pivot_longer
+#' @export
+#'
+#' @examples
+#' l <- importFiles(
+#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),
+#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),
+#'   width = 2000
+#' )
+#' l <- filterGRanges(l)
+#' computeCoverage(l)
+
+computeCoverage <- function(l) {
+    feats <- l[['features']]
+    x <- as.matrix(l[['coverage']][l[['features']]]) |> as.data.frame()
+    scores <- t(x) |>
+        tibble::as_tibble() |>
+        dplyr::mutate(coord = seq(-ncol(x)/2, ncol(x)/2-1, 1)) |>
+        tidyr::pivot_longer(cols = -coord, names_to = 'peak', values_to = 'cov') |>
+        dplyr::group_by(coord) |>
+        dplyr::summarize(
+            score = mean(cov, na.rm = TRUE),
+            median = median(cov, na.rm = TRUE),
+            sd = sd(cov, na.rm = TRUE),
+            count = dplyr::n()
+        ) |>
+        dplyr::mutate(
+            se = sd/sqrt(count),
+            ci_low = score - qt(1 - (0.05 / 2), count - 1) * se,
+            ci_high = score + qt(1 - (0.05 / 2), count - 1) * se
+        )
+    return(scores)
+}
+```
+
+> Content of `R/plot`
+
+```{r}
+#' plotCoverage
+#'
+#' This function takes a tibble describing average coverage +/- CI over a
+#' set of features and returns a ggplot
+#'
+#' @param x tibble with 'coord', 'score', 'ci_low' and 'ci_high' columns
+#' @return ggplot
+#'
+#' @import ggplot2
+#' @export
+#'
+#' @examples
+#' l <- importFiles(
+#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),
+#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),
+#'   width = 5000
+#' )
+#' l <- filterGRanges(l)
+#' x <- computeCoverage(l)
+#' plotCoverage(x)
+
+plotCoverage <- function(x) {
+    p <- ggplot(x, mapping = aes(
+        x = coord, y = score, ymin = ci_low, ymax = ci_high
+    )) +
+        geom_line() +
+        geom_ribbon(alpha = 0.1)
+    return(p)
+}
+```
+</p></details><br>
+

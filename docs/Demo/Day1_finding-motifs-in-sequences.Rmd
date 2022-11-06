@@ -1,0 +1,90 @@
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+I have a set of regulatory elements from Yeast
+
+```{r}
+library(GenomicRanges)
+ATAC_peaks <- readRDS(here::here('Share/Day1/ATAC_peaks.rds'))
+table(ATAC_peaks$annot)
+ATAC_peaks_DA <- ATAC_peaks[ATAC_peaks$annot != "non-DA"]
+```
+
+I can visualize the variations of RE accessibility during response to osmotic stress 
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+# Create a data frame containing mean-centered log-normalized locus accessibility scores
+norm_rlogs <- mcols(ATAC_peaks_DA)[, grepl('rlog_', colnames(mcols(ATAC_peaks)))] |> 
+    apply(1, function(row) {row - mean(row)}) |> 
+    t() |> 
+    as_tibble() |>
+    mutate(annot = ATAC_peaks_DA$annot, peakID = ATAC_peaks_DA$peakID) |>
+    pivot_longer(starts_with("rlog"), names_to = 'timepoint', values_to = 'mean_centered_rlog') |> 
+    group_by(annot) |> 
+    mutate(timepoint = gsub('rlog_', '', timepoint))
+# Plot the results
+p <- ggplot(norm_rlogs, aes(x = timepoint, y = mean_centered_rlog, fill = annot, group = peakID, col = annot)) + 
+    geom_line() + 
+    theme_bw() + 
+    facet_wrap(~annot)
+p
+```
+
+I can import yeast genome seuqnce from BSgenome.Scerevisiae.UCSC.sacCer3
+
+```{r eval = FALSE}
+library(BSgenome.Scerevisiae.UCSC.sacCer3)
+BSgenome.Scerevisiae.UCSC.sacCer3
+seqlevelsStyle(BSgenome.Scerevisiae.UCSC.sacCer3) <- "NCBI"
+```
+
+I can use the `TFBSTools` package to recover all motifs from `JASPAR2020` resource package.
+
+```{r eval = FALSE}
+library(JASPAR2020)
+library(TFBSTools)
+motifs <- getMatrixSet(JASPAR2020, opts = list(species = "4932"))
+motif_names <- lapply(motifs, function(m) name(m)) |> unlist()
+motifs[[1]]
+MSN4_motif <- motifs[[which(motif_names == 'MSN4')]]
+MSN4_motif
+ggseqlogo(as.matrix(MSN4_motif))
+MSN4_PWM <- toPWM(MSN4_motif)
+```
+
+I can then find loci containing the MSN4 binding motif using the `searchSeq()` function and set a stringent threshold.
+
+```{r eval = FALSE}
+hits <- searchSeq(
+    MSN4_PWM, 
+    getSeq(BSgenome.Scerevisiae.UCSC.sacCer3), 
+    strand = '*', 
+    min.score = '90%'
+)
+MSN4_hits <- as(hits, 'GRanges')
+MSN4_hits$siteSeqs
+ggseqlogo(as.character(MSN4_hits$siteSeqs))
+```
+
+I can calculate the odds enrichment of ATAC peaks from cluster `opened_recovery` which contain MSN4 binding motif
+
+```{r eval = FALSE}
+t <- table(ATAC_peaks$annot == 'opened_recovery', ATAC_peaks %over% MSN4_hits)
+fisher.test(table(ATAC_peaks$annot == 'opened_recovery', ATAC_peaks %over% MSN4_hits))$estimate
+```
+
+Using an `lapply()` function, I can perform the previous operation for MSN4 in all the clusters
+
+```{r eval = FALSE}
+odds_MSN4 <- lapply(
+    levels(ATAC_peaks$annot), 
+    function(cluster) {
+        fisher.test(table(ATAC_peaks$annot == cluster, ATAC_peaks %over% MSN4_hits))$estimate
+    }
+) |> unlist() |> setNames(levels(ATAC_peaks$cluster))
+```
+

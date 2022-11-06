@@ -12,6 +12,7 @@ title: "Extra resources"
 ## R/Bioconductor programming 
 
 - ***The*** excellent R guide for beginners, by Emmanuel Paradis: [PDF](https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf)
+- The more advanced *R for data science* book by Hadley Wickam himself: [https://r4ds.had.co.nz/](https://r4ds.had.co.nz/)
 - ***The*** 150+ pages comprehensive book to learn everything about Bioconductor. This ebook has been published by [Kasper D. Hansen](https://www.ashansenlab.com/) and is freely available under the [CC BY-NC-SA 4.0 license](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US): [PDF](/{{<myPackageUrl>}}docs/bioconductor.pdf)
 
 ## Scientific readings
