@@ -30,6 +30,19 @@ library(ggplot2)
 **proposed solution work, type `?<function>` in the R console **
 **and a help menu will appear.**
 
+## 0. Set up your working environment
+
+Let's create a project for this course!  
+In RStudio: `File` > `New Project...`, create a project entitled "Bioc-workshop".  
+Open the newly created project.  
+Download files required for the workshop from the following Google Drive Shared folder:  
+
+```
+https://drive.google.com/drive/folders/1XUMyPTtI6iDj_JZv2O1124YuLCA5MJ7q?usp=sharing
+```
+
+**Unzip the archive in the same directory you have created your project in.**
+
 ## 1. Importing ce11 genome sequence in R
 
 ce11 genome sequence is stored in a `.fa` file in `Share/Day1/`.  
