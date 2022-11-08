@@ -3,7 +3,7 @@ publishDir = "docs"
 languageCode = "en-US"
 defaultContentLanguage = "en"
 
-title = "NGS analysis for gene regulation and epigenomics"
+title = "Developing R/Bioconductor packages"
 theme = "hugo-theme-learn"
 metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
