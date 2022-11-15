@@ -35,4 +35,4 @@ title: " Lectures"
 - [Day 1: Getting starting with Bioconductor](/{{<myPackageUrl>}}Exercices/Day1_Getting-started-with-Bioc.html)
 - [Day 2: The developer virtous circle](/{{<myPackageUrl>}}Exercices/Day2_Developer-virtuous-circle.html)
 - [Day 3: S4 classes in Bioconductor](/{{<myPackageUrl>}}Exercices/Day3_S4-classes.html)
-- [Day 5: Improving package integration](/{{<myPackageUrl>}}Exercices/Day5_package-dissemination.Rmd)
+- [Day 5: Improving package integration](/{{<myPackageUrl>}}Exercices/Day5_package-dissemination.html)
