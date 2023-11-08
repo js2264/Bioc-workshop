@@ -44,6 +44,12 @@ book:
       chapters: 
         - content/day5/Lecture10_Other_package_types.qmd
         - content/day5/Lecture11_Package_dissemination.qmd
+    - part: "Exercises"
+      chapters: 
+        - content/exercises/Day1_Getting-started-with-Bioc.Rmd
+        - content/exercises/Day2_Developer-virtuous-circle.Rmd
+        - content/exercises/Day3_S4-classes.Rmd
+        - content/exercises/Day4_package-integration.Rmd
 format:
   html:
     default-image-extension: pdf

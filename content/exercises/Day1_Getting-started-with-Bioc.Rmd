@@ -1,0 +1,475 @@
+# Getting started with Bioconductor ecosystem
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+library(Biostrings)
+library(GenomicRanges)
+library(rtracklayer)
+library(ggplot2)
+```
+
+::: {.callout-note icon='true'}
+
+## Aims 
+
+- Importing files from various formats in R
+- Handling `DNAStringSet`
+- Handling `GRanges`
+- Finding a specific sequence within larger ones
+- Computing distances between sets of `GRanges`
+
+:::
+
+::: {.callout-tip icon='true'}
+
+**At any time, if you are lost or do not understand how functions in the**
+**proposed solution work, type `?<function>` in the R console **
+**and a help menu will appear.** 
+
+You can also check the help tab in the corresponding quadrant. 
+
+:::
+
+## 0. Set up your working environment
+
+Let's create a project for this course!  
+In RStudio: `File` > `New Project...`, create a project entitled "Bioc-workshop".  
+Open the newly created project.  
+Download files required for the workshop from the following Google Drive Shared folder:  
+
+```
+https://drive.google.com/drive/folders/1XUMyPTtI6iDj_JZv2O1124YuLCA5MJ7q?usp=sharing
+```
+
+**Unzip the archive in the same directory you have created your project in.**
+
+## 1. Importing ce11 genome sequence in R
+
+The `ce11` genome sequence is stored in a `.fa` file in `Share/Day1/`.  
+
+::: {.callout-question .callout-note}
+
+Find the appropriate Bioconductor's function to import fasta files in R and 
+use it to import ce11 genome sequence.
+
+::: {.callout-answer .callout-note collapse=true}
+
+```{r}
+library(Biostrings)
+gseq <- readDNAStringSet(here::here('Share/Day1/ce11.fa'))
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+What are the chromosome names used in the fasta file? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+gseq
+names(gseq)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+What is the difference between the `length` and the `width` of a `DNAStringSet` object?
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+width(gseq)
+length(gseq)
+```
+
+:::
+
+:::
+
+## 2. Importing ce11 gene annotations in R
+
+The `ce11` gene annotations are stored in a `gtf` file in `Share/Day1/`.  
+
+::: {.callout-question .icon .callout-note}
+
+Find the appropriate Bioconductor's function to import gtf files in R and 
+use it to import ce11 gene annotations.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+library(rtracklayer)
+genes <- import(here::here('Share/Day1/ce11_annotations.gtf'))
+```
+
+:::
+
+:::
+
+
+::: {.callout-question .icon .callout-note}
+
+How many genes are they? What's the median gene length? Which tissues are genes expressed in?
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+length(genes)
+median(width(genes))
+table(genes$tissue)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+What are the chromosome names used in this gene annotations file? How many genes map to each chromosome? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+seqlevels(genes)
+table(seqnames(genes))
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Why are the chromosome names (`seqlevels`) ordered this way? Can you reorder them? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+seqlevels(genes) <- seqlevels(genes)[c(5, 4, 6, 3, 1, 2, 7)]
+```
+
+:::
+
+:::
+
+## 3. Wrangling gene annotations 
+
+::: {.callout-question .icon .callout-note}
+
+Is mitochondrial chromosome present in the genome sequence?
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+seqlevels(gseq)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Try to prune genes to remove all those mapping over mitochondrial chromosome. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+genes[seqnames(genes) != 'MtDNA']
+seqlevels(genes, pruning.mode = 'coarse') <- seqlevels(genes)[1:6]
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Compare the chromosome naming nomenclature for genes and chromosome sequences. Are they the same? Can you make them match? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+seqlevelsStyle(gseq)
+seqlevelsStyle(genes)
+seqlevelsStyle(genes) <- "UCSC"
+```
+
+:::
+
+:::
+
+## 4. Extract tissue-specific TSSs
+
+Now that we have two concordant objects, we would like to focus on sets of 
+tissue-specific TSSs.
+
+::: {.callout-question .icon .callout-note}
+
+Re-focus the genes to center them at their TSSs. Choose a window size that you find appropriate (hint: we'll late focus on TATA box, so the window has to at least encompass it!)
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+WINDOW_SIZE <- 300
+TSSs <- resize(genes, fix = 'start', width = 1) |> resize(fix = 'center', width = WINDOW_SIZE)
+```
+
+:::
+
+:::
+
+To iterate over a set of values (e.g. a set of tissues...), 
+one should favor `lapply` function rather than `for` loops. 
+`lapply` outputs a list of elements, one for each element in the vector used 
+in the input. Check `?lapply` for more information if you are not familiar 
+with it. 
+
+::: {.callout-question .icon .callout-note}
+
+Make a list of 6 elements, containing **forward** TSSs specific of each of 
+the 5 main tissues, and the ubiquitous TSSs. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+tissues <- c("Germline", "Neurons", "Muscle", "Hypod.", "Intest.", "Ubiq.")
+TSS_list <- lapply(tissues, function(tissue) {
+    TSSs[TSSs$tissue == tissue & strand(TSSs) == '+']
+})
+names(TSS_list) <- tissues
+lengths(TSS_list)
+```
+
+:::
+
+:::
+
+## 5. Find TATA boxes near intestine-specific TSSs
+
+::: {.callout-question .icon .callout-note}
+
+Start by subseting full genome sequence to only the sequences at intestinal TSSs. 
+Check `?DNAStringSet` to see how to subset a `DNAStringSet`.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+intest_TSSs <- TSS_list[['Intest.']]
+intest_TSS_seqs <- gseq[intest_TSSs]
+intest_TSS_seqs
+table(width(intest_TSS_seqs))
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Read `?matchPattern` for information on how to find a given sequence in a `DNAStringSet`. What is the difference between `matchPattern()` and `vmatchPattern()`? 
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Is there a TATA box ("TATAAA") in the first intestine TSS sequence?
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+pattern <- 'TATAAA'
+seq <- intest_TSS_seqs[[1]]
+matchPattern(pattern, seq)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Map TATA boxes across all intestine TSS sequences.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+pattern <- 'TATAAA'
+TATA_boxes <- vmatchPattern(pattern, intest_TSS_seqs)
+TATA_boxes
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+How to parse `MIndex` objects? Check `?MIndex` if in doubt...
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+positions <- unlist(startIndex(TATA_boxes))
+head(positions)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Plot the distance between TATA box and intestine-specific TSSs.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+library(ggplot2)
+df <- data.frame(pos = positions - WINDOW_SIZE/2)
+ggplot(df, aes(x = pos)) + 
+    geom_histogram(binwidth = 10) + 
+    labs(x = "Distance to TSS", y = "# of motifs")
+```
+
+:::
+
+:::
+
+## 7. Function wrapping
+
+We now know how to 1) parse `GRanges`, 2) map a chosen motif ("TATAAA") over a set of sequences and 3)
+plot the distance between this motif and the center of sequences. 
+
+::: {.callout-question .icon .callout-note}
+
+Create a function which takes a set of sequences and a chosen motif as input, and returns a plot of the distance between 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+plotMotifDistance <- function(seqs, motif) {
+    motif_occurences <- vmatchPattern(motif, seqs)
+    positions <- unlist(startIndex(motif_occurences))
+    df <- data.frame(pos = positions - WINDOW_SIZE/2)
+    ggplot(df, aes(x = pos)) + 
+        geom_histogram(binwidth = 10) + 
+        labs(
+            x = "Distance to TSS", 
+            y = glue::glue("# of {motif} motifs"), 
+            caption = glue::glue("{length(positions)} motifs found amongst {length(seqs)} sequences")
+        )
+}
+plotMotifDistance(intest_TSS_seqs, "TATAAA")
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Add an argument to precise number of possible mismatches when looking for the motif. Also adapt the `vmatchPattern()` function!
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+plotMotifDistance <- function(seqs, motif, n_mismatch = 1) {
+    motif_occurences <- vmatchPattern(motif, seqs, max.mismatch = n_mismatch)
+    positions <- unlist(startIndex(motif_occurences))
+    df <- data.frame(pos = positions - WINDOW_SIZE/2)
+    ggplot(df, aes(x = pos)) + 
+        geom_histogram(binwidth = 10) + 
+        labs(
+            x = "Distance to TSS", 
+            y = glue::glue("# of {motif} motifs"), 
+            caption = glue::glue("{length(positions)} motifs found amongst {length(seqs)} sequences")
+        )
+}
+plotMotifDistance(intest_TSS_seqs, "TATAAA", n_mismatch = 0)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+The real TATA box consensus sequence is closer to "TATAWAA". Can you further adapt `vmatchPattern()` function so it can accept all IUPAC code (e.g. W = A/T).
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+plotMotifDistance <- function(seqs, motif, n_mismatch = 1) {
+    motif_occurences <- vmatchPattern(motif, seqs, max.mismatch = n_mismatch, fixed = FALSE)
+    positions <- unlist(startIndex(motif_occurences))
+    df <- data.frame(pos = positions - WINDOW_SIZE/2)
+    ggplot(df, aes(x = pos)) + 
+        geom_histogram(binwidth = 5) + 
+        labs(
+            x = "Distance to TSS", 
+            y = glue::glue("# of {motif} motifs"), 
+            caption = glue::glue("{length(positions)} motifs found amongst {length(seqs)} sequences")
+        )
+}
+plotMotifDistance(intest_TSS_seqs, "TATAWAA", n_mismatch = 0)
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Run this function to find TATA boxes in sequences from each set of TSSs.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+lapply(names(TSS_list), function(tissue) {
+    TSSs <- TSS_list[[tissue]]
+    plotMotifDistance(
+        gseq[TSSs], 
+        "TATAWAA", 
+        n_mismatch = 0
+    ) + ggtitle(glue::glue("{tissue} TSSs"))
+})
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Run this function to find PolII Initiator (Inr) motif ("YYANWYY") in sequences from each set of TSSs. Comment.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+lapply(names(TSS_list), function(tissue) {
+    TSSs <- TSS_list[[tissue]]
+    plotMotifDistance(
+        gseq[TSSs], 
+        "YYANWYY", 
+        n_mismatch = 1
+    ) + ggtitle(glue::glue("{tissue} TSSs"))
+})
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+How to deal with minus-oriented `GRanges`? Propose a solution.
+
+:::
