@@ -1,0 +1,135 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "",
+    "text": "Welcome\nThis is the landing page for the “Developing R/Bioconductor packages for Genomics” workshop, ed. 2023.\nAuthors: Jacques Serizay [aut, cre] Version: 1.0.0 Modified: 2023-06-14 Compiled: 2023-11-08 Environment: R version 4.3.2 (2023-10-31), Bioconductor 3.18 License: MIT + file LICENSE Copyright: J. Serizay"
+  },
+  {
+    "objectID": "index.html#dates",
+    "href": "index.html#dates",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "Dates",
+    "text": "Dates\n13-17 Nov. 2023."
+  },
+  {
+    "objectID": "index.html#where",
+    "href": "index.html#where",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "Where",
+    "text": "Where\nThis course will be held online."
+  },
+  {
+    "objectID": "index.html#overview",
+    "href": "index.html#overview",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "Overview",
+    "text": "Overview\nThis course aims at making Bioconductor package development at one’s reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using R/Bioconductor packages and who wish to expand their programatic toolkit.\nOverall, this course will help the attendees gain accurate insights in the fundamental notions required for proper R/Bioconductor package development. We will cover key theory concepts about package development and Bioconductor ecosystem, supported by a range of demonstration and exercises, to get a complete understanding of all the steps of package development.\nThroughout this workshop, we will put an emphasis on the best practices for developing a package embedded in the R/Bioconductor ecosystem."
+  },
+  {
+    "objectID": "index.html#format",
+    "href": "index.html#format",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "Format",
+    "text": "Format\nThe course is structured in modules over five days. Each day will contain a mix of formal lectures, demonstration, and hands-on exercises.\n\nFormal lectures will cover the key theory required to understand the principles of package development (~2h).\nFollowing these lectures, practical examples will be shown to illustrate how to translate the acquired knowledge into a real-life R/Bioconductor package. At this stage, trainees will get acquainted with state-of-the-art Bioconductor ecosystem as well as the best coding practices in bioinformatics.\nDuring the rest of the daily sessions, trainees will work by themselves, following guided exercises to practice their package development skills. Hints and solution are provided for each exercise. The exercises will mainly focus on specific concepts introduced earlier that day.\n\nOffice hours will take place during the last hour of the exercises. An instructor will be available to answer individual questions related to daily exercises.\nA Slack channel will also be available so that Q&A are available for everybody."
+  },
+  {
+    "objectID": "index.html#targeted-audience-and-required-background",
+    "href": "index.html#targeted-audience-and-required-background",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "Targeted audience and required background",
+    "text": "Targeted audience and required background\nThe material is suitable both for experimentalists who want to learn more about R/Bioconductor ecosystem as well as computational biologists who want to expand their set of coding skills. However, the course will be mostly beneficial to those who have already been familiarized to the R environment.\nThe requirements for this course are:\n\nKnowledge of next-generation sequencing data processing and formats;\nBasic programming experience in R (writing a function, variable types, loading packages);\nWorking knowledge of Unix / command line interface (managing files, running programs, reading manuals!) is recommended (basic bash commands cd, ls, cp, …), though is not formally required;\nBioconductor experience is a plus, though is not formally required."
+  },
+  {
+    "objectID": "index.html#learning-outcomes",
+    "href": "index.html#learning-outcomes",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "Learning outcomes",
+    "text": "Learning outcomes\nAt the end of this course, you should be able to:\n\nLeverage Bioconductor principles of interoperability (a.k.a “do-not-reinvent-the-wheel!”)\nWrite sets of interconnected functions for genomic data\nDocument and test functions\nManage package dependencies\nManage package versions\nManage package continuous integration\nBuild a dedicated website for your package\nSubmitting/releasing/maintaining your package\nDisseminating your package (publish it!)"
+  },
+  {
+    "objectID": "index.html#about-the-instructor",
+    "href": "index.html#about-the-instructor",
+    "title": "Developing R/Bioconductor packages for Genomics",
+    "section": "About the instructor",
+    "text": "About the instructor\nJacques owns a PhD in Genomics from Cambridge University (UK). His formal training is in experimental biology, which means that he understands the challenges and issues associated with bench troubleshooting and optimization. However, his primary focus shifted towards large-scale genomic analysis years ago, and he now has a deep knowledge of the range of genome-wide datasets (bulk and single-cell!) that are available out there.\nBecause he originally comes from the bench, the examples demonstrated in this course will be designed from “real-life” situations. You may even find yourself using the package you will create during this course for your own analyses!\njacques dot serizay at pasteur dot fr"
+  },
+  {
+    "objectID": "content/program.html#monday",
+    "href": "content/program.html#monday",
+    "title": "Program",
+    "section": "Monday:",
+    "text": "Monday:\n\nDevelopment environment (R, RStudio, dev. packages)\nWriting functions\nIntroduction to package building\nLocal development with devtools\nIntroduction to Github Actions and Continuous Integration"
+  },
+  {
+    "objectID": "content/program.html#tuesday",
+    "href": "content/program.html#tuesday",
+    "title": "Program",
+    "section": "Tuesday:",
+    "text": "Tuesday:\n\nDocumenting functions\nTesting functions and pacakge\nManaging dependencies & namespace"
+  },
+  {
+    "objectID": "content/program.html#wednesday",
+    "href": "content/program.html#wednesday",
+    "title": "Program",
+    "section": "Wednesday:",
+    "text": "Wednesday:\n\nIntroduction to Bioconductor: interoperability and other key notions\nCreating custom Bioconductor objects\nIncluding data to packages"
+  },
+  {
+    "objectID": "content/program.html#thursday",
+    "href": "content/program.html#thursday",
+    "title": "Program",
+    "section": "Thursday:",
+    "text": "Thursday:\n\nPackage vignettes: demonstrating how to use your package\nSubmitting/releasing/maintaining a Bioconductor package"
+  },
+  {
+    "objectID": "content/program.html#friday",
+    "href": "content/program.html#friday",
+    "title": "Program",
+    "section": "Friday:",
+    "text": "Friday:\n\nOther types of Bioconductor packages: datasets, workflows, …\nDisseminating your package: package support website, JOSS, rOpenSci…"
+  },
+  {
+    "objectID": "content/prerequisites.html#r-version",
+    "href": "content/prerequisites.html#r-version",
+    "title": "Prerequesites",
+    "section": "R version",
+    "text": "R version\nWorking with the latest R release (at least) or even better, with the R-devel version (currently R 4.4) is a requirement for this workshop.\nFind instructions on how to install it here:\n\nmacOS\nWindows\nLinux"
+  },
+  {
+    "objectID": "content/prerequisites.html#r-packages",
+    "href": "content/prerequisites.html#r-packages",
+    "title": "Prerequesites",
+    "section": "R packages",
+    "text": "R packages\n\nBioconductor version 3.19 (if possible) or 3.18."
+  },
+  {
+    "objectID": "content/prerequisites.html#rstudio",
+    "href": "content/prerequisites.html#rstudio",
+    "title": "Prerequesites",
+    "section": "RStudio",
+    "text": "RStudio\nIdeally latest version."
+  },
+  {
+    "objectID": "content/extra.html#r-styling",
+    "href": "content/extra.html#r-styling",
+    "title": "Extra resources",
+    "section": "R styling",
+    "text": "R styling\n\nhttp://bioconductor.org/developers/how-to/coding-style/\nhttps://jef.works/R-style-guide/\nhttps://style.tidyverse.org/\nhttps://google.github.io/styleguide/Rguide.html"
+  },
+  {
+    "objectID": "content/extra.html#rbioconductor-programming",
+    "href": "content/extra.html#rbioconductor-programming",
+    "title": "Extra resources",
+    "section": "R/Bioconductor programming",
+    "text": "R/Bioconductor programming\n\nThe excellent R guide for beginners, by Emmanuel Paradis: PDF\nThe more advanced R for data science book by Hadley Wickam himself: https://r4ds.had.co.nz/\nThe 150+ pages comprehensive book to learn everything about Bioconductor. This ebook has been published by Kasper D. Hansen and is freely available under the CC BY-NC-SA 4.0 license: PDF"
+  },
+  {
+    "objectID": "content/extra.html#scientific-readings",
+    "href": "content/extra.html#scientific-readings",
+    "title": "Extra resources",
+    "section": "Scientific readings",
+    "text": "Scientific readings\n\n2014 Nat. Methods paper from Bioconductor core team describing important object classes\nTo see from how far Bioc comes from...\nMore research on osmotic stress reponse"
+  }
+]

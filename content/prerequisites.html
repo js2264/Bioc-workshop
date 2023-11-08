@@ -8,7 +8,7 @@
 
 <meta name="author" content="J. Serizay">
 
-<title>Developing R/Bioconductor packages for Genomics</title>
+<title>Developing R/Bioconductor packages for Genomics - Prerequesites</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,23 +24,24 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./content/program.html" rel="next">
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../content/extra.html" rel="next">
+<link href="../content/program.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -74,7 +75,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../content/prerequisites.html">Prerequesites</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -89,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">Developing R/Bioconductor packages for Genomics</a> 
+      <a href="../">Developing R/Bioconductor packages for Genomics</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/js2264/Bioc-workshop/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
@@ -104,25 +105,25 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Welcome</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/program.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/program.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Program</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/prerequisites.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/prerequisites.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Prerequesites</span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./content/extra.html" class="sidebar-item-text sidebar-link">
+  <a href="../content/extra.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Extra resources</span></a>
   </div>
 </li>
@@ -136,25 +137,18 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#welcome" id="toc-welcome" class="nav-link active" data-scroll-target="#welcome">Welcome</a>
-  <ul class="collapse">
-  <li><a href="#dates" id="toc-dates" class="nav-link" data-scroll-target="#dates">Dates</a></li>
-  <li><a href="#where" id="toc-where" class="nav-link" data-scroll-target="#where">Where</a></li>
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
-  <li><a href="#format" id="toc-format" class="nav-link" data-scroll-target="#format">Format</a></li>
-  <li><a href="#targeted-audience-and-required-background" id="toc-targeted-audience-and-required-background" class="nav-link" data-scroll-target="#targeted-audience-and-required-background">Targeted audience and required background</a></li>
-  <li><a href="#learning-outcomes" id="toc-learning-outcomes" class="nav-link" data-scroll-target="#learning-outcomes">Learning outcomes</a></li>
-  <li><a href="#about-the-instructor" id="toc-about-the-instructor" class="nav-link" data-scroll-target="#about-the-instructor">About the instructor</a></li>
-  </ul></li>
+  <li><a href="#r-version" id="toc-r-version" class="nav-link active" data-scroll-target="#r-version">R version</a></li>
+  <li><a href="#r-packages" id="toc-r-packages" class="nav-link" data-scroll-target="#r-packages">R packages</a></li>
+  <li><a href="#rstudio" id="toc-rstudio" class="nav-link" data-scroll-target="#rstudio">RStudio</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/index.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/prerequisites.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Developing R/Bioconductor packages for Genomics</h1>
+<h1 class="title">Prerequesites</h1>
 </div>
 
 
@@ -169,69 +163,27 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="welcome" class="level1 unnumbered">
-<h1 class="unnumbered">Welcome</h1>
-<p>This is the landing page for the <strong>“Developing R/Bioconductor packages for Genomics”</strong> workshop, ed.&nbsp;2023.</p>
-<p><strong>Authors:</strong> Jacques Serizay [aut, cre]<br> <strong>Version:</strong> 1.0.0<br> <strong>Modified:</strong> 2023-06-14<br> <strong>Compiled:</strong> 2023-11-08<br> <strong>Environment:</strong> R version 4.3.2 (2023-10-31), Bioconductor 3.18<br> <strong>License:</strong> MIT + file LICENSE<br> <strong>Copyright:</strong> J. Serizay</p>
-<section id="dates" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="dates">Dates</h2>
-<p>13-17 Nov.&nbsp;2023.</p>
-</section>
-<section id="where" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="where">Where</h2>
-<p>This course will be held online.</p>
-</section>
-<section id="overview" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="overview">Overview</h2>
-<p>This course aims at making <code>Bioconductor</code> package development at one’s reach. It is specifically designed for biologists and newer bioinformaticians who may find themselves using <code>R/Bioconductor</code> packages and who wish to expand their programatic toolkit.</p>
-<p>Overall, this course will help the attendees gain accurate insights in the fundamental notions required for proper <code>R/Bioconductor</code> package development. We will cover key theory concepts about package development and <code>Bioconductor</code> ecosystem, supported by a range of demonstration and exercises, to get a complete understanding of all the steps of package development.</p>
-<p>Throughout this workshop, we will put an emphasis on the best practices for developing a package embedded in the <code>R/Bioconductor</code> ecosystem.</p>
-</section>
-<section id="format" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="format">Format</h2>
-<p>The course is structured in modules over five days. Each day will contain a mix of formal lectures, demonstration, and hands-on exercises.</p>
+<section id="r-version" class="level2">
+<h2 class="anchored" data-anchor-id="r-version">R version</h2>
+<p>Working with the <strong>latest R release</strong> (at least) or even better, with the <strong>R-devel</strong> version (currently <strong>R 4.4</strong>) is a requirement for this workshop.</p>
+<p>Find instructions on how to install it here:</p>
 <ul>
-<li>Formal lectures will cover the key theory required to understand the principles of package development (~2h).</li>
-<li>Following these lectures, practical examples will be shown to illustrate how to translate the acquired knowledge into a real-life <code>R/Bioconductor</code> package. At this stage, trainees will get acquainted with state-of-the-art <code>Bioconductor</code> ecosystem as well as the best coding practices in bioinformatics.</li>
-<li>During the rest of the daily sessions, trainees will work by themselves, following guided exercises to practice their package development skills. Hints and solution are provided for each exercise. The exercises will mainly focus on specific concepts introduced earlier that day.</li>
-</ul>
-<p>Office hours will take place during the last hour of the exercises. An instructor will be available to answer individual questions related to daily exercises.</p>
-<p>A Slack channel will also be available so that Q&amp;A are available for everybody.</p>
-</section>
-<section id="targeted-audience-and-required-background" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="targeted-audience-and-required-background">Targeted audience and required background</h2>
-<p>The material is suitable both for experimentalists who want to learn more about <code>R/Bioconductor</code> ecosystem as well as computational biologists who want to expand their set of coding skills. However, the course will be mostly beneficial to those who have already been familiarized to the R environment.</p>
-<p>The requirements for this course are:</p>
-<ol type="1">
-<li>Knowledge of next-generation sequencing data processing and formats;</li>
-<li>Basic programming experience in <code>R</code> (writing a function, variable types, loading packages);</li>
-<li>Working knowledge of Unix / command line interface (managing files, running programs, reading manuals!) is recommended (basic bash commands <code>cd</code>, <code>ls</code>, <code>cp</code>, …), though is not formally required;</li>
-<li><code>Bioconductor</code> experience is a plus, though is not formally required.</li>
-</ol>
-</section>
-<section id="learning-outcomes" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="learning-outcomes">Learning outcomes</h2>
-<p>At the end of this course, you should be able to:</p>
-<ul>
-<li>Leverage <code>Bioconductor</code> principles of interoperability (a.k.a “do-not-reinvent-the-wheel!”)</li>
-<li>Write sets of interconnected functions for genomic data</li>
-<li>Document and test functions</li>
-<li>Manage package dependencies</li>
-<li>Manage package versions</li>
-<li>Manage package continuous integration</li>
-<li>Build a dedicated website for your package</li>
-<li>Submitting/releasing/maintaining your package</li>
-<li>Disseminating your package (publish it!)</li>
+<li><a href="https://mac.r-project.org/">macOS</a></li>
+<li><a href="https://cran.r-project.org/bin/windows/base/rdevel.html">Windows</a></li>
+<li><a href="http://singmann.org/installing-r-devel-on-linux/">Linux</a></li>
 </ul>
 </section>
-<section id="about-the-instructor" class="level2 unnumbered">
-<h2 class="unnumbered anchored" data-anchor-id="about-the-instructor">About the instructor</h2>
-<p>Jacques owns a PhD in Genomics from Cambridge University (UK). His formal training is in experimental biology, which means that he understands the challenges and issues associated with bench troubleshooting and optimization. However, his primary focus shifted towards large-scale genomic analysis years ago, and he now has a deep knowledge of the range of genome-wide datasets (bulk and single-cell!) that are available out there.</p>
-<p>Because he originally comes from the bench, the examples demonstrated in this course will be designed from “real-life” situations. You may even find yourself using the package you will create during this course for your own analyses!</p>
-<p><a href="mailto:jacques.serizay@pasteur.fr">jacques dot serizay at pasteur dot fr</a></p>
-
-
+<section id="r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages">R packages</h2>
+<ul>
+<li>Bioconductor version 3.19 (if possible) or 3.18.</li>
+</ul>
 </section>
+<section id="rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="rstudio">RStudio</h2>
+<p>Ideally latest version.</p>
+
+
 </section>
 
 </main> <!-- /main -->
@@ -470,10 +422,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="../content/program.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Program</span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./content/program.html" class="pagination-link">
-        <span class="nav-page-text">Program</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../content/extra.html" class="pagination-link">
+        <span class="nav-page-text">Extra resources</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
