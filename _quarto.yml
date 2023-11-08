@@ -22,7 +22,28 @@ book:
     - content/program.qmd
     - content/prerequisites.qmd
     - content/extra.qmd
-
+    - part: "Day 1"
+      chapters: 
+        - content/day1/Lecture0_course-overview.qmd
+        - content/day1/Lecture1_Package_architecture.qmd
+        - content/day1/Lecture2_Bioconductor_101.qmd
+        - content/day1/Lecture3_Developer-toolkit.qmd
+    - part: "Day 2"
+      chapters: 
+        - content/day2/Lecture4_Continuous_development-writing-documenting-testing.qmd
+        - content/day2/Lecture5_Bioconductor_201.qmd
+    - part: "Day 3"
+      chapters: 
+        - content/day3/Lecture6_Git_versionning.qmd
+        - content/day3/Lecture7_S4_classes.qmd
+    - part: "Day 4"
+      chapters: 
+        - content/day4/Lecture8_Improving_package-data_vignettes-....qmd
+        - content/day4/Lecture9_Bioconductor_submission.qmd
+    - part: "Day 5"
+      chapters: 
+        - content/day5/Lecture10_Other_package_types.qmd
+        - content/day5/Lecture11_Package_dissemination.qmd
 format:
   html:
     default-image-extension: pdf
