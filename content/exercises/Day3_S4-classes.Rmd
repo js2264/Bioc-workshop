@@ -2,9 +2,6 @@
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(devtools)
-library(usethis)
-library(biocthis)
 ```
 
 - **Overarching goal:** Implement a new S4 class of objects

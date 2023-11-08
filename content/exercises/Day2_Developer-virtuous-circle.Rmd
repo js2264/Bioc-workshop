@@ -2,9 +2,6 @@
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(devtools)
-library(usethis)
-library(biocthis)
 ```
 
 ::: {.callout-note icon='true'}

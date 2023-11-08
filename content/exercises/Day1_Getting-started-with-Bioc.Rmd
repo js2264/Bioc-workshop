@@ -2,10 +2,6 @@
 
 ```{r echo = FALSE, warning = FALSE, message = FALSE}
 knitr::opts_chunk$set(eval = FALSE)
-library(Biostrings)
-library(GenomicRanges)
-library(rtracklayer)
-library(ggplot2)
 ```
 
 ::: {.callout-note icon='true'}
@@ -30,7 +26,7 @@ You can also check the help tab in the corresponding quadrant.
 
 :::
 
-## 0. Set up your working environment
+## Set up your working environment
 
 Let's create a project for this course!  
 In RStudio: `File` > `New Project...`, create a project entitled "Bioc-workshop".  
@@ -43,7 +39,7 @@ https://drive.google.com/drive/folders/1XUMyPTtI6iDj_JZv2O1124YuLCA5MJ7q?usp=sha
 
 **Unzip the archive in the same directory you have created your project in.**
 
-## 1. Importing ce11 genome sequence in R
+## Importing ce11 genome sequence in R
 
 The `ce11` genome sequence is stored in a `.fa` file in `Share/Day1/`.  
 
@@ -93,7 +89,7 @@ length(gseq)
 
 :::
 
-## 2. Importing ce11 gene annotations in R
+## Importing ce11 gene annotations in R
 
 The `ce11` gene annotations are stored in a `gtf` file in `Share/Day1/`.  
 
@@ -159,7 +155,7 @@ seqlevels(genes) <- seqlevels(genes)[c(5, 4, 6, 3, 1, 2, 7)]
 
 :::
 
-## 3. Wrangling gene annotations 
+## Wrangling gene annotations 
 
 ::: {.callout-question .icon .callout-note}
 
@@ -206,7 +202,7 @@ seqlevelsStyle(genes) <- "UCSC"
 
 :::
 
-## 4. Extract tissue-specific TSSs
+## Extract tissue-specific TSSs
 
 Now that we have two concordant objects, we would like to focus on sets of 
 tissue-specific TSSs.
@@ -252,7 +248,7 @@ lengths(TSS_list)
 
 :::
 
-## 5. Find TATA boxes near intestine-specific TSSs
+## Find TATA boxes near intestine-specific TSSs
 
 ::: {.callout-question .icon .callout-note}
 
@@ -343,7 +339,7 @@ ggplot(df, aes(x = pos)) +
 
 :::
 
-## 7. Function wrapping
+## Function wrapping
 
 We now know how to 1) parse `GRanges`, 2) map a chosen motif ("TATAAA") over a set of sequences and 3)
 plot the distance between this motif and the center of sequences. 
