@@ -1,0 +1,20 @@
+# Prerequesites {-}
+
+## R version 
+
+Working with the **latest R release** (at least) or even better, with the **R-devel** version (currently **R 4.4**) 
+is a requirement for this workshop. 
+
+Find instructions on how to install it here: 
+
+- [macOS](https://mac.r-project.org/)
+- [Windows](https://cran.r-project.org/bin/windows/base/rdevel.html)
+- [Linux](http://singmann.org/installing-r-devel-on-linux/)
+
+## R packages
+ 
+- Bioconductor version 3.19 (if possible) or 3.18. 
+
+## RStudio
+
+Ideally latest version. 

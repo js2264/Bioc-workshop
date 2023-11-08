@@ -1,0 +1,18 @@
+Package: BiocPackageDev
+Version: 1.0.0
+Date: 2023-06-14
+Authors@R:
+    c(person(given = "Jacques",
+           family = "Serizay",
+           role = c("aut", "cre"),
+           email = "jacquesserizay@gmail.com",
+           comment = c(ORCID = "0000-0002-4295-0624")))
+Description: This course aims at making `Bioconductor` package development 
+    at one's reach. It is specifically designed for biologists and newer 
+    bioinformaticians who may find themselves using `R/Bioconductor` 
+    packages and who wish to expand their programatic toolkit. 
+License: MIT + file LICENSE
+Imports:
+    rmarkdown,
+    knitr, 
+    rebook

@@ -1,0 +1,50 @@
+project:
+  type: book
+  output-dir: docs
+
+engine: knitr
+code-line-numbers: true
+
+book:
+  title: "Developing R/Bioconductor packages for Genomics"
+  page-footer:
+    left: |
+      Developing R/Bioconductor packages for Genomics |  
+      J. Serizay
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+  site-url: https://js2264.github.io/Bioc-workshop/
+  repo-url: https://github.com/js2264/Bioc-workshop/
+  repo-branch: main
+  repo-actions: [edit, issue]
+  chapters:
+    - index.qmd
+    - content/program.qmd
+    - content/prerequisites.qmd
+    - content/extra.qmd
+
+format:
+  html:
+    default-image-extension: pdf
+    theme:
+      - theme.scss
+    code-link: true
+    author-meta: "J. Serizay"
+    highlight-style: atom-one-dark.theme
+    citations-hover: true
+    toc: true
+    toc-float: 
+      collapsed: false
+    toc-depth: 3
+    grid:
+      gutter-width: 1.5em
+      sidebar-width: 500px
+      body-width: 1200px
+      margin-width: 400px
+    website: 
+      sidebar: 
+        style: "docked"
+        search: true
+        collapse-level: 5
+
+editor: visual
