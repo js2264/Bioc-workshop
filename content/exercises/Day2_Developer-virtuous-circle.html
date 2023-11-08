@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="J. Serizay">
+
+<title>Developing R/Bioconductor packages for Genomics - 2&nbsp; Kickstarting an R package</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../content/exercises/Day3_S4-classes.html" rel="next">
+<link href="../../content/exercises/Day1_Getting-started-with-Bioc.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/exercises/Day1_Getting-started-with-Bioc.html">Exercises</a></li><li class="breadcrumb-item"><a href="../../content/exercises/Day2_Developer-virtuous-circle.html"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kickstarting an R package</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../../">Developing R/Bioconductor packages for Genomics</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/js2264/Bioc-workshop/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Welcome</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/program.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Program</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/prerequisites.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Prerequesites</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/extra.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Extra resources</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Day 1</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day1/Lecture0_course-overview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 0 - Introduction to the workshop</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day1/Lecture1_Package_architecture.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 1 - R package architecture</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day1/Lecture2_Bioconductor_101.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 2 - Introduction to Bioconductor</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day1/Lecture3_Developer-toolkit.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 3 - R developer toolkit</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Day 2</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day2/Lecture4_Continuous_development-writing-documenting-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 4 - Continuous development</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day2/Lecture5_Bioconductor_201.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 5 - Bioconductor 201</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true">
+ <span class="menu-text">Day 3</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day3/Lecture6_Git_versionning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 6 - Git versioning</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day3/Lecture7_S4_classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true">
+ <span class="menu-text">Day 4</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day4/Lecture8_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day4/Lecture9_Bioconductor_submission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 9 - Bioconductor package submission</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true">
+ <span class="menu-text">Day 5</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day5/Lecture10_Other_package_types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 10 - Other package types</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/day5/Lecture11_Package_dissemination.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 11 - Package dissemination</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true">
+ <span class="menu-text">Exercises</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day1_Getting-started-with-Bioc.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started with Bioconductor ecosystem</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day2_Developer-virtuous-circle.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kickstarting an R package</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day3_S4-classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day4_package-integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#package-functions" id="toc-package-functions" class="nav-link active" data-scroll-target="#package-functions"><span class="header-section-number">2.1</span> 0. Proposed package functionalities</a></li>
+  <li><a href="#starting-a-new-package" id="toc-starting-a-new-package" class="nav-link" data-scroll-target="#starting-a-new-package"><span class="header-section-number">2.2</span> 1. Starting a new package</a></li>
+  <li><a href="#write-functions-to-populate-your-package." id="toc-write-functions-to-populate-your-package." class="nav-link" data-scroll-target="#write-functions-to-populate-your-package."><span class="header-section-number">2.3</span> 2. Write functions to populate your package.</a></li>
+  <li><a href="#add-function-documentation" id="toc-add-function-documentation" class="nav-link" data-scroll-target="#add-function-documentation"><span class="header-section-number">2.4</span> 3. Add function documentation</a></li>
+  <li><a href="#check-your-package" id="toc-check-your-package" class="nav-link" data-scroll-target="#check-your-package"><span class="header-section-number">2.5</span> 4. Check your package!</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info"><span class="header-section-number">2.6</span> Session Info</a></li>
+  <li><a href="#answers2" id="toc-answers2" class="nav-link" data-scroll-target="#answers2"><span class="header-section-number">2.7</span> Section 2 answers</a></li>
+  <li><a href="#answers3" id="toc-answers3" class="nav-link" data-scroll-target="#answers3"><span class="header-section-number">2.8</span> Section 3 answers</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day2_Developer-virtuous-circle.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kickstarting an R package</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Kickstart an R package</li>
+<li>Write and document functions</li>
+<li>Check package</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>At any time, if you are lost or do not understand how functions in the</strong> <strong>proposed solution work, type <code>?&lt;function&gt;</code> in the R console </strong> <strong>and a help menu will appear.</strong></p>
+<p>You can also check the help tab in the corresponding quadrant.</p>
+</div>
+</div>
+<section id="package-functions" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="package-functions"><span class="header-section-number">2.1</span> 0. Proposed package functionalities</h2>
+<p>In this section, we are going to create a package which aims at:</p>
+<ol type="1">
+<li>Importing <code>.bigwig</code> coverage track files as well as <code>.bed</code> files of genomic coordinates</li>
+<li>Filtering imported <code>GRanges</code> to make sure they all are contained within the coverage tracks</li>
+<li>Calculating the average (+/- quantiles) of coverage of the <code>.bigwig</code> file over the <code>GRanges</code> of interest</li>
+<li>Plot a plot of the aggregated <code>.bigwig</code> coverage over the <code>GRanges</code> of interest</li>
+</ol>
+<p>Eventually, the functions shipped in this package should be able to turn a pair of <code>.bigwig</code>/<code>.bed</code> files into this type of plot:</p>
+<p>…</p>
+</section>
+<section id="starting-a-new-package" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="starting-a-new-package"><span class="header-section-number">2.2</span> 1. Starting a new package</h2>
+<p>To start developing a new package, one may want to make sure all useful developer resources are already set-up.</p>
+<blockquote class="blockquote">
+<p>Make sure to install the developer toolkit packages!</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">c</span>(</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        <span class="st">"available"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>        <span class="st">"devtools"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="st">"rcmdcheck"</span>, </span>
+<span id="cb1-7"><a href="#cb1-7"></a>        <span class="st">"knitr"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8"></a>        <span class="st">"pkgdown"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9"></a>        <span class="st">"RefManageR"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10"></a>        <span class="st">"rmarkdown"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11"></a>        <span class="st">"rstudioapi"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12"></a>        <span class="st">"sessioninfo"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13"></a>        <span class="st">"styler"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14"></a>        <span class="st">"usethis"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="st">"gert"</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a>    )</span>
+<span id="cb1-17"><a href="#cb1-17"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"BiocStyle"</span>, <span class="st">"BiocCheck"</span>, <span class="st">"biocthis"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>Now the time has come to create your very first package! But first, you need to make sure that your package name is available!</p>
+<blockquote class="blockquote">
+<p>To keep a coherent cohorte, we’ll create a package named <code>&lt;YOURNAME&gt;TestPackage</code>. Verify that this name is appropriate with the <code>available</code> package.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>available<span class="sc">::</span><span class="fu">available</span>(<span class="st">"JacquesTestPackage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<blockquote class="blockquote">
+<p>If this name is available, let’s create your package! Make sure to use <code>create_package()</code> function from <code>devtools</code>.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">create_package</span>(<span class="st">"JacquesTestPackage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>When creating your package, <code>devtools</code>+<code>RStudio</code> combo automatically opens a new <code>RStudio</code> window, with the package’s project automatically activated. Navigate to your package RStudio project window and re-open this instruction sheet.</p>
+<blockquote class="blockquote">
+<p>Make sure you’re in the right project using the appropriate function from <code>rstudioapi</code> package.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>rstudioapi<span class="sc">::</span><span class="fu">getActiveProject</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>Explore the newly created folder architecture. Do you recognize all the files and directories?</p>
+<p>The DESCRIPTION file automatically created does not exactly match Bioconductor requirements. You should replace it by a better-fitted DESCRIPTION file.</p>
+<blockquote class="blockquote">
+<p>Find the appropriate function from <code>biocthis</code> to replace the current DESCRIPTION file by one fitting BIOCONDUCTOR’s requirements.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_description</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>Don’t forget to manually edit the important fields from your new DESCRIPTION file: Title &amp; Author. The remaining fields will be filled out later on.</p>
+<blockquote class="blockquote">
+<p>Now add a LICENSE file to specify under which license you wish to publish your package.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>usethis<span class="sc">::</span><span class="fu">use_mit_license</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>A nice touch is to systematically provide a README file. This provides a good overview of your package when browsed e.g.&nbsp;in GitHub, and for non-R specialists, who don’t necessarily know about DESCRIPTION and vignettes. And since you are developing an R package, let’s stick with the Rmd format for your README.</p>
+<blockquote class="blockquote">
+<p>What are the benefits of having a <code>README.Rmd</code> file?</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Which function from <code>biocthis</code> can create a <code>.Rmd</code> README file?</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_readme_rmd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>That being said, package submission requires that a <code>REAMDE.md</code> file only is present in the repository. A way to provide this is to 1) <code>devtools::build_readme()</code> to parse <code>README.Rmd</code> into <code>README.md</code> (with R chunks processed!), and 2) add <code>README.Rmd</code> to .gitignore.</p>
+<blockquote class="blockquote">
+<p>Parse your <code>README.Rmd</code> into <code>README.md</code> and check the differences.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>(<span class="st">'.'</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()</span>
+<span id="cb8-3"><a href="#cb8-3"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.Rmd"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.md"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+<p>A bunch of extra useful commands from <code>bioc/usethis</code> can be performed at this stage, e.g.&nbsp;to add a NEWS file, a Code of Conduct, a citation file, etc… Beware, each command creates/modify one/several files. Pay attention to the comments printed in the R console!</p>
+<blockquote class="blockquote">
+<p>Run each of the following commands one by one and make sure to fulfill each required action highlighted in the R console.</p>
+</blockquote>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show code
+</summary>
+<p>
+</p><div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_news_md</span>()  <span class="do">## To add a NEWS.md file</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_coc</span>()  <span class="do">## To add a .github/CODE_OF_CONDUCT.md file</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_support</span>()  <span class="do">## To add a .github/SUPPORT.md file</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_issue_template</span>()  <span class="do">## To add a .github/ISSUE_TEMPLATE/issue_template.md file</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_citation</span>()  <span class="do">## To add a inst/CITATION file</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>usethis<span class="sc">::</span><span class="fu">use_lifecycle_badge</span>(<span class="st">"Experimental"</span>)  <span class="do">## To add a "Experimental" badge to your README.Rmd</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()  <span class="do">## To rebuild README.md</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+</section>
+<section id="write-functions-to-populate-your-package." class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="write-functions-to-populate-your-package."><span class="header-section-number">2.3</span> 2. Write functions to populate your package.</h2>
+<p>To write your first package function, you can either create an <code>R/&lt;name&gt;.R</code> file manually, or run <code>usethis::use_r(name)</code>.</p>
+<p>Now is time to write! Refer to the functionalities (descriped in <a href="#package-functions">Section 0</a>) that we are aiming to provide in this package, and start writing 4 to 5 functions which, together, can fulfill these functionalities. Briefly, we suggest to design functions to:</p>
+<ol type="1">
+<li><code>import</code> a coverage track and a set of genomic features (scaled to a fixed width) together in a list;</li>
+<li><code>filter</code> the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);</li>
+<li><code>compute</code> the mean coverage and its confidence interval, for each position within the features’ width;</li>
+<li><code>plot</code> the results with <code>ggplot2</code>.</li>
+</ol>
+<p>…</p>
+<p>The content of the proposed function files is shown <a href="#answers2">at the end of this instruction sheet</a>. These files provides an example of implementation to fulfill our package’s requirements.</p>
+</section>
+<section id="add-function-documentation" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="add-function-documentation"><span class="header-section-number">2.4</span> 3. Add function documentation</h2>
+<p>Write oxygen tags (<code>title</code>, <code>description</code>, <code>@param</code>, <code>@return</code>, …) for each function. Don’t forget to add runnable examples!</p>
+<p>Once you have documented each function, you can 1) regenerate the documentation and 2) run examples to make sure everything is ok.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">document</span>()</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">run_examples</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>…</p>
+<p>The content of the proposed function files is shown <a href="#answers2">at the end of this instruction sheet</a>. These files provides an example of implementation to fulfill our package’s requirements, with documentation added.</p>
+</section>
+<section id="check-your-package" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="check-your-package"><span class="header-section-number">2.5</span> 4. Check your package!</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">check</span>()</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">BiocCheck</span>()</span>
+<span id="cb11-3"><a href="#cb11-3"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="session-info" class="level2" data-number="2.6">
+<h2 data-number="2.6" class="anchored" data-anchor-id="session-info"><span class="header-section-number">2.6</span> Session Info</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>R version 4.3.2 (2023-10-31)
+Platform: x86_64-pc-linux-gnu (64-bit)
+Running under: Ubuntu 22.04.3 LTS
+
+Matrix products: default
+BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
+LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: UTC
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+ [1] compiler_4.3.2  fastmap_1.1.1   cli_3.6.1       tools_4.3.2    
+ [5] htmltools_0.5.7 rmarkdown_2.25  knitr_1.45      jsonlite_1.8.7 
+ [9] xfun_0.41       digest_0.6.33   rlang_1.1.2     evaluate_0.23  </code></pre>
+</div>
+</div>
+<hr>
+</section>
+<section id="answers2" class="level2" data-number="2.7">
+<h2 data-number="2.7" class="anchored" data-anchor-id="answers2"><span class="header-section-number">2.7</span> Section 2 answers</h2>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show answers
+</summary>
+<p>
+</p><blockquote class="blockquote">
+<p>Content of <code>R/import.R</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(coverage_path, features_path, width) {</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    cov <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(coverage_path, <span class="at">as =</span> <span class="st">"Rle"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    feat <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(features_path)</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    feat <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(feat, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    <span class="fu">return</span>(</span>
+<span id="cb14-6"><a href="#cb14-6"></a>        <span class="fu">list</span>(<span class="at">coverage =</span> cov, <span class="at">features =</span> feat)</span>
+<span id="cb14-7"><a href="#cb14-7"></a>    )</span>
+<span id="cb14-8"><a href="#cb14-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Content of <code>R/filter</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    covered_genome <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">reduce</span>(<span class="fu">as</span>(l[[<span class="st">'coverage'</span>]], <span class="st">'GRanges'</span>))</span>
+<span id="cb15-3"><a href="#cb15-3"></a>    n_feats <span class="ot">&lt;-</span> <span class="fu">length</span>(l[[<span class="st">'features'</span>]])</span>
+<span id="cb15-4"><a href="#cb15-4"></a>    l[[<span class="st">'features'</span>]] <span class="ot">&lt;-</span> IRanges<span class="sc">::</span><span class="fu">subsetByOverlaps</span>(l[[<span class="st">'features'</span>]], covered_genome, <span class="at">type =</span> <span class="st">"within"</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>    <span class="fu">message</span>(<span class="fu">length</span>(l[[<span class="st">'features'</span>]]), <span class="st">' features retained out of '</span>, n_feats)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>    <span class="fu">return</span>(l)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Content of <code>R/compute</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    feats <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
+<span id="cb16-3"><a href="#cb16-3"></a>    x <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(l[[<span class="st">'coverage'</span>]][l[[<span class="st">'features'</span>]]]) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb16-4"><a href="#cb16-4"></a>    scores <span class="ot">&lt;-</span> <span class="fu">t</span>(x) <span class="sc">|&gt;</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a>        tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">coord =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2-1</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a>        tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>coord, <span class="at">names_to =</span> <span class="st">'peak'</span>, <span class="at">values_to =</span> <span class="st">'cov'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(coord) <span class="sc">|&gt;</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a>        dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb16-10"><a href="#cb16-10"></a>            <span class="at">score =</span> <span class="fu">mean</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-11"><a href="#cb16-11"></a>            <span class="at">median =</span> <span class="fu">median</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-12"><a href="#cb16-12"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb16-13"><a href="#cb16-13"></a>            <span class="at">count =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
+<span id="cb16-14"><a href="#cb16-14"></a>        ) <span class="sc">|&gt;</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb16-16"><a href="#cb16-16"></a>            <span class="at">se =</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(count),</span>
+<span id="cb16-17"><a href="#cb16-17"></a>            <span class="at">ci_low =</span> score <span class="sc">-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se,</span>
+<span id="cb16-18"><a href="#cb16-18"></a>            <span class="at">ci_high =</span> score <span class="sc">+</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se</span>
+<span id="cb16-19"><a href="#cb16-19"></a>        )</span>
+<span id="cb16-20"><a href="#cb16-20"></a>    <span class="fu">return</span>(scores)</span>
+<span id="cb16-21"><a href="#cb16-21"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Content of <code>R/plot</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb17-3"><a href="#cb17-3"></a>        <span class="at">x =</span> coord, <span class="at">y =</span> score, <span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high</span>
+<span id="cb17-4"><a href="#cb17-4"></a>    )) <span class="sc">+</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a>        <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)</span>
+<span id="cb17-7"><a href="#cb17-7"></a>    <span class="fu">return</span>(p)</span>
+<span id="cb17-8"><a href="#cb17-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+</section>
+<section id="answers3" class="level2" data-number="2.8">
+<h2 data-number="2.8" class="anchored" data-anchor-id="answers3"><span class="header-section-number">2.8</span> Section 3 answers</h2>
+<details>
+<summary style="color: #ff7f00; font-weight: bold">
+Show answers
+</summary>
+<p>
+</p><blockquote class="blockquote">
+<p>Content of <code>R/import.R</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co">#' importFiles</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co">#'</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#' This function parses a coverage track and a features file</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#' (bed, narrowPeaks, gtf, ...) and returns a list of the two</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#' objects imported in R.</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#'</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#' @param coverage_path Path to coverage track (bigwig)</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#' @param features_path Path to features file (bed, narrowPeaks, gtf, ...)</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#' @param width width at which each feature will be rescaled</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#' @return named list of 2: coverage and features</span></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#'</span></span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#' @importFrom rtracklayer import</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#' @importFrom GenomicRanges resize</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#' @export</span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#'</span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#' @examples</span></span>
+<span id="cb18-17"><a href="#cb18-17"></a><span class="co">#' importFiles(</span></span>
+<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
+<span id="cb18-19"><a href="#cb18-19"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
+<span id="cb18-20"><a href="#cb18-20"></a><span class="co">#'   width = 2000</span></span>
+<span id="cb18-21"><a href="#cb18-21"></a><span class="co">#' )</span></span>
+<span id="cb18-22"><a href="#cb18-22"></a></span>
+<span id="cb18-23"><a href="#cb18-23"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(coverage_path, features_path, width) {</span>
+<span id="cb18-24"><a href="#cb18-24"></a>    cov <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(coverage_path, <span class="at">as =</span> <span class="st">"Rle"</span>)</span>
+<span id="cb18-25"><a href="#cb18-25"></a>    feat <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(features_path)</span>
+<span id="cb18-26"><a href="#cb18-26"></a>    feat <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(feat, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
+<span id="cb18-27"><a href="#cb18-27"></a>    <span class="fu">return</span>(</span>
+<span id="cb18-28"><a href="#cb18-28"></a>        <span class="fu">list</span>(<span class="at">coverage =</span> cov, <span class="at">features =</span> feat)</span>
+<span id="cb18-29"><a href="#cb18-29"></a>    )</span>
+<span id="cb18-30"><a href="#cb18-30"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Content of <code>R/filter</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">#' filterGRanges</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#'</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#' This function takes a named list of 2 (coverage and features) and filters</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#' out the features which are not strictly contained within the coverage track.</span></span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="co">#'</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#' @param l named list of 2 (coverage and features)</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co">#' @return named list of 2 (coverage and features)</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a><span class="co">#'</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a><span class="co">#' @importFrom methods as</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a><span class="co">#' @importFrom GenomicRanges reduce</span></span>
+<span id="cb19-11"><a href="#cb19-11"></a><span class="co">#' @importFrom IRanges subsetByOverlaps</span></span>
+<span id="cb19-12"><a href="#cb19-12"></a><span class="co">#' @export</span></span>
+<span id="cb19-13"><a href="#cb19-13"></a><span class="co">#'</span></span>
+<span id="cb19-14"><a href="#cb19-14"></a><span class="co">#' @examples</span></span>
+<span id="cb19-15"><a href="#cb19-15"></a><span class="co">#' l &lt;- importFiles(</span></span>
+<span id="cb19-16"><a href="#cb19-16"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
+<span id="cb19-17"><a href="#cb19-17"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
+<span id="cb19-18"><a href="#cb19-18"></a><span class="co">#'   width = 2000</span></span>
+<span id="cb19-19"><a href="#cb19-19"></a><span class="co">#' )</span></span>
+<span id="cb19-20"><a href="#cb19-20"></a><span class="co">#' filterGRanges(l)</span></span>
+<span id="cb19-21"><a href="#cb19-21"></a></span>
+<span id="cb19-22"><a href="#cb19-22"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb19-23"><a href="#cb19-23"></a>    covered_genome <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">reduce</span>(<span class="fu">as</span>(l[[<span class="st">'coverage'</span>]], <span class="st">'GRanges'</span>))</span>
+<span id="cb19-24"><a href="#cb19-24"></a>    n_feats <span class="ot">&lt;-</span> <span class="fu">length</span>(l[[<span class="st">'features'</span>]])</span>
+<span id="cb19-25"><a href="#cb19-25"></a>    l[[<span class="st">'features'</span>]] <span class="ot">&lt;-</span> IRanges<span class="sc">::</span><span class="fu">subsetByOverlaps</span>(l[[<span class="st">'features'</span>]], covered_genome, <span class="at">type =</span> <span class="st">"within"</span>)</span>
+<span id="cb19-26"><a href="#cb19-26"></a>    <span class="fu">message</span>(<span class="fu">length</span>(l[[<span class="st">'features'</span>]]), <span class="st">' features retained out of '</span>, n_feats)</span>
+<span id="cb19-27"><a href="#cb19-27"></a>    <span class="fu">return</span>(l)</span>
+<span id="cb19-28"><a href="#cb19-28"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Content of <code>R/compute</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co">#' filterGRanges</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co">#' computeCoverage</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="co">#'</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#' This function takes a named list of 2 (coverage and features) and extracts</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="co">#' the coverage over each feature, centered at the center of each feature.</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="co">#'</span></span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#' @param l named list of 2 (coverage and features)</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#' @return a tibble describing average coverage +/- CI over the set of features</span></span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#' from `l`</span></span>
+<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#'</span></span>
+<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#' @importFrom tibble as_tibble</span></span>
+<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#' @importFrom dplyr mutate</span></span>
+<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#' @importFrom dplyr group_by</span></span>
+<span id="cb20-14"><a href="#cb20-14"></a><span class="co">#' @importFrom dplyr summarize</span></span>
+<span id="cb20-15"><a href="#cb20-15"></a><span class="co">#' @importFrom dplyr n</span></span>
+<span id="cb20-16"><a href="#cb20-16"></a><span class="co">#' @importFrom tidyr pivot_longer</span></span>
+<span id="cb20-17"><a href="#cb20-17"></a><span class="co">#' @export</span></span>
+<span id="cb20-18"><a href="#cb20-18"></a><span class="co">#'</span></span>
+<span id="cb20-19"><a href="#cb20-19"></a><span class="co">#' @examples</span></span>
+<span id="cb20-20"><a href="#cb20-20"></a><span class="co">#' l &lt;- importFiles(</span></span>
+<span id="cb20-21"><a href="#cb20-21"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
+<span id="cb20-22"><a href="#cb20-22"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
+<span id="cb20-23"><a href="#cb20-23"></a><span class="co">#'   width = 2000</span></span>
+<span id="cb20-24"><a href="#cb20-24"></a><span class="co">#' )</span></span>
+<span id="cb20-25"><a href="#cb20-25"></a><span class="co">#' l &lt;- filterGRanges(l)</span></span>
+<span id="cb20-26"><a href="#cb20-26"></a><span class="co">#' computeCoverage(l)</span></span>
+<span id="cb20-27"><a href="#cb20-27"></a></span>
+<span id="cb20-28"><a href="#cb20-28"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb20-29"><a href="#cb20-29"></a>    feats <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
+<span id="cb20-30"><a href="#cb20-30"></a>    x <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(l[[<span class="st">'coverage'</span>]][l[[<span class="st">'features'</span>]]]) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
+<span id="cb20-31"><a href="#cb20-31"></a>    scores <span class="ot">&lt;-</span> <span class="fu">t</span>(x) <span class="sc">|&gt;</span></span>
+<span id="cb20-32"><a href="#cb20-32"></a>        tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb20-33"><a href="#cb20-33"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">coord =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2-1</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb20-34"><a href="#cb20-34"></a>        tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>coord, <span class="at">names_to =</span> <span class="st">'peak'</span>, <span class="at">values_to =</span> <span class="st">'cov'</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-35"><a href="#cb20-35"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(coord) <span class="sc">|&gt;</span></span>
+<span id="cb20-36"><a href="#cb20-36"></a>        dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
+<span id="cb20-37"><a href="#cb20-37"></a>            <span class="at">score =</span> <span class="fu">mean</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-38"><a href="#cb20-38"></a>            <span class="at">median =</span> <span class="fu">median</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-39"><a href="#cb20-39"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb20-40"><a href="#cb20-40"></a>            <span class="at">count =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
+<span id="cb20-41"><a href="#cb20-41"></a>        ) <span class="sc">|&gt;</span></span>
+<span id="cb20-42"><a href="#cb20-42"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb20-43"><a href="#cb20-43"></a>            <span class="at">se =</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(count),</span>
+<span id="cb20-44"><a href="#cb20-44"></a>            <span class="at">ci_low =</span> score <span class="sc">-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se,</span>
+<span id="cb20-45"><a href="#cb20-45"></a>            <span class="at">ci_high =</span> score <span class="sc">+</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se</span>
+<span id="cb20-46"><a href="#cb20-46"></a>        )</span>
+<span id="cb20-47"><a href="#cb20-47"></a>    <span class="fu">return</span>(scores)</span>
+<span id="cb20-48"><a href="#cb20-48"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<blockquote class="blockquote">
+<p>Content of <code>R/plot</code></p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co">#' plotCoverage</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co">#'</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#' This function takes a tibble describing average coverage +/- CI over a</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#' set of features and returns a ggplot</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#'</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="co">#' @param x tibble with 'coord', 'score', 'ci_low' and 'ci_high' columns</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="co">#' @return ggplot</span></span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="co">#'</span></span>
+<span id="cb21-9"><a href="#cb21-9"></a><span class="co">#' @import ggplot2</span></span>
+<span id="cb21-10"><a href="#cb21-10"></a><span class="co">#' @export</span></span>
+<span id="cb21-11"><a href="#cb21-11"></a><span class="co">#'</span></span>
+<span id="cb21-12"><a href="#cb21-12"></a><span class="co">#' @examples</span></span>
+<span id="cb21-13"><a href="#cb21-13"></a><span class="co">#' l &lt;- importFiles(</span></span>
+<span id="cb21-14"><a href="#cb21-14"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
+<span id="cb21-15"><a href="#cb21-15"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
+<span id="cb21-16"><a href="#cb21-16"></a><span class="co">#'   width = 5000</span></span>
+<span id="cb21-17"><a href="#cb21-17"></a><span class="co">#' )</span></span>
+<span id="cb21-18"><a href="#cb21-18"></a><span class="co">#' l &lt;- filterGRanges(l)</span></span>
+<span id="cb21-19"><a href="#cb21-19"></a><span class="co">#' x &lt;- computeCoverage(l)</span></span>
+<span id="cb21-20"><a href="#cb21-20"></a><span class="co">#' plotCoverage(x)</span></span>
+<span id="cb21-21"><a href="#cb21-21"></a></span>
+<span id="cb21-22"><a href="#cb21-22"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
+<span id="cb21-23"><a href="#cb21-23"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb21-24"><a href="#cb21-24"></a>        <span class="at">x =</span> coord, <span class="at">y =</span> score, <span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high</span>
+<span id="cb21-25"><a href="#cb21-25"></a>    )) <span class="sc">+</span></span>
+<span id="cb21-26"><a href="#cb21-26"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb21-27"><a href="#cb21-27"></a>        <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)</span>
+<span id="cb21-28"><a href="#cb21-28"></a>    <span class="fu">return</span>(p)</span>
+<span id="cb21-29"><a href="#cb21-29"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</details>
+<p><br></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../content/exercises/Day1_Getting-started-with-Bioc.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Getting started with Bioconductor ecosystem</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../../content/exercises/Day3_S4-classes.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">Developing R/Bioconductor packages for Genomics |<br>
+J. Serizay</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
+  </div>
+</footer>
+
+
+
+</body></html>
