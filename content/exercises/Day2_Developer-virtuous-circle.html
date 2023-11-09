@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/exercises/Day3_S4-classes.html" rel="next">
+<link href="../../content/exercises/Day3_Examples-test-data.html" rel="next">
 <link href="../../content/exercises/Day1_Getting-started-with-Bioc.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
@@ -236,8 +236,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day3/Lecture7_S4_classes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
+  <a href="../../content/day3/Lecture7_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
   </div>
 </li>
       </ul>
@@ -253,8 +253,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day4/Lecture8_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
+  <a href="../../content/day4/Lecture8_S4_classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -311,14 +311,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day3_S4-classes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  <a href="../../content/exercises/Day3_Examples-test-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day4_package-integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
+  <a href="../../content/exercises/Day4_S4-classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day5_package-integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
   </div>
 </li>
       </ul>
@@ -333,14 +339,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#package-functions" id="toc-package-functions" class="nav-link active" data-scroll-target="#package-functions"><span class="header-section-number">2.1</span> 0. Proposed package functionalities</a></li>
-  <li><a href="#starting-a-new-package" id="toc-starting-a-new-package" class="nav-link" data-scroll-target="#starting-a-new-package"><span class="header-section-number">2.2</span> 1. Starting a new package</a></li>
-  <li><a href="#write-functions-to-populate-your-package." id="toc-write-functions-to-populate-your-package." class="nav-link" data-scroll-target="#write-functions-to-populate-your-package."><span class="header-section-number">2.3</span> 2. Write functions to populate your package.</a></li>
-  <li><a href="#add-function-documentation" id="toc-add-function-documentation" class="nav-link" data-scroll-target="#add-function-documentation"><span class="header-section-number">2.4</span> 3. Add function documentation</a></li>
-  <li><a href="#check-your-package" id="toc-check-your-package" class="nav-link" data-scroll-target="#check-your-package"><span class="header-section-number">2.5</span> 4. Check your package!</a></li>
-  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info"><span class="header-section-number">2.6</span> Session Info</a></li>
-  <li><a href="#answers2" id="toc-answers2" class="nav-link" data-scroll-target="#answers2"><span class="header-section-number">2.7</span> Section 2 answers</a></li>
-  <li><a href="#answers3" id="toc-answers3" class="nav-link" data-scroll-target="#answers3"><span class="header-section-number">2.8</span> Section 3 answers</a></li>
+  <li><a href="#package-functions" id="toc-package-functions" class="nav-link active" data-scroll-target="#package-functions"><span class="header-section-number">2.1</span> Proposed package functionalities</a></li>
+  <li><a href="#starting-a-new-package" id="toc-starting-a-new-package" class="nav-link" data-scroll-target="#starting-a-new-package"><span class="header-section-number">2.2</span> Starting a new package</a></li>
+  <li><a href="#write-functions-to-populate-your-package" id="toc-write-functions-to-populate-your-package" class="nav-link" data-scroll-target="#write-functions-to-populate-your-package"><span class="header-section-number">2.3</span> Write functions to populate your package</a></li>
+  <li><a href="#add-function-documentation" id="toc-add-function-documentation" class="nav-link" data-scroll-target="#add-function-documentation"><span class="header-section-number">2.4</span> Add function documentation</a></li>
+  <li><a href="#check-your-package" id="toc-check-your-package" class="nav-link" data-scroll-target="#check-your-package"><span class="header-section-number">2.5</span> Check your package</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day2_Developer-virtuous-circle.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -396,29 +399,44 @@ Tip
 </div>
 </div>
 <section id="package-functions" class="level2" data-number="2.1">
-<h2 data-number="2.1" class="anchored" data-anchor-id="package-functions"><span class="header-section-number">2.1</span> 0. Proposed package functionalities</h2>
+<h2 data-number="2.1" class="anchored" data-anchor-id="package-functions"><span class="header-section-number">2.1</span> Proposed package functionalities</h2>
 <p>In this section, we are going to create a package which aims at:</p>
 <ol type="1">
 <li>Importing <code>.bigwig</code> coverage track files as well as <code>.bed</code> files of genomic coordinates</li>
 <li>Filtering imported <code>GRanges</code> to make sure they all are contained within the coverage tracks</li>
 <li>Calculating the average (+/- quantiles) of coverage of the <code>.bigwig</code> file over the <code>GRanges</code> of interest</li>
-<li>Plot a plot of the aggregated <code>.bigwig</code> coverage over the <code>GRanges</code> of interest</li>
+<li>Plot the aggregated <code>.bigwig</code> coverage over the <code>GRanges</code> of interest</li>
 </ol>
 <p>Eventually, the functions shipped in this package should be able to turn a pair of <code>.bigwig</code>/<code>.bed</code> files into this type of plot:</p>
 <p>…</p>
 </section>
 <section id="starting-a-new-package" class="level2" data-number="2.2">
-<h2 data-number="2.2" class="anchored" data-anchor-id="starting-a-new-package"><span class="header-section-number">2.2</span> 1. Starting a new package</h2>
+<h2 data-number="2.2" class="anchored" data-anchor-id="starting-a-new-package"><span class="header-section-number">2.2</span> Starting a new package</h2>
 <p>To start developing a new package, one may want to make sure all useful developer resources are already set-up.</p>
-<blockquote class="blockquote">
-<p>Make sure to install the developer toolkit packages!</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Make sure to install the developer toolkit packages.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">c</span>(</span>
@@ -436,133 +454,293 @@ Show code
 <span id="cb1-15"><a href="#cb1-15"></a>        <span class="st">"gert"</span></span>
 <span id="cb1-16"><a href="#cb1-16"></a>    )</span>
 <span id="cb1-17"><a href="#cb1-17"></a>)</span>
-<span id="cb1-18"><a href="#cb1-18"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"BiocStyle"</span>, <span class="st">"BiocCheck"</span>, <span class="st">"biocthis"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-18"><a href="#cb1-18"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"BiocStyle"</span>, <span class="st">"BiocCheck"</span>, <span class="st">"biocthis"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<p>Now the time has come to create your very first package! But first, you need to make sure that your package name is available!</p>
-<blockquote class="blockquote">
-<p>To keep a coherent cohorte, we’ll create a package named <code>&lt;YOURNAME&gt;TestPackage</code>. Verify that this name is appropriate with the <code>available</code> package.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Now the time has come to create your very first package! To keep a coherent cohorte, we’ll create a package named <code>&lt;YOURNAME&gt;TestPackage</code>. But first, you need to make sure that this package name is available.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Verify that your package name is available, with the <code>available</code> package.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>available<span class="sc">::</span><span class="fu">available</span>(<span class="st">"JacquesTestPackage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>If this name is available, let’s create your package! Make sure to use <code>create_package()</code> function from <code>devtools</code>.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>If this name is available, let’s create your package.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Which function from <code>devtools</code> can be used to create a package skeleton? Use it to create your package.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(devtools)</span>
 <span id="cb3-2"><a href="#cb3-2"></a><span class="fu">create_package</span>(<span class="st">"JacquesTestPackage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>When creating your package, <code>devtools</code>+<code>RStudio</code> combo automatically opens a new <code>RStudio</code> window, with the package’s project automatically activated. Navigate to your package RStudio project window and re-open this instruction sheet.</p>
-<blockquote class="blockquote">
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Make sure you’re in the right project using the appropriate function from <code>rstudioapi</code> package.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>rstudioapi<span class="sc">::</span><span class="fu">getActiveProject</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Explore the newly created folder architecture. Do you recognize all the files and directories?</p>
+</div>
+</div>
 <p>The DESCRIPTION file automatically created does not exactly match Bioconductor requirements. You should replace it by a better-fitted DESCRIPTION file.</p>
-<blockquote class="blockquote">
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Find the appropriate function from <code>biocthis</code> to replace the current DESCRIPTION file by one fitting BIOCONDUCTOR’s requirements.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_description</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<p>Don’t forget to manually edit the important fields from your new DESCRIPTION file: Title &amp; Author. The remaining fields will be filled out later on.</p>
-<blockquote class="blockquote">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Manually edit the important fields from your new DESCRIPTION file: <code>Title</code> &amp; <code>Author</code>. The remaining fields will be filled out later on.</p>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Now add a LICENSE file to specify under which license you wish to publish your package.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>usethis<span class="sc">::</span><span class="fu">use_mit_license</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<p>A nice touch is to systematically provide a README file. This provides a good overview of your package when browsed e.g.&nbsp;in GitHub, and for non-R specialists, who don’t necessarily know about DESCRIPTION and vignettes. And since you are developing an R package, let’s stick with the Rmd format for your README.</p>
-<blockquote class="blockquote">
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>A nice touch is to systematically provide a <code>README</code> file. This provides a good overview of your package when browsed e.g.&nbsp;in GitHub, and for non-R specialists, who don’t necessarily know about <code>DESCRIPTION</code> and vignettes. And since you are developing an R package, let’s stick with the Rmd format for your <code>README</code>.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>What are the benefits of having a <code>README.Rmd</code> file?</p>
-</blockquote>
-<blockquote class="blockquote">
 <p>Which function from <code>biocthis</code> can create a <code>.Rmd</code> README file?</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_readme_rmd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>That being said, package submission requires that a <code>REAMDE.md</code> file only is present in the repository. A way to provide this is to 1) <code>devtools::build_readme()</code> to parse <code>README.Rmd</code> into <code>README.md</code> (with R chunks processed!), and 2) add <code>README.Rmd</code> to .gitignore.</p>
-<blockquote class="blockquote">
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Parse your <code>README.Rmd</code> into <code>README.md</code> and check the differences.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-19" class="callout-19-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>(<span class="st">'.'</span>)</span>
 <span id="cb8-2"><a href="#cb8-2"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()</span>
 <span id="cb8-3"><a href="#cb8-3"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.Rmd"</span>)</span>
 <span id="cb8-4"><a href="#cb8-4"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.md"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <p>A bunch of extra useful commands from <code>bioc/usethis</code> can be performed at this stage, e.g.&nbsp;to add a NEWS file, a Code of Conduct, a citation file, etc… Beware, each command creates/modify one/several files. Pay attention to the comments printed in the R console!</p>
-<blockquote class="blockquote">
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Run each of the following commands one by one and make sure to fulfill each required action highlighted in the R console.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_news_md</span>()  <span class="do">## To add a NEWS.md file</span></span>
 <span id="cb9-2"><a href="#cb9-2"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_coc</span>()  <span class="do">## To add a .github/CODE_OF_CONDUCT.md file</span></span>
 <span id="cb9-3"><a href="#cb9-3"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_support</span>()  <span class="do">## To add a .github/SUPPORT.md file</span></span>
@@ -571,315 +749,101 @@ Show code
 <span id="cb9-6"><a href="#cb9-6"></a>usethis<span class="sc">::</span><span class="fu">use_lifecycle_badge</span>(<span class="st">"Experimental"</span>)  <span class="do">## To add a "Experimental" badge to your README.Rmd</span></span>
 <span id="cb9-7"><a href="#cb9-7"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()  <span class="do">## To rebuild README.md</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
+</div>
+</div>
+</div>
+</div>
+</div>
 </section>
-<section id="write-functions-to-populate-your-package." class="level2" data-number="2.3">
-<h2 data-number="2.3" class="anchored" data-anchor-id="write-functions-to-populate-your-package."><span class="header-section-number">2.3</span> 2. Write functions to populate your package.</h2>
+<section id="write-functions-to-populate-your-package" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="write-functions-to-populate-your-package"><span class="header-section-number">2.3</span> Write functions to populate your package</h2>
 <p>To write your first package function, you can either create an <code>R/&lt;name&gt;.R</code> file manually, or run <code>usethis::use_r(name)</code>.</p>
-<p>Now is time to write! Refer to the functionalities (descriped in <a href="#package-functions">Section 0</a>) that we are aiming to provide in this package, and start writing 4 to 5 functions which, together, can fulfill these functionalities. Briefly, we suggest to design functions to:</p>
+<p>Now is time to write! Refer to the functionalities (descriped in <a href="#package-functions">Section 0</a>) that we are aiming to provide in this package, and start writing 4 functions which, together, can fulfill these functionalities. Briefly, we suggest to design functions to:</p>
 <ol type="1">
 <li><code>import</code> a coverage track and a set of genomic features (scaled to a fixed width) together in a list;</li>
 <li><code>filter</code> the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);</li>
 <li><code>compute</code> the mean coverage and its confidence interval, for each position within the features’ width;</li>
 <li><code>plot</code> the results with <code>ggplot2</code>.</li>
 </ol>
-<p>…</p>
-<p>The content of the proposed function files is shown <a href="#answers2">at the end of this instruction sheet</a>. These files provides an example of implementation to fulfill our package’s requirements.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>These functions should work in a chain:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">import</span>(bw_path, features_path, width) <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="fu">filter</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="fu">compute</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb10-4"><a href="#cb10-4"></a>    <span class="fu">plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The content of the proposed function files is shown in <code>Share/Day2/functions/</code>. These files provides an example of implementation to fulfill our package’s requirements.</p>
+</div>
+</div>
 </section>
 <section id="add-function-documentation" class="level2" data-number="2.4">
-<h2 data-number="2.4" class="anchored" data-anchor-id="add-function-documentation"><span class="header-section-number">2.4</span> 3. Add function documentation</h2>
-<p>Write oxygen tags (<code>title</code>, <code>description</code>, <code>@param</code>, <code>@return</code>, …) for each function. Don’t forget to add runnable examples!</p>
-<p>Once you have documented each function, you can 1) regenerate the documentation and 2) run examples to make sure everything is ok.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="fu">document</span>()</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">run_examples</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<h2 data-number="2.4" class="anchored" data-anchor-id="add-function-documentation"><span class="header-section-number">2.4</span> Add function documentation</h2>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p>…</p>
-<p>The content of the proposed function files is shown <a href="#answers2">at the end of this instruction sheet</a>. These files provides an example of implementation to fulfill our package’s requirements, with documentation added.</p>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Write oxygen tags (<code>title</code>, <code>description</code>, <code>@param</code>, <code>@return</code>, …) for each function.</p>
+</div>
+</div>
+<p>Once you have documented each function, you can regenerate the documentation with <code>document()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">document</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 <section id="check-your-package" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="check-your-package"><span class="header-section-number">2.5</span> 4. Check your package!</h2>
+<h2 data-number="2.5" class="anchored" data-anchor-id="check-your-package"><span class="header-section-number">2.5</span> Check your package</h2>
+<p>Several <code>check</code> functions are available. They each check your package in a specific way.</p>
+<ul>
+<li><code>devtools::check()</code> verifies the basic structure of the package, the documentation, the examples and unit tests;</li>
+<li><code>rcmdcheck::rcmdcheck()</code> does somewhat the same job but builds the package first;</li>
+<li><code>BiocCheck::BiocCheck()</code> checks the compliance of the package with <code>Bioconductor</code> requirements.</li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">check</span>()</span>
-<span id="cb11-2"><a href="#cb11-2"></a><span class="fu">BiocCheck</span>()</span>
-<span id="cb11-3"><a href="#cb11-3"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">check</span>()</span>
+<span id="cb12-2"><a href="#cb12-2"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">BiocCheck</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section>
-<section id="session-info" class="level2" data-number="2.6">
-<h2 data-number="2.6" class="anchored" data-anchor-id="session-info"><span class="header-section-number">2.6</span> Session Info</h2>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.2 (2023-10-31)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 22.04.3 LTS
-
-Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
-
-locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
-
-time zone: UTC
-tzcode source: system (glibc)
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] compiler_4.3.2  fastmap_1.1.1   cli_3.6.1       tools_4.3.2    
- [5] htmltools_0.5.7 rmarkdown_2.25  knitr_1.45      jsonlite_1.8.7 
- [9] xfun_0.41       digest_0.6.33   rlang_1.1.2     evaluate_0.23  </code></pre>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
 </div>
 </div>
-<hr>
-</section>
-<section id="answers2" class="level2" data-number="2.7">
-<h2 data-number="2.7" class="anchored" data-anchor-id="answers2"><span class="header-section-number">2.7</span> Section 2 answers</h2>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show answers
-</summary>
-<p>
-</p><blockquote class="blockquote">
-<p>Content of <code>R/import.R</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(coverage_path, features_path, width) {</span>
-<span id="cb14-2"><a href="#cb14-2"></a>    cov <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(coverage_path, <span class="at">as =</span> <span class="st">"Rle"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3"></a>    feat <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(features_path)</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    feat <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(feat, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
-<span id="cb14-5"><a href="#cb14-5"></a>    <span class="fu">return</span>(</span>
-<span id="cb14-6"><a href="#cb14-6"></a>        <span class="fu">list</span>(<span class="at">coverage =</span> cov, <span class="at">features =</span> feat)</span>
-<span id="cb14-7"><a href="#cb14-7"></a>    )</span>
-<span id="cb14-8"><a href="#cb14-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-body-container callout-body">
+<p>Attempt to fix the <code>ERROR</code> and <code>WARNING</code> returned by <code>check()</code> and <code>BiocCheck()</code>.</p>
 </div>
-<blockquote class="blockquote">
-<p>Content of <code>R/filter</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb15-2"><a href="#cb15-2"></a>    covered_genome <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">reduce</span>(<span class="fu">as</span>(l[[<span class="st">'coverage'</span>]], <span class="st">'GRanges'</span>))</span>
-<span id="cb15-3"><a href="#cb15-3"></a>    n_feats <span class="ot">&lt;-</span> <span class="fu">length</span>(l[[<span class="st">'features'</span>]])</span>
-<span id="cb15-4"><a href="#cb15-4"></a>    l[[<span class="st">'features'</span>]] <span class="ot">&lt;-</span> IRanges<span class="sc">::</span><span class="fu">subsetByOverlaps</span>(l[[<span class="st">'features'</span>]], covered_genome, <span class="at">type =</span> <span class="st">"within"</span>)</span>
-<span id="cb15-5"><a href="#cb15-5"></a>    <span class="fu">message</span>(<span class="fu">length</span>(l[[<span class="st">'features'</span>]]), <span class="st">' features retained out of '</span>, n_feats)</span>
-<span id="cb15-6"><a href="#cb15-6"></a>    <span class="fu">return</span>(l)</span>
-<span id="cb15-7"><a href="#cb15-7"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
-<p>Content of <code>R/compute</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb16-2"><a href="#cb16-2"></a>    feats <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
-<span id="cb16-3"><a href="#cb16-3"></a>    x <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(l[[<span class="st">'coverage'</span>]][l[[<span class="st">'features'</span>]]]) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb16-4"><a href="#cb16-4"></a>    scores <span class="ot">&lt;-</span> <span class="fu">t</span>(x) <span class="sc">|&gt;</span></span>
-<span id="cb16-5"><a href="#cb16-5"></a>        tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">coord =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2-1</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb16-7"><a href="#cb16-7"></a>        tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>coord, <span class="at">names_to =</span> <span class="st">'peak'</span>, <span class="at">values_to =</span> <span class="st">'cov'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb16-8"><a href="#cb16-8"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(coord) <span class="sc">|&gt;</span></span>
-<span id="cb16-9"><a href="#cb16-9"></a>        dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
-<span id="cb16-10"><a href="#cb16-10"></a>            <span class="at">score =</span> <span class="fu">mean</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb16-11"><a href="#cb16-11"></a>            <span class="at">median =</span> <span class="fu">median</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb16-12"><a href="#cb16-12"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb16-13"><a href="#cb16-13"></a>            <span class="at">count =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
-<span id="cb16-14"><a href="#cb16-14"></a>        ) <span class="sc">|&gt;</span></span>
-<span id="cb16-15"><a href="#cb16-15"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb16-16"><a href="#cb16-16"></a>            <span class="at">se =</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(count),</span>
-<span id="cb16-17"><a href="#cb16-17"></a>            <span class="at">ci_low =</span> score <span class="sc">-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se,</span>
-<span id="cb16-18"><a href="#cb16-18"></a>            <span class="at">ci_high =</span> score <span class="sc">+</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se</span>
-<span id="cb16-19"><a href="#cb16-19"></a>        )</span>
-<span id="cb16-20"><a href="#cb16-20"></a>    <span class="fu">return</span>(scores)</span>
-<span id="cb16-21"><a href="#cb16-21"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Content of <code>R/plot</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb17-2"><a href="#cb17-2"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
-<span id="cb17-3"><a href="#cb17-3"></a>        <span class="at">x =</span> coord, <span class="at">y =</span> score, <span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    )) <span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb17-6"><a href="#cb17-6"></a>        <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)</span>
-<span id="cb17-7"><a href="#cb17-7"></a>    <span class="fu">return</span>(p)</span>
-<span id="cb17-8"><a href="#cb17-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p></p>
-</details>
-<p><br></p>
-</section>
-<section id="answers3" class="level2" data-number="2.8">
-<h2 data-number="2.8" class="anchored" data-anchor-id="answers3"><span class="header-section-number">2.8</span> Section 3 answers</h2>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show answers
-</summary>
-<p>
-</p><blockquote class="blockquote">
-<p>Content of <code>R/import.R</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co">#' importFiles</span></span>
-<span id="cb18-2"><a href="#cb18-2"></a><span class="co">#'</span></span>
-<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#' This function parses a coverage track and a features file</span></span>
-<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#' (bed, narrowPeaks, gtf, ...) and returns a list of the two</span></span>
-<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#' objects imported in R.</span></span>
-<span id="cb18-6"><a href="#cb18-6"></a><span class="co">#'</span></span>
-<span id="cb18-7"><a href="#cb18-7"></a><span class="co">#' @param coverage_path Path to coverage track (bigwig)</span></span>
-<span id="cb18-8"><a href="#cb18-8"></a><span class="co">#' @param features_path Path to features file (bed, narrowPeaks, gtf, ...)</span></span>
-<span id="cb18-9"><a href="#cb18-9"></a><span class="co">#' @param width width at which each feature will be rescaled</span></span>
-<span id="cb18-10"><a href="#cb18-10"></a><span class="co">#' @return named list of 2: coverage and features</span></span>
-<span id="cb18-11"><a href="#cb18-11"></a><span class="co">#'</span></span>
-<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#' @importFrom rtracklayer import</span></span>
-<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#' @importFrom GenomicRanges resize</span></span>
-<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#' @export</span></span>
-<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#'</span></span>
-<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#' @examples</span></span>
-<span id="cb18-17"><a href="#cb18-17"></a><span class="co">#' importFiles(</span></span>
-<span id="cb18-18"><a href="#cb18-18"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
-<span id="cb18-19"><a href="#cb18-19"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
-<span id="cb18-20"><a href="#cb18-20"></a><span class="co">#'   width = 2000</span></span>
-<span id="cb18-21"><a href="#cb18-21"></a><span class="co">#' )</span></span>
-<span id="cb18-22"><a href="#cb18-22"></a></span>
-<span id="cb18-23"><a href="#cb18-23"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(coverage_path, features_path, width) {</span>
-<span id="cb18-24"><a href="#cb18-24"></a>    cov <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(coverage_path, <span class="at">as =</span> <span class="st">"Rle"</span>)</span>
-<span id="cb18-25"><a href="#cb18-25"></a>    feat <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(features_path)</span>
-<span id="cb18-26"><a href="#cb18-26"></a>    feat <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(feat, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
-<span id="cb18-27"><a href="#cb18-27"></a>    <span class="fu">return</span>(</span>
-<span id="cb18-28"><a href="#cb18-28"></a>        <span class="fu">list</span>(<span class="at">coverage =</span> cov, <span class="at">features =</span> feat)</span>
-<span id="cb18-29"><a href="#cb18-29"></a>    )</span>
-<span id="cb18-30"><a href="#cb18-30"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Content of <code>R/filter</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co">#' filterGRanges</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#'</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="co">#' This function takes a named list of 2 (coverage and features) and filters</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="co">#' out the features which are not strictly contained within the coverage track.</span></span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="co">#'</span></span>
-<span id="cb19-6"><a href="#cb19-6"></a><span class="co">#' @param l named list of 2 (coverage and features)</span></span>
-<span id="cb19-7"><a href="#cb19-7"></a><span class="co">#' @return named list of 2 (coverage and features)</span></span>
-<span id="cb19-8"><a href="#cb19-8"></a><span class="co">#'</span></span>
-<span id="cb19-9"><a href="#cb19-9"></a><span class="co">#' @importFrom methods as</span></span>
-<span id="cb19-10"><a href="#cb19-10"></a><span class="co">#' @importFrom GenomicRanges reduce</span></span>
-<span id="cb19-11"><a href="#cb19-11"></a><span class="co">#' @importFrom IRanges subsetByOverlaps</span></span>
-<span id="cb19-12"><a href="#cb19-12"></a><span class="co">#' @export</span></span>
-<span id="cb19-13"><a href="#cb19-13"></a><span class="co">#'</span></span>
-<span id="cb19-14"><a href="#cb19-14"></a><span class="co">#' @examples</span></span>
-<span id="cb19-15"><a href="#cb19-15"></a><span class="co">#' l &lt;- importFiles(</span></span>
-<span id="cb19-16"><a href="#cb19-16"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
-<span id="cb19-17"><a href="#cb19-17"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
-<span id="cb19-18"><a href="#cb19-18"></a><span class="co">#'   width = 2000</span></span>
-<span id="cb19-19"><a href="#cb19-19"></a><span class="co">#' )</span></span>
-<span id="cb19-20"><a href="#cb19-20"></a><span class="co">#' filterGRanges(l)</span></span>
-<span id="cb19-21"><a href="#cb19-21"></a></span>
-<span id="cb19-22"><a href="#cb19-22"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb19-23"><a href="#cb19-23"></a>    covered_genome <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">reduce</span>(<span class="fu">as</span>(l[[<span class="st">'coverage'</span>]], <span class="st">'GRanges'</span>))</span>
-<span id="cb19-24"><a href="#cb19-24"></a>    n_feats <span class="ot">&lt;-</span> <span class="fu">length</span>(l[[<span class="st">'features'</span>]])</span>
-<span id="cb19-25"><a href="#cb19-25"></a>    l[[<span class="st">'features'</span>]] <span class="ot">&lt;-</span> IRanges<span class="sc">::</span><span class="fu">subsetByOverlaps</span>(l[[<span class="st">'features'</span>]], covered_genome, <span class="at">type =</span> <span class="st">"within"</span>)</span>
-<span id="cb19-26"><a href="#cb19-26"></a>    <span class="fu">message</span>(<span class="fu">length</span>(l[[<span class="st">'features'</span>]]), <span class="st">' features retained out of '</span>, n_feats)</span>
-<span id="cb19-27"><a href="#cb19-27"></a>    <span class="fu">return</span>(l)</span>
-<span id="cb19-28"><a href="#cb19-28"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Content of <code>R/compute</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co">#' filterGRanges</span></span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="co">#' computeCoverage</span></span>
-<span id="cb20-3"><a href="#cb20-3"></a><span class="co">#'</span></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="co">#' This function takes a named list of 2 (coverage and features) and extracts</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="co">#' the coverage over each feature, centered at the center of each feature.</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="co">#'</span></span>
-<span id="cb20-7"><a href="#cb20-7"></a><span class="co">#' @param l named list of 2 (coverage and features)</span></span>
-<span id="cb20-8"><a href="#cb20-8"></a><span class="co">#' @return a tibble describing average coverage +/- CI over the set of features</span></span>
-<span id="cb20-9"><a href="#cb20-9"></a><span class="co">#' from `l`</span></span>
-<span id="cb20-10"><a href="#cb20-10"></a><span class="co">#'</span></span>
-<span id="cb20-11"><a href="#cb20-11"></a><span class="co">#' @importFrom tibble as_tibble</span></span>
-<span id="cb20-12"><a href="#cb20-12"></a><span class="co">#' @importFrom dplyr mutate</span></span>
-<span id="cb20-13"><a href="#cb20-13"></a><span class="co">#' @importFrom dplyr group_by</span></span>
-<span id="cb20-14"><a href="#cb20-14"></a><span class="co">#' @importFrom dplyr summarize</span></span>
-<span id="cb20-15"><a href="#cb20-15"></a><span class="co">#' @importFrom dplyr n</span></span>
-<span id="cb20-16"><a href="#cb20-16"></a><span class="co">#' @importFrom tidyr pivot_longer</span></span>
-<span id="cb20-17"><a href="#cb20-17"></a><span class="co">#' @export</span></span>
-<span id="cb20-18"><a href="#cb20-18"></a><span class="co">#'</span></span>
-<span id="cb20-19"><a href="#cb20-19"></a><span class="co">#' @examples</span></span>
-<span id="cb20-20"><a href="#cb20-20"></a><span class="co">#' l &lt;- importFiles(</span></span>
-<span id="cb20-21"><a href="#cb20-21"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
-<span id="cb20-22"><a href="#cb20-22"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
-<span id="cb20-23"><a href="#cb20-23"></a><span class="co">#'   width = 2000</span></span>
-<span id="cb20-24"><a href="#cb20-24"></a><span class="co">#' )</span></span>
-<span id="cb20-25"><a href="#cb20-25"></a><span class="co">#' l &lt;- filterGRanges(l)</span></span>
-<span id="cb20-26"><a href="#cb20-26"></a><span class="co">#' computeCoverage(l)</span></span>
-<span id="cb20-27"><a href="#cb20-27"></a></span>
-<span id="cb20-28"><a href="#cb20-28"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb20-29"><a href="#cb20-29"></a>    feats <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
-<span id="cb20-30"><a href="#cb20-30"></a>    x <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(l[[<span class="st">'coverage'</span>]][l[[<span class="st">'features'</span>]]]) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb20-31"><a href="#cb20-31"></a>    scores <span class="ot">&lt;-</span> <span class="fu">t</span>(x) <span class="sc">|&gt;</span></span>
-<span id="cb20-32"><a href="#cb20-32"></a>        tibble<span class="sc">::</span><span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb20-33"><a href="#cb20-33"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">coord =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2</span>, <span class="fu">ncol</span>(x)<span class="sc">/</span><span class="dv">2-1</span>, <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb20-34"><a href="#cb20-34"></a>        tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>coord, <span class="at">names_to =</span> <span class="st">'peak'</span>, <span class="at">values_to =</span> <span class="st">'cov'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb20-35"><a href="#cb20-35"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(coord) <span class="sc">|&gt;</span></span>
-<span id="cb20-36"><a href="#cb20-36"></a>        dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
-<span id="cb20-37"><a href="#cb20-37"></a>            <span class="at">score =</span> <span class="fu">mean</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb20-38"><a href="#cb20-38"></a>            <span class="at">median =</span> <span class="fu">median</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb20-39"><a href="#cb20-39"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb20-40"><a href="#cb20-40"></a>            <span class="at">count =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
-<span id="cb20-41"><a href="#cb20-41"></a>        ) <span class="sc">|&gt;</span></span>
-<span id="cb20-42"><a href="#cb20-42"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb20-43"><a href="#cb20-43"></a>            <span class="at">se =</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(count),</span>
-<span id="cb20-44"><a href="#cb20-44"></a>            <span class="at">ci_low =</span> score <span class="sc">-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se,</span>
-<span id="cb20-45"><a href="#cb20-45"></a>            <span class="at">ci_high =</span> score <span class="sc">+</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se</span>
-<span id="cb20-46"><a href="#cb20-46"></a>        )</span>
-<span id="cb20-47"><a href="#cb20-47"></a>    <span class="fu">return</span>(scores)</span>
-<span id="cb20-48"><a href="#cb20-48"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Content of <code>R/plot</code></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a><span class="co">#' plotCoverage</span></span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="co">#'</span></span>
-<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#' This function takes a tibble describing average coverage +/- CI over a</span></span>
-<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#' set of features and returns a ggplot</span></span>
-<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#'</span></span>
-<span id="cb21-6"><a href="#cb21-6"></a><span class="co">#' @param x tibble with 'coord', 'score', 'ci_low' and 'ci_high' columns</span></span>
-<span id="cb21-7"><a href="#cb21-7"></a><span class="co">#' @return ggplot</span></span>
-<span id="cb21-8"><a href="#cb21-8"></a><span class="co">#'</span></span>
-<span id="cb21-9"><a href="#cb21-9"></a><span class="co">#' @import ggplot2</span></span>
-<span id="cb21-10"><a href="#cb21-10"></a><span class="co">#' @export</span></span>
-<span id="cb21-11"><a href="#cb21-11"></a><span class="co">#'</span></span>
-<span id="cb21-12"><a href="#cb21-12"></a><span class="co">#' @examples</span></span>
-<span id="cb21-13"><a href="#cb21-13"></a><span class="co">#' l &lt;- importFiles(</span></span>
-<span id="cb21-14"><a href="#cb21-14"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-vs-input.bw'),</span></span>
-<span id="cb21-15"><a href="#cb21-15"></a><span class="co">#'   here::here('../../../Share/Day2/Scc1-peaks.narrowPeak'),</span></span>
-<span id="cb21-16"><a href="#cb21-16"></a><span class="co">#'   width = 5000</span></span>
-<span id="cb21-17"><a href="#cb21-17"></a><span class="co">#' )</span></span>
-<span id="cb21-18"><a href="#cb21-18"></a><span class="co">#' l &lt;- filterGRanges(l)</span></span>
-<span id="cb21-19"><a href="#cb21-19"></a><span class="co">#' x &lt;- computeCoverage(l)</span></span>
-<span id="cb21-20"><a href="#cb21-20"></a><span class="co">#' plotCoverage(x)</span></span>
-<span id="cb21-21"><a href="#cb21-21"></a></span>
-<span id="cb21-22"><a href="#cb21-22"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(x) {</span>
-<span id="cb21-23"><a href="#cb21-23"></a>    p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(x, <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
-<span id="cb21-24"><a href="#cb21-24"></a>        <span class="at">x =</span> coord, <span class="at">y =</span> score, <span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high</span>
-<span id="cb21-25"><a href="#cb21-25"></a>    )) <span class="sc">+</span></span>
-<span id="cb21-26"><a href="#cb21-26"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb21-27"><a href="#cb21-27"></a>        <span class="fu">geom_ribbon</span>(<span class="at">alpha =</span> <span class="fl">0.1</span>)</span>
-<span id="cb21-28"><a href="#cb21-28"></a>    <span class="fu">return</span>(p)</span>
-<span id="cb21-29"><a href="#cb21-29"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p></p>
-</details>
-<p><br></p>
 
 
 </section>
@@ -1125,8 +1089,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/exercises/Day3_S4-classes.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/exercises/Day3_Examples-test-data.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

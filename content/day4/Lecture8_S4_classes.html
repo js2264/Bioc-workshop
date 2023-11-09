@@ -8,7 +8,7 @@
 
 <meta name="author" content="J. Serizay">
 
-<title>Developing R/Bioconductor packages for Genomics - 4&nbsp; Improving package integration</title>
+<title>Developing R/Bioconductor packages for Genomics – Lecture 7 - S4 classes in Bioconductor</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
 </style>
 
 
@@ -65,7 +31,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/exercises/Day3_S4-classes.html" rel="prev">
+<link href="../../content/day4/Lecture9_Bioconductor_submission.html" rel="next">
+<link href="../../content/day3/Lecture7_Improving_package-data_vignettes-....html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -108,7 +75,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/exercises/Day1_Getting-started-with-Bioc.html">Exercises</a></li><li class="breadcrumb-item"><a href="../../content/exercises/Day4_package-integration.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/day4/Lecture8_S4_classes.html">Day 4</a></li><li class="breadcrumb-item"><a href="../../content/day4/Lecture8_S4_classes.html">Lecture 7 - S4 classes in Bioconductor</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -123,7 +90,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../../">Developing R/Bioconductor packages for Genomics</a> 
+      <a href="../../">
+      Developing R/Bioconductor packages for Genomics
+      </a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/js2264/Bioc-workshop/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
@@ -235,8 +204,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day3/Lecture7_S4_classes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
+  <a href="../../content/day3/Lecture7_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
   </div>
 </li>
       </ul>
@@ -252,8 +221,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day4/Lecture8_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
+  <a href="../../content/day4/Lecture8_S4_classes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -310,14 +279,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day3_S4-classes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  <a href="../../content/exercises/Day3_Examples-test-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day4_package-integration.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
+  <a href="../../content/exercises/Day4_S4-classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day5_package-integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
   </div>
 </li>
       </ul>
@@ -328,21 +303,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#improve-examples-using-txdb-and-annotationhub-resources" id="toc-improve-examples-using-txdb-and-annotationhub-resources" class="nav-link active" data-scroll-target="#improve-examples-using-txdb-and-annotationhub-resources"><span class="header-section-number">4.1</span> 1. Improve examples using TxDb and AnnotationHub resources</a></li>
-  <li><a href="#create-pkgdown-website-and-host-it-on-github" id="toc-create-pkgdown-website-and-host-it-on-github" class="nav-link" data-scroll-target="#create-pkgdown-website-and-host-it-on-github"><span class="header-section-number">4.2</span> 2. Create pkgdown website and host it on GitHub</a></li>
-  </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day4_package-integration.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+        
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></h1>
+<h1 class="title">Lecture 7 - S4 classes in Bioconductor</h1>
 </div>
 
 
@@ -357,114 +325,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<ul>
-<li><p><strong>Overarching goal:</strong> Improve package embedding in Bioconductor ecosystem</p></li>
-<li><p><strong>Specific aims:</strong></p>
-<ul>
-<li>Add suppporting functions to access AnnotationHub-hosted files</li>
-<li>Create a pkgdown website for package documentation</li>
-</ul></li>
-</ul>
-<section id="improve-examples-using-txdb-and-annotationhub-resources" class="level2" data-number="4.1">
-<h2 data-number="4.1" class="anchored" data-anchor-id="improve-examples-using-txdb-and-annotationhub-resources"><span class="header-section-number">4.1</span> 1. Improve examples using TxDb and AnnotationHub resources</h2>
-<p><code>TxDb</code> packages provide transcript annotations for model organisms.</p>
-<blockquote class="blockquote">
-<p>Find the <code>TxDb</code> package associated with UCSC-provided human gene annotations and install it. <strong>You will need annotations from the <code>hg19</code> human genome reference!</strong></p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">'TxDb.Hsapiens.UCSC.hg19.knownGene'</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>txdb <span class="ot">&lt;-</span> TxDb.Hsapiens.UCSC.hg19.knownGene<span class="sc">::</span>TxDb.Hsapiens.UCSC.hg19.knownGene</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<iframe height="800" width="100%" src="Lecture8_S4_classes.pdf">
+<div id="quarto-navigation-envelope" class="hidden">
+<p><span class="hidden" data-render-id="quarto-int-sidebar-title">Developing R/Bioconductor packages for Genomics</span> <span class="hidden" data-render-id="quarto-int-navbar-title">Developing R/Bioconductor packages for Genomics</span> <span class="hidden" data-render-id="quarto-int-next">Lecture 9 - Bioconductor package submission</span> <span class="hidden" data-render-id="quarto-int-prev">Lecture 8 - Vignettes and data</span> <span class="hidden" data-render-id="quarto-int-sidebar:/index.html">Welcome</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/program.html">Program</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/prerequisites.html">Prerequesites</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/extra.html">Extra resources</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-1">Day 1</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture0_course-overview.html">Lecture 0 - Introduction to the workshop</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture1_Package_architecture.html">Lecture 1 - R package architecture</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture2_Bioconductor_101.html">Lecture 2 - Introduction to Bioconductor</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture3_Developer-toolkit.html">Lecture 3 - R developer toolkit</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-2">Day 2</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day2/Lecture4_Continuous_development-writing-documenting-testing.html">Lecture 4 - Continuous development</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day2/Lecture5_Bioconductor_201.html">Lecture 5 - Bioconductor 201</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-3">Day 3</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day3/Lecture6_Git_versionning.html">Lecture 6 - Git versioning</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day3/Lecture7_Improving_package-data_vignettes-....html">Lecture 8 - Vignettes and data</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-4">Day 4</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day4/Lecture8_S4_classes.html">Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day4/Lecture9_Bioconductor_submission.html">Lecture 9 - Bioconductor package submission</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-5">Day 5</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day5/Lecture10_Other_package_types.html">Lecture 10 - Other package types</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day5/Lecture11_Package_dissemination.html">Lecture 11 - Package dissemination</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-6">Exercises</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day1_Getting-started-with-Bioc.html"><span class="chapter-number">1</span>  <span class="chapter-title">Getting started with Bioconductor ecosystem</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day2_Developer-virtuous-circle.html"><span class="chapter-number">2</span>  <span class="chapter-title">Kickstarting an R package</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day3_Examples-test-data.html"><span class="chapter-number">3</span>  <span class="chapter-title">Enriching package functionalities</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day4_S4-classes.html"><span class="chapter-number">4</span>  <span class="chapter-title">Using S4 classes in a package</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day5_package-integration.html"><span class="chapter-number">5</span>  <span class="chapter-title">Improving package integration</span></span> <span class="hidden" data-render-id="footer-left">Developing R/Bioconductor packages for Genomics |<br />
+J. Serizay</span> <span class="hidden" data-render-id="footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</span> <span class="hidden" data-render-id="quarto-breadcrumbs-df06f69911ab808ad1be095f974e0508">Day 4</span> <span class="hidden" data-render-id="quarto-breadcrumbs-c4d4cf1a36220ca60aad58d36dbef3f3">Lecture 7 - S4 classes in Bioconductor</span></p>
 </div>
-<p><code>GenomicFeatures</code> is a package designed in order to facilitate conversion of <code>TxDb</code> objects into <code>GRanges</code> objects.</p>
-<blockquote class="blockquote">
-<p>Which function from <code>GenomicFeatures</code> can be used to find the gene loci for all genes present in the human <code>TxDb</code>?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>GenomicFeatures<span class="sc">::</span><span class="fu">genes</span>(txdb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="quarto-meta-markdown" class="hidden">
+<p><span class="hidden" data-render-id="quarto-metatitle">Developing R/Bioconductor packages for Genomics - Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-twittercardtitle">Developing R/Bioconductor packages for Genomics - Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-ogcardtitle">Developing R/Bioconductor packages for Genomics - Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-metasitename">Developing R/Bioconductor packages for Genomics</span> <span class="hidden" data-render-id="quarto-twittercarddesc"></span> <span class="hidden" data-render-id="quarto-ogcardddesc"></span></p>
 </div>
-<p>AnnotationHub provides extensive human NGS datasets.</p>
-<blockquote class="blockquote">
-<p>Can you query the AnnotationHub to explore which datasets are available? Which species are most represented?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>ah <span class="ot">&lt;-</span> AnnotationHub<span class="sc">::</span><span class="fu">AnnotationHub</span>()</span>
-<span id="cb3-2"><a href="#cb3-2"></a>ah_df <span class="ot">&lt;-</span> AnnotationHub<span class="sc">::</span><span class="fu">mcols</span>(ah)</span>
-<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">table</span>(ah_df<span class="sc">$</span>species) <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">10</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="fu">table</span>(ah_df<span class="sc">$</span>sourcetype) <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The Epigenome roadmap project by the Broad Institute performed H3K4me3 ChIP-seq in human. They generated a library labelled ‘LL227’ (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM409308">GEO ID: GSM409308</a>).</p>
-<blockquote class="blockquote">
-<p>Can you query the AnnotationHub for this library?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>AnnotationHub<span class="sc">::</span><span class="fu">query</span>(ah, <span class="st">'LL227'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>bw <span class="ot">&lt;-</span> ah[[<span class="st">'AH34904'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>What is the path of the file now stored on disk? How can you load the file in R?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>BiocIO<span class="sc">::</span><span class="fu">resource</span>(bw)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>cov <span class="ot">&lt;-</span> BiocIO<span class="sc">::</span><span class="fu">import</span>(bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Create a <code>colData</code> data frame containing a single <code>file</code> column containing this file, then compute an <code>AggregatedCoverage</code> object over human TSSs (+/- 5kb).</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>genes <span class="ot">&lt;-</span> GenomicFeatures<span class="sc">::</span><span class="fu">genes</span>(txdb)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>tss <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(genes, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">fix =</span> <span class="st">'start'</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>tss_extended <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(tss, <span class="at">width =</span> <span class="dv">10000</span>, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">file =</span> BiocIO<span class="sc">::</span><span class="fu">resource</span>(bw))</span>
-<span id="cb7-5"><a href="#cb7-5"></a>AC <span class="ot">&lt;-</span> <span class="fu">AggregatedCoverage</span>(tss_extended, colData)</span>
-<span id="cb7-6"><a href="#cb7-6"></a>AC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Can you plot the results?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">plot</span>(AC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Create a new vignette to illustrate use of AnnotationHub data with your package.</p>
-</blockquote>
-</section>
-<section id="create-pkgdown-website-and-host-it-on-github" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="create-pkgdown-website-and-host-it-on-github"><span class="header-section-number">4.2</span> 2. Create pkgdown website and host it on GitHub</h2>
-<blockquote class="blockquote">
-<p>Check <code>pkgdown</code> documentation. What is the recommended way to add pkgdown support for your package?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>usethis<span class="sc">::</span><span class="fu">use_pkgdown</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Can you now build your package? What does the building step do exactly?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>pkgdown<span class="sc">::</span><span class="fu">build_site</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<blockquote class="blockquote">
-<p>Comment on why setting up a pkgdown website helps with checking that your package reliably works?</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Commit your changes. Did that include your newly created <code>docs</code> folder? Why?</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Remove <code>docs</code> from <code>.gitignore</code>, then commit the <code>docs/</code> folder with git.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Now push all your commits to your github remote repository, navigate to its webpage, and enable <code>Pages</code> deployment from the <code>docs</code> folder. Check the resulting website.</p>
-</blockquote>
-
-
-</section>
 
 </main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+<script id = "quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -699,25 +570,34 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/exercises/Day3_S4-classes.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span>
+      <a  href="/content/day3/Lecture7_Improving_package-data_vignettes-....html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 8 - Vignettes and data</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a  href="/content/day4/Lecture9_Bioconductor_submission.html" class="pagination-link">
+        <span class="nav-page-text">Lecture 9 - Bioconductor package submission</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">Developing R/Bioconductor packages for Genomics |<br>
-J. Serizay</div>   
+    <div class="nav-footer-left">
+      <div class='footer-contents'>Developing R/Bioconductor packages for Genomics |  
+J. Serizay
+</div>  
+    </div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
-    <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
+    <div class="nav-footer-right">
+      <div class='footer-contents'>This book was built with <a href="https://quarto.org/">Quarto</a>.
+</div>  
+    </div>
   </div>
 </footer>
 
+</body>
 
-
-</body></html>
+</html></iframe></main></div><footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/day4/Lecture8_S4_classes.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></div></div></footer></body></html>

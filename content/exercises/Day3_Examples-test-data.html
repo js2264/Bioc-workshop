@@ -8,7 +8,7 @@
 
 <meta name="author" content="J. Serizay">
 
-<title>Developing R/Bioconductor packages for Genomics – Lecture 7 - S4 classes in Bioconductor</title>
+<title>Developing R/Bioconductor packages for Genomics - 3&nbsp; Enriching package functionalities</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -31,8 +65,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/day4/Lecture8_Improving_package-data_vignettes-....html" rel="next">
-<link href="../../content/day3/Lecture6_Git_versionning.html" rel="prev">
+<link href="../../content/exercises/Day4_S4-classes.html" rel="next">
+<link href="../../content/exercises/Day2_Developer-virtuous-circle.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -75,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/day3/Lecture6_Git_versionning.html">Day 3</a></li><li class="breadcrumb-item"><a href="../../content/day3/Lecture7_S4_classes.html">Lecture 7 - S4 classes in Bioconductor</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/exercises/Day1_Getting-started-with-Bioc.html">Exercises</a></li><li class="breadcrumb-item"><a href="../../content/exercises/Day3_Examples-test-data.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -90,9 +124,7 @@ ul.task-list li input[type="checkbox"] {
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="../../">
-      Developing R/Bioconductor packages for Genomics
-      </a> 
+      <a href="../../">Developing R/Bioconductor packages for Genomics</a> 
         <div class="sidebar-tools-main">
     <a href="https://github.com/js2264/Bioc-workshop/" rel="" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
 </div>
@@ -204,8 +236,8 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day3/Lecture7_S4_classes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
+  <a href="../../content/day3/Lecture7_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
   </div>
 </li>
       </ul>
@@ -221,8 +253,8 @@ ul.task-list li input[type="checkbox"] {
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day4/Lecture8_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
+  <a href="../../content/day4/Lecture8_S4_classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -279,14 +311,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day3_S4-classes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  <a href="../../content/exercises/Day3_Examples-test-data.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day4_package-integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
+  <a href="../../content/exercises/Day4_S4-classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day5_package-integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
   </div>
 </li>
       </ul>
@@ -297,14 +335,22 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#add-supporting-data-to-your-package" id="toc-add-supporting-data-to-your-package" class="nav-link active" data-scroll-target="#add-supporting-data-to-your-package"><span class="header-section-number">3.1</span> Add supporting data to your package</a></li>
+  <li><a href="#add-examples-to-your-function-files" id="toc-add-examples-to-your-function-files" class="nav-link" data-scroll-target="#add-examples-to-your-function-files"><span class="header-section-number">3.2</span> Add examples to your function files</a></li>
+  <li><a href="#add-unit-tests-to-your-package" id="toc-add-unit-tests-to-your-package" class="nav-link" data-scroll-target="#add-unit-tests-to-your-package"><span class="header-section-number">3.3</span> Add unit tests to your package</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day3_Examples-test-data.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lecture 7 - S4 classes in Bioconductor</h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></h1>
 </div>
 
 
@@ -319,17 +365,172 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<iframe height="800" width="100%" src="Lecture7_S4_classes.pdf">
-<div id="quarto-navigation-envelope" class="hidden">
-<p><span class="hidden" data-render-id="quarto-int-sidebar-title">Developing R/Bioconductor packages for Genomics</span> <span class="hidden" data-render-id="quarto-int-navbar-title">Developing R/Bioconductor packages for Genomics</span> <span class="hidden" data-render-id="quarto-int-next">Lecture 8 - Vignettes and data</span> <span class="hidden" data-render-id="quarto-int-prev">Lecture 6 - Git versioning</span> <span class="hidden" data-render-id="quarto-int-sidebar:/index.html">Welcome</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/program.html">Program</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/prerequisites.html">Prerequesites</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/extra.html">Extra resources</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-1">Day 1</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture0_course-overview.html">Lecture 0 - Introduction to the workshop</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture1_Package_architecture.html">Lecture 1 - R package architecture</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture2_Bioconductor_101.html">Lecture 2 - Introduction to Bioconductor</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day1/Lecture3_Developer-toolkit.html">Lecture 3 - R developer toolkit</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-2">Day 2</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day2/Lecture4_Continuous_development-writing-documenting-testing.html">Lecture 4 - Continuous development</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day2/Lecture5_Bioconductor_201.html">Lecture 5 - Bioconductor 201</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-3">Day 3</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day3/Lecture6_Git_versionning.html">Lecture 6 - Git versioning</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day3/Lecture7_S4_classes.html">Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-4">Day 4</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day4/Lecture8_Improving_package-data_vignettes-....html">Lecture 8 - Vignettes and data</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day4/Lecture9_Bioconductor_submission.html">Lecture 9 - Bioconductor package submission</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-5">Day 5</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day5/Lecture10_Other_package_types.html">Lecture 10 - Other package types</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/day5/Lecture11_Package_dissemination.html">Lecture 11 - Package dissemination</span> <span class="hidden" data-render-id="quarto-int-sidebar:quarto-sidebar-section-6">Exercises</span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day1_Getting-started-with-Bioc.html"><span class="chapter-number">1</span>  <span class="chapter-title">Getting started with Bioconductor ecosystem</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day2_Developer-virtuous-circle.html"><span class="chapter-number">2</span>  <span class="chapter-title">Kickstarting an R package</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day3_S4-classes.html"><span class="chapter-number">3</span>  <span class="chapter-title">Using S4 classes in a package</span></span> <span class="hidden" data-render-id="quarto-int-sidebar:/content/exercises/Day4_package-integration.html"><span class="chapter-number">4</span>  <span class="chapter-title">Improving package integration</span></span> <span class="hidden" data-render-id="footer-left">Developing R/Bioconductor packages for Genomics |<br />
-J. Serizay</span> <span class="hidden" data-render-id="footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</span> <span class="hidden" data-render-id="quarto-breadcrumbs-223e2965264ed5a7335008666fb8bf98">Day 3</span> <span class="hidden" data-render-id="quarto-breadcrumbs-c4d4cf1a36220ca60aad58d36dbef3f3">Lecture 7 - S4 classes in Bioconductor</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<div id="quarto-meta-markdown" class="hidden">
-<p><span class="hidden" data-render-id="quarto-metatitle">Developing R/Bioconductor packages for Genomics - Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-twittercardtitle">Developing R/Bioconductor packages for Genomics - Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-ogcardtitle">Developing R/Bioconductor packages for Genomics - Lecture 7 - S4 classes in Bioconductor</span> <span class="hidden" data-render-id="quarto-metasitename">Developing R/Bioconductor packages for Genomics</span> <span class="hidden" data-render-id="quarto-twittercarddesc"></span> <span class="hidden" data-render-id="quarto-ogcardddesc"></span></p>
+<div class="callout-title-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Adding supporting data</li>
+<li>Adding examples</li>
+<li>Adding unit tests</li>
+</ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>At any time, if you are lost or do not understand how functions in the</strong> <strong>proposed solution work, type <code>?&lt;function&gt;</code> in the R console </strong> <strong>and a help menu will appear.</strong></p>
+<p>You can also check the help tab in the corresponding quadrant.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We aim to create a package which can plot the aggregated coverage of a genomic track over a set of <code>GRanges</code> of interest (at a fixed width).</p>
+</div>
+</div>
+<section id="add-supporting-data-to-your-package" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="add-supporting-data-to-your-package"><span class="header-section-number">3.1</span> Add supporting data to your package</h2>
+<p>You can use toy dataset files provided in <code>Share/Day3/</code>.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Add them to the <code>inst/extdata/</code> folder in your package.</p>
+</div>
+</div>
+<p>You will also need to document how these raw data files have been generated (or obtained). This can be done in a less “formal” manner, in a <code>.R</code> file in <code>inst/scripts</code>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An example of such script is in <code>Share/Day3/make-extdata.R</code>.</p>
+</div>
+</div>
+</section>
+<section id="add-examples-to-your-function-files" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="add-examples-to-your-function-files"><span class="header-section-number">3.2</span> Add examples to your function files</h2>
+<p>Examples can be used to illustrate how your function works. They are integrated in the manual pages compiled with <code>document()</code> and are often the first thing a new end-user is going to read.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Add runnable examples to each function.</p>
+</div>
+</div>
+<p>Once you have added examples to your functions, you can check whether these examples work with <code>run_examples()</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">run_examples</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The content of the proposed function files is shown in <code>Share/Day3/functions_with-examples/</code>. These files provides an example of implementation to fulfill our package’s requirements, with examples added.</p>
+</div>
+</div>
+</section>
+<section id="add-unit-tests-to-your-package" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="add-unit-tests-to-your-package"><span class="header-section-number">3.3</span> Add unit tests to your package</h2>
+<p>Unit tests are the best way to make sure that your package works as intended. They consist of <code>R</code> code, executed and compared to an expected result.</p>
+<p>To start using unit tests, you need to declare it. We will use the <code>testthat</code> framework to implement unit tests.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>usethis<span class="sc">::</span><span class="fu">use_testthat</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Once <code>testthat</code> is initiated, create a new test file and add individual tests.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>An example of a working test file is availabe in <code>Share/Day3//</code></p>
+</div>
 </div>
 
+
+</section>
+
 </main> <!-- /main -->
-<script id = "quarto-html-after-body" type="application/javascript">
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -564,34 +765,28 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a  href="/content/day3/Lecture6_Git_versionning.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lecture 6 - Git versioning</span>
+      <a href="../../content/exercises/Day2_Developer-virtuous-circle.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kickstarting an R package</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a  href="/content/day4/Lecture8_Improving_package-data_vignettes-....html" class="pagination-link">
-        <span class="nav-page-text">Lecture 8 - Vignettes and data</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/exercises/Day4_S4-classes.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
-    <div class="nav-footer-left">
-      <div class='footer-contents'>Developing R/Bioconductor packages for Genomics |  
-J. Serizay
-</div>  
-    </div>   
+    <div class="nav-footer-left">Developing R/Bioconductor packages for Genomics |<br>
+J. Serizay</div>   
     <div class="nav-footer-center">
       &nbsp;
     </div>
-    <div class="nav-footer-right">
-      <div class='footer-contents'>This book was built with <a href="https://quarto.org/">Quarto</a>.
-</div>  
-    </div>
+    <div class="nav-footer-right">This book was built with <a href="https://quarto.org/">Quarto</a>.</div>
   </div>
 </footer>
 
-</body>
 
-</html></iframe></main></div><footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/day3/Lecture7_S4_classes.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></div></div></footer></body></html>
+
+</body></html>

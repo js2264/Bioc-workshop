@@ -8,7 +8,7 @@
 
 <meta name="author" content="J. Serizay">
 
-<title>Developing R/Bioconductor packages for Genomics - 3&nbsp; Using S4 classes in a package</title>
+<title>Developing R/Bioconductor packages for Genomics - 4&nbsp; Using S4 classes in a package</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -65,8 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
-<link href="../../content/exercises/Day4_package-integration.html" rel="next">
-<link href="../../content/exercises/Day2_Developer-virtuous-circle.html" rel="prev">
+<link href="../../content/exercises/Day5_package-integration.html" rel="next">
+<link href="../../content/exercises/Day3_Examples-test-data.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -109,7 +109,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/exercises/Day1_Getting-started-with-Bioc.html">Exercises</a></li><li class="breadcrumb-item"><a href="../../content/exercises/Day3_S4-classes.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../content/exercises/Day1_Getting-started-with-Bioc.html">Exercises</a></li><li class="breadcrumb-item"><a href="../../content/exercises/Day4_S4-classes.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -236,8 +236,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day3/Lecture7_S4_classes.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
+  <a href="../../content/day3/Lecture7_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
   </div>
 </li>
       </ul>
@@ -253,8 +253,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/day4/Lecture8_Improving_package-data_vignettes-....html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Lecture 8 - Vignettes and data</span></a>
+  <a href="../../content/day4/Lecture8_S4_classes.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lecture 7 - S4 classes in Bioconductor</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -311,14 +311,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day3_S4-classes.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  <a href="../../content/exercises/Day3_Examples-test-data.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../../content/exercises/Day4_package-integration.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
+  <a href="../../content/exercises/Day4_S4-classes.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../content/exercises/Day5_package-integration.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Improving package integration</span></span></a>
   </div>
 </li>
       </ul>
@@ -333,22 +339,22 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#framework" id="toc-framework" class="nav-link active" data-scroll-target="#framework"><span class="header-section-number">3.1</span> 0. Framework</a></li>
-  <li><a href="#preliminary-checks" id="toc-preliminary-checks" class="nav-link" data-scroll-target="#preliminary-checks"><span class="header-section-number">3.2</span> 1. Preliminary checks</a></li>
-  <li><a href="#parsing-bigwig-files" id="toc-parsing-bigwig-files" class="nav-link" data-scroll-target="#parsing-bigwig-files"><span class="header-section-number">3.3</span> 2. Parsing bigwig files</a></li>
-  <li><a href="#preparing-rowdata" id="toc-preparing-rowdata" class="nav-link" data-scroll-target="#preparing-rowdata"><span class="header-section-number">3.4</span> 3. Preparing rowData</a></li>
-  <li><a href="#building-the-aggregatedcoverage-class" id="toc-building-the-aggregatedcoverage-class" class="nav-link" data-scroll-target="#building-the-aggregatedcoverage-class"><span class="header-section-number">3.5</span> 4. Building the <code>AggregatedCoverage</code> class</a></li>
-  <li><a href="#plotting-aggregatedcoverage-objects" id="toc-plotting-aggregatedcoverage-objects" class="nav-link" data-scroll-target="#plotting-aggregatedcoverage-objects"><span class="header-section-number">3.6</span> 5. Plotting <code>AggregatedCoverage</code> objects</a></li>
-  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info"><span class="header-section-number">3.7</span> Session Info</a></li>
+  <li><a href="#framework" id="toc-framework" class="nav-link active" data-scroll-target="#framework"><span class="header-section-number">4.1</span> Framework</a></li>
+  <li><a href="#preliminary-checks" id="toc-preliminary-checks" class="nav-link" data-scroll-target="#preliminary-checks"><span class="header-section-number">4.2</span> 1. Preliminary checks</a></li>
+  <li><a href="#parsing-bigwig-files" id="toc-parsing-bigwig-files" class="nav-link" data-scroll-target="#parsing-bigwig-files"><span class="header-section-number">4.3</span> 2. Parsing bigwig files</a></li>
+  <li><a href="#preparing-rowdata" id="toc-preparing-rowdata" class="nav-link" data-scroll-target="#preparing-rowdata"><span class="header-section-number">4.4</span> 3. Preparing rowData</a></li>
+  <li><a href="#building-the-aggregatedcoverage-class" id="toc-building-the-aggregatedcoverage-class" class="nav-link" data-scroll-target="#building-the-aggregatedcoverage-class"><span class="header-section-number">4.5</span> 4. Building the <code>AggregatedCoverage</code> class</a></li>
+  <li><a href="#plotting-aggregatedcoverage-objects" id="toc-plotting-aggregatedcoverage-objects" class="nav-link" data-scroll-target="#plotting-aggregatedcoverage-objects"><span class="header-section-number">4.6</span> 5. Plotting <code>AggregatedCoverage</code> objects</a></li>
+  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info"><span class="header-section-number">4.7</span> Session Info</a></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day3_S4-classes.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day4_S4-classes.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Using S4 classes in a package</span></h1>
 </div>
 
 
@@ -363,38 +369,63 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li><p><strong>Overarching goal:</strong> Implement a new S4 class of objects</p></li>
-<li><p><strong>Specific aims:</strong></p>
-<ul>
-<li>Put together the set of functions from Day 2 into a single workflow</li>
-<li>Document the new S4 class and its constructor</li>
+<li>Put together the set of functions from Day 2 into a single workflow;</li>
+<li>Document a new S4 class and its constructor;</li>
 <li>Create a method to handle plotting for your new S4 class</li>
-</ul></li>
 </ul>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p><strong>At any time, if you are lost or do not understand how functions in the</strong> <strong>proposed solution work, type <code>?&lt;function&gt;</code> in the R console </strong> <strong>and a help menu will appear.</strong></p>
-<p><strong>REMINDER:</strong><br>
-We aim to create a package which can:</p>
-<ul>
-<li>Import <code>.bigwig</code> coverage track files</li>
-<li>Calculate the average (+/- quantiles) of coverage of the <code>.bigwig</code> file over <code>GRanges</code> of interest</li>
-<li>Plot the aggregated <code>.bigwig</code> coverage over the <code>GRanges</code> of interest</li>
-</ul>
-<p>Eventually, the functions shipped in this package should be able to turn a pair of <code>.bigwig</code>/<code>GRanges</code> into this type of plot:</p>
-<p>…</p>
-<section id="framework" class="level2" data-number="3.1">
-<h2 data-number="3.1" class="anchored" data-anchor-id="framework"><span class="header-section-number">3.1</span> 0. Framework</h2>
+<p>You can also check the help tab in the corresponding quadrant.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We aim to create a package which can plot the aggregated coverage of a genomic track over a set of <code>GRanges</code> of interest (at a fixed width).</p>
+</div>
+</div>
+<section id="framework" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="framework"><span class="header-section-number">4.1</span> Framework</h2>
 <p>Functions developed in Day 2 work well for a specific couple of <code>.bigwig</code>/<code>.bed</code> files. However, the more used to Bioconductor you get, the more you will realize that you might already have your genomic features of interest (TSSs, genebodies, regulatory elements, binding motifs, …) already imported in R.</p>
 <p>To make this package more “usable” by a broader Bioconductor audience, we will move to a more generic framework. We will create a single S4 class named <code>AggregatedCoverage</code>. The <code>AggregatedCoverage</code> constructor function will take 2 inputs:</p>
 <ol type="1">
-<li>a named list of <code>.bigwig</code> files</li>
-<li>a <code>GRanges</code> object</li>
+<li>a named list of <code>.RleList</code> objects (<code>RleList</code> are <code>bigwig</code> files imported in <code>R</code>);</li>
+<li>a <code>GRanges</code> object (containing genomic features of interest)</li>
 </ol>
 <p>For each <code>.bigwig</code> file, the coverage over <code>GRanges</code> will be extracted and the mean +/- conf. interval (CI) coverage scores will be computed, similarly to what has been done in Day 2.</p>
 <p>The <code>AggregatedCoverage</code> class will be a direct adaptation of the <code>SummarizedExperiment</code> class. It will contain a <code>colData</code> (refering to the “samples”, i.e.&nbsp;the bigwig files), a <code>rowData</code> (describing the genomic distance to the center of the <code>GRanges</code> of interest) and exactly 3 assays: <code>mean</code>, <code>lowCI</code> and <code>highCI</code>.</p>
 </section>
-<section id="preliminary-checks" class="level2" data-number="3.2">
-<h2 data-number="3.2" class="anchored" data-anchor-id="preliminary-checks"><span class="header-section-number">3.2</span> 1. Preliminary checks</h2>
+<section id="preliminary-checks" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="preliminary-checks"><span class="header-section-number">4.2</span> 1. Preliminary checks</h2>
 <p>To simplify the development of this package, we will require that the provided <code>GRanges</code> are all the same width.</p>
 <blockquote class="blockquote">
 <p>Write a function that checks whether all the entries in a <code>GRanges</code> are of the same width and if so, return that width.</p>
@@ -435,8 +466,8 @@ Show code
 <p>Do you need to export this function?</p>
 </blockquote>
 </section>
-<section id="parsing-bigwig-files" class="level2" data-number="3.3">
-<h2 data-number="3.3" class="anchored" data-anchor-id="parsing-bigwig-files"><span class="header-section-number">3.3</span> 2. Parsing bigwig files</h2>
+<section id="parsing-bigwig-files" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="parsing-bigwig-files"><span class="header-section-number">4.3</span> 2. Parsing bigwig files</h2>
 <p>Another “module” required in this package is a function to 1) import a bigwig file in memory, 2) subset it to a provided <code>GRanges</code> and 3) compute mean and confidence interval values. The output of this function should be a data.frame, with several columns: the bp position from the center of the input <code>GRanges</code> and the mean, lower CI and higher CI values of coverage of the input <code>.bigwig</code>.</p>
 <blockquote class="blockquote">
 <p>Write a <code>parseBigWig</code> function to do this.</p>
@@ -475,8 +506,8 @@ Show code
 <p>Create a <code>parse.R</code> file in <code>R/</code> and add your parsing function to it. Don’t forget to document it!!</p>
 </blockquote>
 </section>
-<section id="preparing-rowdata" class="level2" data-number="3.4">
-<h2 data-number="3.4" class="anchored" data-anchor-id="preparing-rowdata"><span class="header-section-number">3.4</span> 3. Preparing rowData</h2>
+<section id="preparing-rowdata" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="preparing-rowdata"><span class="header-section-number">4.4</span> 3. Preparing rowData</h2>
 <p>Since the <code>AggregatedCoverage</code> class is adapted from the <code>SummarizedExperiment</code> class, the information regarding the genomic distance to the center of the <code>GRanges</code> of interest can be stored in a <code>rowData</code> object.</p>
 <blockquote class="blockquote">
 <p>Write a simple <code>prepareRowData</code> function which takes a <code>width</code> argument (the width of the <code>GRanges</code>) and returns a data.frame which contains a single <code>pos</code> column of that length, centered at 0 (e.g.&nbsp;for <code>width</code> == 2000, the <code>pos</code> column would be a sequence from -1000 to 999 (length of 2000)).</p>
@@ -500,8 +531,8 @@ Show code
 <p>Add this function to a <code>utils.R</code> file.</p>
 </blockquote>
 </section>
-<section id="building-the-aggregatedcoverage-class" class="level2" data-number="3.5">
-<h2 data-number="3.5" class="anchored" data-anchor-id="building-the-aggregatedcoverage-class"><span class="header-section-number">3.5</span> 4. Building the <code>AggregatedCoverage</code> class</h2>
+<section id="building-the-aggregatedcoverage-class" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="building-the-aggregatedcoverage-class"><span class="header-section-number">4.5</span> 4. Building the <code>AggregatedCoverage</code> class</h2>
 <p>Everything is now ready to create an <code>AggregatedCoverage</code> object.</p>
 <blockquote class="blockquote">
 <p>Fill out the <code>...</code> fields in this template to create an <code>AggregatedCoverage</code> object, using a <code>granges</code> and a colData containig a list of <code>.bigwig</code> files as inputs (see below).</p>
@@ -511,8 +542,8 @@ Show code
 <span id="cb5-2"><a href="#cb5-2"></a>granges <span class="ot">&lt;-</span> <span class="fu">resize</span>(granges, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">fix =</span> <span class="st">'center'</span>) <span class="sc">|&gt;</span> <span class="fu">resize</span>(<span class="at">width =</span> <span class="dv">5000</span>, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
 <span id="cb5-3"><a href="#cb5-3"></a>colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
 <span id="cb5-4"><a href="#cb5-4"></a>    <span class="at">file =</span> <span class="fu">c</span>(</span>
-<span id="cb5-5"><a href="#cb5-5"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day3/Scc1-calibrated_rep1.bw'</span>),</span>
-<span id="cb5-6"><a href="#cb5-6"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day3/Scc1-calibrated_rep2.bw'</span>)</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day4/Scc1-calibrated_rep1.bw'</span>),</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day4/Scc1-calibrated_rep2.bw'</span>)</span>
 <span id="cb5-7"><a href="#cb5-7"></a>    )</span>
 <span id="cb5-8"><a href="#cb5-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -657,8 +688,8 @@ Show code
 </details>
 <p><br></p>
 </section>
-<section id="plotting-aggregatedcoverage-objects" class="level2" data-number="3.6">
-<h2 data-number="3.6" class="anchored" data-anchor-id="plotting-aggregatedcoverage-objects"><span class="header-section-number">3.6</span> 5. Plotting <code>AggregatedCoverage</code> objects</h2>
+<section id="plotting-aggregatedcoverage-objects" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="plotting-aggregatedcoverage-objects"><span class="header-section-number">4.6</span> 5. Plotting <code>AggregatedCoverage</code> objects</h2>
 <p>Now that we have a working S4 class, we can think about setting a new <em>method</em> to plot these scores. The plot method can be adapted from that developed in Day 2, but will not be a dedicated <strong>function</strong>, but a <strong>method</strong> associated with the <code>plot</code> generic function.</p>
 <blockquote class="blockquote">
 <p>In the <code>plot.R</code> file, set a new <code>plot</code> method (<code>setMethod</code>) for the <code>AggregatedCoverage</code> signature.</p>
@@ -706,8 +737,8 @@ Show code
 </details>
 <p><br></p>
 </section>
-<section id="session-info" class="level2" data-number="3.7">
-<h2 data-number="3.7" class="anchored" data-anchor-id="session-info"><span class="header-section-number">3.7</span> Session Info</h2>
+<section id="session-info" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="session-info"><span class="header-section-number">4.7</span> Session Info</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -977,13 +1008,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../../content/exercises/Day2_Developer-virtuous-circle.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Kickstarting an R package</span></span>
+      <a href="../../content/exercises/Day3_Examples-test-data.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Enriching package functionalities</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../../content/exercises/Day4_package-integration.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Improving package integration</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../../content/exercises/Day5_package-integration.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Improving package integration</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
