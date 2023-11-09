@@ -35,10 +35,10 @@ book:
     - part: "Day 3"
       chapters: 
         - content/day3/Lecture6_Git_versionning.qmd
-        - content/day3/Lecture7_S4_classes.qmd
+        - content/day3/Lecture7_Improving_package-data_vignettes-....qmd
     - part: "Day 4"
       chapters: 
-        - content/day4/Lecture8_Improving_package-data_vignettes-....qmd
+        - content/day4/Lecture8_S4_classes.qmd
         - content/day4/Lecture9_Bioconductor_submission.qmd
     - part: "Day 5"
       chapters: 
@@ -48,8 +48,9 @@ book:
       chapters: 
         - content/exercises/Day1_Getting-started-with-Bioc.Rmd
         - content/exercises/Day2_Developer-virtuous-circle.Rmd
-        - content/exercises/Day3_S4-classes.Rmd
-        - content/exercises/Day4_package-integration.Rmd
+        - content/exercises/Day3_Examples-test-data.Rmd
+        - content/exercises/Day4_S4-classes.Rmd
+        - content/exercises/Day5_package-integration.Rmd
 format:
   html:
     default-image-extension: pdf

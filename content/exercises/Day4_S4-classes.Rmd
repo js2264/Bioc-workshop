@@ -4,29 +4,36 @@
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-- **Overarching goal:** Implement a new S4 class of objects
-- **Specific aims:**
+::: {.callout-note icon='true'}
 
-    - Put together the set of functions from Day 2 into a single workflow
-    - Document the new S4 class and its constructor
-    - Create a method to handle plotting for your new S4 class
+## Aims 
+
+- Put together the set of functions from Day 2 into a single workflow;
+- Document a new S4 class and its constructor; 
+- Create a method to handle plotting for your new S4 class
+
+:::
+
+::: {.callout-tip icon='true'}
 
 **At any time, if you are lost or do not understand how functions in the**
 **proposed solution work, type `?<function>` in the R console **
-**and a help menu will appear.**
+**and a help menu will appear.** 
 
-**REMINDER:**  
-We aim to create a package which can: 
+You can also check the help tab in the corresponding quadrant. 
 
-- Import `.bigwig` coverage track files
-- Calculate the average (+/- quantiles) of coverage of the `.bigwig` file over `GRanges` of interest
-- Plot the aggregated `.bigwig` coverage over the `GRanges` of interest 
+:::
 
-Eventually, the functions shipped in this package should be able to turn a pair of `.bigwig`/`GRanges` into this type of plot:
+::: {.callout-tip icon='true'}
 
-...
+## Reminder
 
-## 0. Framework
+We aim to create a package which can plot the aggregated coverage of a genomic
+track over a set of `GRanges` of interest (at a fixed width).
+
+:::
+
+## Framework
 
 Functions developed in Day 2 work well for a specific couple of `.bigwig`/`.bed` files. 
 However, the more used to Bioconductor you get, the more you will realize that 
@@ -37,8 +44,8 @@ To make this package more "usable" by a broader Bioconductor audience, we will
 move to a more generic framework. We will create a single S4 class named `AggregatedCoverage`. 
 The `AggregatedCoverage` constructor function will take 2 inputs:  
 
-1. a named list of `.bigwig` files
-2. a `GRanges` object
+1. a named list of `.RleList` objects (`RleList` are `bigwig` files imported in `R`);
+2. a `GRanges` object (containing genomic features of interest)
 
 For each `.bigwig` file, the coverage over `GRanges` will be extracted and the 
 mean +/- conf. interval (CI) coverage scores will be computed, similarly to what 
@@ -145,8 +152,8 @@ granges <- rtracklayer::import(here::here('../../../Share/Day3/Scc1-peaks.narrow
 granges <- resize(granges, width = 1, fix = 'center') |> resize(width = 5000, fix = 'center')
 colData <- data.frame(
     file = c(
-        here::here('../../../Share/Day3/Scc1-calibrated_rep1.bw'),
-        here::here('../../../Share/Day3/Scc1-calibrated_rep2.bw')
+        here::here('../../../Share/Day4/Scc1-calibrated_rep1.bw'),
+        here::here('../../../Share/Day4/Scc1-calibrated_rep2.bw')
     )
 )
 ```

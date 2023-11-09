@@ -1,0 +1,115 @@
+# Enriching package functionalities
+
+```{r echo = FALSE, warning = FALSE, message = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+::: {.callout-note icon='true'}
+
+## Aims 
+
+- Adding supporting data
+- Adding examples
+- Adding unit tests
+
+:::
+
+::: {.callout-tip icon='true'}
+
+**At any time, if you are lost or do not understand how functions in the**
+**proposed solution work, type `?<function>` in the R console **
+**and a help menu will appear.** 
+
+You can also check the help tab in the corresponding quadrant. 
+
+:::
+
+::: {.callout-tip icon='true'}
+
+## Reminder
+
+We aim to create a package which can plot the aggregated coverage of a genomic
+track over a set of `GRanges` of interest (at a fixed width).
+
+:::
+
+## Add supporting data to your package 
+
+You can use toy dataset files provided in `Share/Day3/`. 
+
+::: {.callout-question .icon .callout-note}
+
+Add them to the `inst/extdata/` folder in your package. 
+
+:::
+
+
+You will also need to document how these raw data files have been 
+generated (or obtained). This can be done in a less "formal" manner, in a 
+`.R` file in `inst/scripts`. 
+
+::: {.callout-tip icon='true'}
+
+An example of such script is in `Share/Day3/make-extdata.R`. 
+
+:::
+
+## Add examples to your function files
+
+Examples can be used to illustrate how your function works. They are 
+integrated in the manual pages compiled with `document()` and are often 
+the first thing a new end-user is going to read. 
+
+::: {.callout-question .icon .callout-note}
+
+Add runnable examples to each function. 
+
+:::
+
+Once you have added examples to your functions, you can check whether these
+examples work with `run_examples()`. 
+
+```{r}
+run_examples()
+```
+
+::: {.callout-tip icon='true'}
+
+The content of the proposed function files is shown 
+in `Share/Day3/functions_with-examples/`. These files provides an 
+example of implementation to fulfill our package's requirements, 
+with examples added.
+
+:::
+
+## Add unit tests to your package
+
+Unit tests are the best way to make sure that your package works as intended. 
+They consist of `R` code, executed and compared to an expected result. 
+
+To start using unit tests, you need to declare it. We will use the `testthat` 
+framework to implement unit tests. 
+
+```{r}
+usethis::use_testthat()
+```
+
+::: {.callout-question .icon .callout-note}
+
+Once `testthat` is initiated, create a new test file and add individual tests. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+usethis::use_test("")
+```
+
+:::
+
+:::
+
+::: {.callout-tip icon='true'}
+
+An example of a working test file is availabe in `Share/Day3//`
+
+:::
