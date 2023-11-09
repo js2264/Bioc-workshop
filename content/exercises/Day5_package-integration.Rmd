@@ -4,37 +4,90 @@
 knitr::opts_chunk$set(eval = FALSE)
 ```
 
-- **Overarching goal:** Improve package embedding in Bioconductor ecosystem
-- **Specific aims:**
+::: {.callout-note icon='true'}
 
-    - Add suppporting functions to access AnnotationHub-hosted files
-    - Create a pkgdown website for package documentation
+## Aims 
 
-## 1. Improve examples using TxDb and AnnotationHub resources
+- Add suppporting functions to access AnnotationHub-hosted files;
+- Write a vignette to document a use case for the package;
+- Create a pkgdown website for package documentation
+
+:::
+
+::: {.callout-tip icon='true'}
+
+**At any time, if you are lost or do not understand how functions in the**
+**proposed solution work, type `?<function>` in the R console **
+**and a help menu will appear.** 
+
+You can also check the help tab in the corresponding quadrant. 
+
+:::
+
+::: {.callout-tip icon='true'}
+
+## Reminder
+
+We aim to create a package which can plot the aggregated coverage of a genomic
+track over a set of `GRanges` of interest (at a fixed width).
+
+:::
+
+## Use `TxDb` and `AnnotationHub` resources
+
+### `TxDb` database
 
 `TxDb` packages provide transcript annotations for model organisms. 
 
-> Find the `TxDb` package associated with UCSC-provided human gene annotations and 
-install it. **You will need annotations from the `hg19` human genome reference!**
+::: {.callout-question .icon .callout-note}
+
+Find the `TxDb` package associated with UCSC-provided human gene annotations and 
+install it. 
+
+**Note:** You will need annotations from the `hg19` human genome reference.
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 BiocManager::install('TxDb.Hsapiens.UCSC.hg19.knownGene')
 txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
 ```
 
+:::
+
+:::
+
 `GenomicFeatures` is a package designed in order to facilitate conversion of 
 `TxDb` objects into `GRanges` objects. 
 
-> Which function from `GenomicFeatures` can be used to find the gene loci for all genes present in the human `TxDb`? 
+::: {.callout-question .icon .callout-note}
+
+Which function from `GenomicFeatures` can be used to find the gene loci for all genes present in the human `TxDb`? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 GenomicFeatures::genes(txdb)
 ```
 
-AnnotationHub provides extensive human NGS datasets. 
+:::
 
-> Can you query the AnnotationHub to explore which datasets are available? 
-Which species are most represented? 
+:::
+
+### `AnnotationHub` database
+
+`AnnotationHub` provides access to a large number of NGS datasets. 
+
+::: {.callout-question .icon .callout-note}
+
+- Can you query the `AnnotationHub` to explore which datasets are available? 
+
+- Which species are most represented? 
+
+**Hint:** The `mcols()` function will extract metadata associated with each 
+entry in the `AnnotationHub`. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 ah <- AnnotationHub::AnnotationHub()
@@ -43,72 +96,218 @@ table(ah_df$species) |> sort() |> tail(10)
 table(ah_df$sourcetype) |> sort() |> tail(10)
 ```
 
-The Epigenome roadmap project by the Broad Institute performed H3K4me3 ChIP-seq
-in human. They generated a library labelled 'LL227' ([GEO ID: GSM409308](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM409308)).
+:::
 
-> Can you query the AnnotationHub for this library?
+:::
+
+The Epigenome roadmap project by the Broad Institute performed H3K4me3 ChIP-seq
+in human (among other marks). They generated a library labelled 'LL227' 
+([GEO ID: GSM409308](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM409308)).
+
+::: {.callout-question .icon .callout-note}
+
+Can you query the AnnotationHub for this library?
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 AnnotationHub::query(ah, 'LL227')
 ```
 
-> Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file? 
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+- Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 bw <- ah[['AH34904']]
 ```
 
-> What is the path of the file now stored on disk? How can you load the file in R? 
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+What is the path of the file now stored on disk? How can you load the file in R?
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-BiocIO::resource(bw)
+H3K4me3_bw <- BiocIO::resource(bw)
 cov <- BiocIO::import(bw)
 ```
 
-> Create a `colData` data frame containing a single `file` column containing this file,
-then compute an `AggregatedCoverage` object over human TSSs (+/- 5kb). 
+:::
+
+:::
+
+## Create a `AggregatedCoverage` object
+
+This `AggregatedCoverage` should contain aggregated H3K4me3 coverage over the 
+TSSs of all **forward** human genes. 
+
+::: {.callout-question .icon .callout-note}
+
+Three arguments are required: 
+
+- `bw_file`: the path to a disk-stored coverage track file (e.g. the path to a `bw` file)
+- `features_file`: the path to a disk-stored features file (e.g. the path to a `bed` file)
+- `width`: an integer specifying the width to use for each genomic locus
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+- Preparing `bw_file` argument: 
 
 ```{r}
+bw_file <- H3K4me3_bw
+```
+
+- Preparing `features_file` argument: 
+
+```{r}
+library(GenomicRanges)
+library(rtracklayer)
+txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
 genes <- GenomicFeatures::genes(txdb)
-tss <- GenomicRanges::resize(genes, width = 1, fix = 'start')
-tss_extended <- GenomicRanges::resize(tss, width = 10000, fix = 'center')
-colData <- data.frame(file = BiocIO::resource(bw))
-AC <- AggregatedCoverage(tss_extended, colData)
+forward_genes <- genes[strand(genes) == '+']
+forward_tss <- resize(forward_genes, width = 1, fix = 'start')
+export(forward_tss, "forward_tss.bed")
+features_file <- 'forward_tss.bed'
+```
+
+- Preparing `width` argument: 
+
+```{r}
+width <- 8000L
+```
+
+:::
+
+:::
+
+Now that all the arguments are ready, one can create an `AggregatedCoverage` 
+object. 
+
+::: {.callout-question .icon .callout-note}
+
+Create a `AggregatedCoverage` object summarizing the coverage 
+of H3K4me3 over the TSSs (± 4kb) of all forward human genes.
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+AC <- AggregatedCoverage(bw_file, features_file, width = width)
 AC
 ```
 
-> Can you plot the results? 
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Plot the resulting `AC` object.
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 plot(AC)
 ```
 
-> Create a new vignette to illustrate use of AnnotationHub data with your package.
+:::
+
+:::
+
+## Add a vignette to your package
+
+The previous section reuses publicly available datasets and 
+resources provided by Bioconductor to illustrate a use case for our 
+package. 
+
+::: {.callout-question .icon .callout-note}
+
+- Initiate a vignette using `biocthis` template; 
+
+- Fill out the vignette header with relevant information (namely, the `author` field);
+
+- Describe the use case developed in the previous section.
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-
+biocthis::use_bioc_vignette(name = "JacquesTestPackage", title = "Introduction to my package")
 ```
 
+:::
 
-## 2. Create pkgdown website and host it on GitHub
+:::
 
-> Check `pkgdown` documentation. What is the recommended way to add pkgdown support 
+::: {.callout-question .icon .callout-note}
+
+Because the vignette relies on several packages, these need to be declared in
+the DESCRIPTION file. Make sure to update it. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+usethis::use_package("BiocStyle")
+usethis::use_package("TxDb.Hsapiens.UCSC.hg19.knownGene")
+usethis::use_package("GenomicFeatures")
+usethis::use_package("GenomicRanges")
+usethis::use_package("AnnotationHub")
+usethis::use_package("BiocIO")
+```
+
+:::
+
+:::
+
+
+## Create pkgdown website and host it on GitHub
+
+::: {.callout-question .icon .callout-note}
+
+Check `pkgdown` documentation. What is the recommended way to add pkgdown support 
 for your package? 
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 usethis::use_pkgdown()
 ```
 
-> Can you now build your package? What does the building step do exactly?
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Can you now build your package? What does the building step do exactly?
+
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 pkgdown::build_site()
 ```
 
-> Comment on why setting up a pkgdown website helps with checking that your package reliably works? 
+:::
 
-> Commit your changes. Did that include your newly created `docs` folder? Why? 
+:::
 
-> Remove `docs` from `.gitignore`, then commit the `docs/` folder with git. 
+::: {.callout-question .icon .callout-note}
 
-> Now push all your commits to your github remote repository, navigate to its webpage, and enable `Pages` deployment from the `docs` folder. Check the resulting website. 
+- Comment on why setting up a pkgdown website helps with checking that your package reliably works? 
+
+- Commit your changes. Did that include your newly created `docs` folder? Why? 
+
+- Remove `docs` from `.gitignore`, then commit the `docs/` folder with git. 
+
+- Now push all your commits to your github remote repository, navigate to its webpage, and enable `Pages` deployment from the `docs` folder. Check the resulting website. 
+
+:::

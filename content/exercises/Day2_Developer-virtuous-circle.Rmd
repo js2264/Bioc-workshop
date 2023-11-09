@@ -9,8 +9,8 @@ knitr::opts_chunk$set(eval = FALSE)
 ## Aims 
 
 - Kickstart an R package 
-- Write and document functions
-- Check package 
+- Write functions
+- Document functions
 
 :::
 
@@ -103,6 +103,7 @@ Use it to create your package.
 
 ```{r}
 library(devtools)
+setwd("~")
 create_package("JacquesTestPackage")
 ```
 
@@ -119,6 +120,7 @@ Make sure you're in the right project using the appropriate function from `rstud
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
+usethis::proj_activate("~/JacquesTestPackage/")
 rstudioapi::getActiveProject()
 ```
 
@@ -292,24 +294,3 @@ Once you have documented each function, you can regenerate the documentation wit
 ```{r}
 document()
 ```
-
-## Check your package
-
-Several `check` functions are available. They each check your package in a 
-specific way. 
-
-- `devtools::check()` verifies the basic structure of the package, the documentation, the examples and unit tests; 
-- `rcmdcheck::rcmdcheck()` does somewhat the same job but builds the package first;
-- `BiocCheck::BiocCheck()` checks the compliance of the package with `Bioconductor` requirements. 
-
-```{r}
-check()
-rcmdcheck::rcmdcheck()
-BiocCheck()
-```
-
-::: {.callout-question .icon .callout-note}
-
-Attempt to fix the `ERROR` and `WARNING` returned by `check()` and `BiocCheck()`. 
-
-:::

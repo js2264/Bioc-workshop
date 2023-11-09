@@ -8,8 +8,8 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Aims 
 
-- Put together the set of functions from Day 2 into a single workflow;
-- Document a new S4 class and its constructor; 
+- Create and document a new S4 class `AggregatedCoverage`; 
+- Put together the set of functions from Day 1, 2 and 3 into a single constructor of `AggregatedCoverage` objects;
 - Create a method to handle plotting for your new S4 class
 
 :::
@@ -41,277 +41,282 @@ you might already have your genomic features of interest (TSSs, genebodies,
 regulatory elements, binding motifs, ...) already imported in R.  
 
 To make this package more "usable" by a broader Bioconductor audience, we will 
-move to a more generic framework. We will create a single S4 class named `AggregatedCoverage`. 
-The `AggregatedCoverage` constructor function will take 2 inputs:  
+move to a more "Bioconductor-friendly" framework. We will create a single S4 class named `AggregatedCoverage`. 
+The `AggregatedCoverage` constructor function will take 3 inputs:  
 
-1. a named list of `.RleList` objects (`RleList` are `bigwig` files imported in `R`);
-2. a `GRanges` object (containing genomic features of interest)
+1. The path to a single `bigwig` file;
+2. The path to a single feature file (e.g. a `bed` or a `narrowPeak` file);
+3. A width to use to recover the coverage around the center of each feature. 
 
-For each `.bigwig` file, the coverage over `GRanges` will be extracted and the 
-mean +/- conf. interval (CI) coverage scores will be computed, similarly to what 
+The coverage (from the `bigwig` file) over each genomic feature
+(from the feature file) will be extracted, then the mean signal +/- confidence
+interval (CI) scores will be computed, similarly to what 
 has been done in Day 2.
 
 The `AggregatedCoverage` class will be a direct adaptation of the `SummarizedExperiment` class. 
-It will contain a `colData` (refering to the "samples", i.e. the bigwig files), 
-a `rowData` (describing the genomic distance to the center of the `GRanges` of interest) and 
-exactly 3 assays: `mean`, `lowCI` and `highCI`.
+It will contain a `colData` (refering to the "samples", i.e. the `bigiwg` file imported as `RleList`), 
+a `rowData` (describing the genomic distance to the center of the each genomic range of interest) and 
+exactly 3 assays: `mean`, `lowCI` and `upCI`.
 
-## 1. Preliminary checks 
+## Preparing colData
 
-To simplify the development of this package, we will require that the provided `GRanges` are all the same width. 
+The `colData` slot of a `SummarizedExperiment`-derived object should be a `data.frame`. Each row represents
+an individual sample and each column describes a variable associated with each sample. 
 
-> Write a function that checks whether all the entries in a `GRanges` are of the same width and if so, return that width.
+::: {.callout-question .icon .callout-note}
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-check_widths <- function(granges) {
-    if (length(unique(GenomicRanges::width(granges))) != 1) {
-        stop("The provided GRanges should all have the same width.")
-    }
-    else {
-        return(GenomicRanges::width(granges[1]))
-    }
-}
-```
-</p></details><br>
+Create a `colData` object for a single sample, e.g. the `Scc1-vs-input` `bigwig` file.
 
-> Create a `checks.R` file in `R/` and add your check function to it. Don't forget to document it!!
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-usethis::use_r('checks')
-```
-</p></details><br>
-
-> Do you need to export this function? 
-
-## 2. Parsing bigwig files
-
-Another "module" required in this package is a function to 1) import a bigwig 
-file in memory, 2) subset it to a provided `GRanges` and 3) compute mean and 
-confidence interval values. The output of this function should be a data.frame, 
-with several columns: the bp position from the center of the input `GRanges` 
-and the mean, lower CI and higher CI values of coverage of the input `.bigwig`. 
-
-> Write a `parseBigWig` function to do this.
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-parseBigWig <- function(file, granges) {
-    rtracklayer::import(file, as = "Rle")[granges] |>
-        as.matrix() |>
-        t() |>
-        as.data.frame() |>
-        dplyr::mutate(pos = seq(-unique(width(sub_granges))/2, unique(width(sub_granges))/2-1, by = 1)) |>
-        tidyr::pivot_longer(-pos, names_to = 'idx', values_to = 'cov') |>
-        dplyr::group_by(pos) |>
-        dplyr::summarize(
-            score = mean(cov, na.rm = TRUE),
-            median = median(cov, na.rm = TRUE),
-            sd = sd(cov, na.rm = TRUE),
-            count = dplyr::n()
-        ) |>
-        dplyr::mutate(
-            se = sd/sqrt(count),
-            ci_low = score - qt(1 - (0.05 / 2), count - 1) * se,
-            ci_high = score + qt(1 - (0.05 / 2), count - 1) * se
-        )
-}
-```
-</p></details><br>
-
-> Create a `parse.R` file in `R/` and add your parsing function to it. Don't forget to document it!!
-
-## 3. Preparing rowData
-
-Since the `AggregatedCoverage` class is adapted from the `SummarizedExperiment` class, 
-the information regarding the genomic distance to the center of the `GRanges` of interest can be stored in a `rowData` object. 
-
-> Write a simple `prepareRowData` function which takes a `width` argument (the width of the `GRanges`) and returns a data.frame which contains a single `pos` column of that length, centered at 0 (e.g. for `width` == 2000, the `pos` column would be a sequence from -1000 to 999 (length of 2000)). 
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-prepareRowData <- function(width) {
-    data.frame(
-        pos = seq(-width_gr/2, width_gr/2-1, by = 1)
-    )
-}
-```
-</p></details><br>
-
-> Add this function to a `utils.R` file.
-
-## 4. Building the `AggregatedCoverage` class 
-
-Everything is now ready to create an `AggregatedCoverage` object. 
-
-> Fill out the `...` fields in this template to create an `AggregatedCoverage` object, using a `granges` and a colData containig a list of `.bigwig` files as inputs (see below).
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-granges <- rtracklayer::import(here::here('../../../Share/Day3/Scc1-peaks.narrowPeak'))
-granges <- resize(granges, width = 1, fix = 'center') |> resize(width = 5000, fix = 'center')
+bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
 colData <- data.frame(
-    file = c(
-        here::here('../../../Share/Day4/Scc1-calibrated_rep1.bw'),
-        here::here('../../../Share/Day4/Scc1-calibrated_rep2.bw')
+    file = bw_file,
+    sample = 'Scc1-vs-input', 
+    type = 'ChIPseq', 
+    target = 'Scc1' 
+)
+```
+
+:::
+
+:::
+
+## Preparing rowData
+
+The `rowData` slot of a `SummarizedExperiment`-derived object should also be a `data.frame`. 
+In our case, each row will represent the genomic distance to the center of the 
+set of genomic ranges of interest. 
+
+::: {.callout-question .icon .callout-note}
+
+Create a `data.frame` which contains a single `distance` column, which will be 
+a numerical vector centered at 0 and whose length is half of a provided `width`
+variable (e.g. for `width` == 2000, the `distance` column would be a sequence from `-1000` to `999` (length of `2000`))
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+width <- 2000
+rowData <- data.frame(
+    distance = seq(-width/2, width/2-1, by = 1)
+)
+```
+
+:::
+
+:::
+
+## Preparing `assays`
+
+The `assays` stored in a `SummarizedExperiment`-derived object should be a list of numerical matrices, with as many rows 
+as rows in the matching `rowData` and as many columns as rows in the matching `colData`. 
+
+In our case, each matrix will represent a different metric: 
+
+- The **mean** signal of a sample (from `colData`) at the corresponding distance from a genomic range of interest (from `rowData`)
+- The **upper confidence intervale** value of a signal of a sample (from `colData`) at the corresponding distance from a genomic range of interest (from `rowData`)
+- The **lower confidence intervale** value of a signal of a sample (from `colData`) at the corresponding distance from a genomic range of interest (from `rowData`)
+
+::: {.callout-question .icon .callout-note}
+
+Prepare a list of three matrices as indicated hereabove. Use the functions 
+defined in the previous exercises and the datasets provided as `extdata`. 
+
+- Each matrix should have 1 column, since there is only 1 example `bigwig`. 
+- Each matrix should have as many rows as the chosen `width` variable. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+l <- importFiles(bw_file, bed_file, width = width) |> 
+    filterGRanges()
+df <- computeCoverage(l)
+
+assays <- list(
+    'mean' = matrix(df$mean, ncol = 1), 
+    'upCI' = matrix(df$ci_high, ncol = 1), 
+    'lowCI' = matrix(df$ci_low, ncol = 1)
+)
+```
+
+:::
+
+:::
+
+## Build an `AggregatedCoverage` object
+
+Everything is now ready to manually create an `AggregatedCoverage` object. 
+
+::: {.callout-question .icon .callout-note}
+
+Define a new `AggregatedCoverage` class, containing a 
+`SummarizedExperiment`-derived object with two additional slots, 
+named `features` (storing a `GRanges` object 
+corresponding to the imported genomic loci of interest) and `width` (storing the 
+`width` at which each genomic locus is resized). 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+library(SummarizedExperiment)
+methods::setClass(
+    "AggregatedCoverage", 
+    contains = c("SummarizedExperiment"), 
+    slots = list(
+        features = 'GRanges', 
+        width = 'integer'
     )
 )
 ```
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+You can now manually create a new `AggregatedCoverage` object with the `methods::new()` 
+function. Start by creating a `SummarizedExperiment`, and then fill out the 
+two extra slots manually. 
+
+**Tip:** You can edit the slots using the `object@slot <- ...` notation. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
 ```{r}
-# 1. Check width of input GRanges
-width_gr <- check_widths(...)
-
-# 2. For each bigwig: import it and compute stats over granges
-l_cvgs <- lapply(seq_len(nrow(colData)), function(K){
-    message("Parsing sample ", K, "/", nrow(colData))
-    file <- colData[K, '...']
-    parseBigWig(file, ...)
-})
-
-# 2. Prepare rowData
-rowData <- prepareRowData(...)
-
-# 3. Create an `AggregatedCoverage` object
 AC <- methods::new(
-    "...",
+    "AggregatedCoverage",
     SummarizedExperiment::SummarizedExperiment(
-        rowData = ...,
-        colData = ...,
-        assays = list(
-            'mean' = do.call(cbind, lapply(... = , '[[', '...')),
-            'lowCI' = do.call(cbind, lapply(..., '[[', '...')),
-            'highCI' = do.call(cbind, lapply(..., '[[', '...'))
-        )
+        rowData = rowData,
+        colData = colData,
+        assays = assays
     )
 )
+AC@features <- l[['features']]
+AC@width <- as.integer(width)
+AC
 ```
-</p></details><br>
 
-Once you have it working, you need to turn it into a constructor! But first, you need to properly define the S4 class you're creating in this package. 
+:::
 
-> Create a `AllClass.R` file and set a new method in this file. 
+:::
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+## Build an `AggregatedCoverage` constructor
+
+Instead of manually using the `methods::new()` function, 
+developers generally provide *constructor* functions to initiate an S4 object. 
+
+::: {.callout-question .icon .callout-note}
+
+Wrap all the previous steps together in a single constructor function. 
+By convention, this constructor function is named after the class of object it creates, 
+here `AggregatedCoverage`. 
+
+The constructor should take three arguments: 
+
+1. The path to a single `bigwig` file;
+2. The path to a single feature file (e.g. a `bed` or a `narrowPeak` file);
+3. A width to use to recover the coverage around the center of each feature. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
 ```{r}
-methods::setClass("AggregatedCoverage", contains = c("SummarizedExperiment"))
-```
-</p></details><br>
-
-> In the same file, create a constructor function, wrapping the previous chunk in which you created a single `AggregatedCoverage` object. 
-By convention, the constructor function bears the same name than the class itself (`AggregatedCoverage`).
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-AggregatedCoverage <- function(granges, colData) {
-
-    # Check width of input GRanges
-    width_gr <- check_widths(granges)
-
-    # Import each bigwig and compute stats
-    l_cvgs <- lapply(seq_len(nrow(colData)), function(K){
-        message("Parsing sample ", K, "/", nrow(colData))
-        file <- colData[K, 'file']
-        parseBigWig(file, rowRanges)
-    })
-
-    # Prepare rowData
-    rowData <- prepareRowData(width_gr)
-
-    # Create an `AggregatedCoverage` object
+AggregatedCoverage <- function(bw_file, features_file, width) {
+    colData <- data.frame(
+        file = bw_file
+    )
+    rowData <- data.frame(
+        distance = seq(-width/2, width/2-1, by = 1)
+    )
+    l <- importFiles(bw_file, features_file, width = width) |> 
+        filterGRanges()
+    df <- computeCoverage(l)
+    assays <- list(
+        'mean' = matrix(df$mean, ncol = 1), 
+        'upCI' = matrix(df$ci_high, ncol = 1), 
+        'lowCI' = matrix(df$ci_low, ncol = 1)
+    )
     AC <- methods::new(
         "AggregatedCoverage",
         SummarizedExperiment::SummarizedExperiment(
             rowData = rowData,
             colData = colData,
-            assays = list(
-                'mean' = do.call(cbind, lapply(l_cvgs, '[[', 'score')),
-                'lowCI' = do.call(cbind, lapply(l_cvgs, '[[', 'ci_low')),
-                'highCI' = do.call(cbind, lapply(l_cvgs, '[[', 'ci_high'))
-            )
+            assays = assays
         )
     )
+    AC@features <- l[['features']]
+    AC@width <- as.integer(width)
     return(AC)
 }
+AC <- AggregatedCoverage(bw_file, bed_file, width)
+AC
 ```
-</p></details><br>
 
-> Now add documentation to this new file. Which function should you export? 
+:::
 
-> Try your function. 
+:::
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-granges <- rtracklayer::import(here::here('../../../Share/Day3/Scc1-peaks.narrowPeak'))
-granges <- resize(granges, width = 1, fix = 'center') |> resize(width = 5000, fix = 'center')
-colData <- data.frame(
-    file = c(
-        here::here('../../../Share/Day3/Scc1-calibrated_rep1.bw'),
-        here::here('../../../Share/Day3/Scc1-calibrated_rep2.bw')
-    )
-)
-AC <- AggregatedCoverage(granges, colData)
-```
-</p></details><br>
+## Implement this class and constructor in the package
 
-> Does it work? What do you need to adapt? Change the `parseBigWig` function to only retain `GRanges` contained within the input coverage track.
+::: {.callout-question .icon .callout-note}
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
-parseBigWig <- function(file, granges) {
-    cov <- rtracklayer::import(file, as = "Rle")
-    l <- filterGRanges(list(coverage = cov, features = granges))
-    sub_granges <- l[['features']]
-    cov[sub_granges] |>
-        as.matrix() |>
-        t() |>
-        ...
-```
-</p></details><br>
+- Add the new class definition to your package source code in a file named `AllClasses.R`. 
 
-## 5. Plotting `AggregatedCoverage` objects
+- Add the new constructor to your package source code in a file named `AggregatedCoverage.R`. 
 
-Now that we have a working S4 class, we can think about setting a new _method_ to plot these scores. 
-The plot method can be adapted from that developed in Day 2, but will not be a dedicated **function**, but a **method** associated with the `plot` generic function. 
+- Document each file accordingly.
 
-> In the `plot.R` file, set a new `plot` method (`setMethod`) for the `AggregatedCoverage` signature. 
+:::
 
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+## Plot `AggregatedCoverage` objects
+
+Now that we have a dedicated class to store aggregated coverage signal metrics
+over a set of genomic features of interest, we can provide a `plot` method 
+that will be used to dispatch an `AggregatedCoverage` object to the 
+right function when passed to the `plot()` generic function. 
+
+::: {.callout-question .icon .callout-note}
+
+Create a method with `setMethod(<generic>, <class>, <fct>)` to 
+plot `AggregatedCoverage` objects. You can reuse the `plotCoverage()` function
+defined in Day 2. 
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
 ```{r}
 setMethod("plot", "AggregatedCoverage", function(x) {
     df <- lapply(seq_len(ncol(x)), function(K) {
         data.frame(
-            file = colData(x)$file[K],
+            file = SummarizedExperiment::colData(x)$file[K],
             K = K,
-            pos = rowData(x)$pos,
-            mean = assay(x, 'mean')[, K],
-            lowCI = assay(x, 'lowCI')[, K],
-            highCI = assay(x, 'highCI')[, K]
+            distance = SummarizedExperiment::rowData(x)$distance,
+            score = SummarizedExperiment::assay(x, 'score')[, K],
+            upCI = SummarizedExperiment::assay(x, 'upCI')[, K], 
+            lowCI = SummarizedExperiment::assay(x, 'lowCI')[, K]
         )
     }) |> dplyr::bind_rows()
     ggplot(df, mapping = aes(
-        x = pos, y = mean, ymin = lowCI, ymax = highCI,
+        x = distance, y = score, ymin = lowCI, ymax = upCI,
         col = basename(file), fill = basename(file)
     )) +
         geom_line() +
         geom_ribbon(col = NA, alpha = 0.2)
 })
-```
-</p></details><br>
 
-> Try plotting your `AC` object. 
-
-<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
-```{r}
 plot(AC)
 ```
-</p></details><br>
 
-## Session Info
+:::
 
-```{r eval = TRUE}
-sessionInfo()
-```
+:::
 
+::: {.callout-question .icon .callout-note}
 
+- Add this method to your package source code in a file named `AllMethods.R`. 
+
+- Document the method accordingly.
+
+:::

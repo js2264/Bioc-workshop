@@ -11,6 +11,7 @@ knitr::opts_chunk$set(eval = FALSE)
 - Adding supporting data
 - Adding examples
 - Adding unit tests
+- Check package 
 
 :::
 
@@ -111,5 +112,26 @@ usethis::use_test("")
 ::: {.callout-tip icon='true'}
 
 An example of a working test file is availabe in `Share/Day3//`
+
+:::
+
+## Check your package
+
+Several `check` functions are available. They each check your package in a 
+specific way. 
+
+- `devtools::check()` verifies the basic structure of the package, the documentation, the examples and unit tests; 
+- `rcmdcheck::rcmdcheck()` does somewhat the same job but builds the package first;
+- `BiocCheck::BiocCheck()` checks the compliance of the package with `Bioconductor` requirements. 
+
+```{r}
+check()
+rcmdcheck::rcmdcheck()
+BiocCheck()
+```
+
+::: {.callout-question .icon .callout-note}
+
+Attempt to fix the `ERROR` and `WARNING` returned by `check()` and `BiocCheck()`. 
 
 :::
