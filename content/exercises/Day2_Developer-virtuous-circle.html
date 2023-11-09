@@ -343,7 +343,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#starting-a-new-package" id="toc-starting-a-new-package" class="nav-link" data-scroll-target="#starting-a-new-package"><span class="header-section-number">2.2</span> Starting a new package</a></li>
   <li><a href="#write-functions-to-populate-your-package" id="toc-write-functions-to-populate-your-package" class="nav-link" data-scroll-target="#write-functions-to-populate-your-package"><span class="header-section-number">2.3</span> Write functions to populate your package</a></li>
   <li><a href="#add-function-documentation" id="toc-add-function-documentation" class="nav-link" data-scroll-target="#add-function-documentation"><span class="header-section-number">2.4</span> Add function documentation</a></li>
-  <li><a href="#check-your-package" id="toc-check-your-package" class="nav-link" data-scroll-target="#check-your-package"><span class="header-section-number">2.5</span> Check your package</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day2_Developer-virtuous-circle.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -379,8 +378,8 @@ Aims
 <div class="callout-body-container callout-body">
 <ul>
 <li>Kickstart an R package</li>
-<li>Write and document functions</li>
-<li>Check package</li>
+<li>Write functions</li>
+<li>Document functions</li>
 </ul>
 </div>
 </div>
@@ -520,7 +519,8 @@ Answer
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">create_package</span>(<span class="st">"JacquesTestPackage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fu">setwd</span>(<span class="st">"~"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="fu">create_package</span>(<span class="st">"JacquesTestPackage"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -552,7 +552,8 @@ Answer
 <div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>rstudioapi<span class="sc">::</span><span class="fu">getActiveProject</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>usethis<span class="sc">::</span><span class="fu">proj_activate</span>(<span class="st">"~/JacquesTestPackage/"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>rstudioapi<span class="sc">::</span><span class="fu">getActiveProject</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -816,33 +817,6 @@ Question
 <p>Once you have documented each function, you can regenerate the documentation with <code>document()</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">document</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section>
-<section id="check-your-package" class="level2" data-number="2.5">
-<h2 data-number="2.5" class="anchored" data-anchor-id="check-your-package"><span class="header-section-number">2.5</span> Check your package</h2>
-<p>Several <code>check</code> functions are available. They each check your package in a specific way.</p>
-<ul>
-<li><code>devtools::check()</code> verifies the basic structure of the package, the documentation, the examples and unit tests;</li>
-<li><code>rcmdcheck::rcmdcheck()</code> does somewhat the same job but builds the package first;</li>
-<li><code>BiocCheck::BiocCheck()</code> checks the compliance of the package with <code>Bioconductor</code> requirements.</li>
-</ul>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">check</span>()</span>
-<span id="cb12-2"><a href="#cb12-2"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span>
-<span id="cb12-3"><a href="#cb12-3"></a><span class="fu">BiocCheck</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="icon callout callout-style-default callout-question no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Question
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Attempt to fix the <code>ERROR</code> and <code>WARNING</code> returned by <code>check()</code> and <code>BiocCheck()</code>.</p>
-</div>
 </div>
 
 

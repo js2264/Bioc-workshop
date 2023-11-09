@@ -342,6 +342,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#add-supporting-data-to-your-package" id="toc-add-supporting-data-to-your-package" class="nav-link active" data-scroll-target="#add-supporting-data-to-your-package"><span class="header-section-number">3.1</span> Add supporting data to your package</a></li>
   <li><a href="#add-examples-to-your-function-files" id="toc-add-examples-to-your-function-files" class="nav-link" data-scroll-target="#add-examples-to-your-function-files"><span class="header-section-number">3.2</span> Add examples to your function files</a></li>
   <li><a href="#add-unit-tests-to-your-package" id="toc-add-unit-tests-to-your-package" class="nav-link" data-scroll-target="#add-unit-tests-to-your-package"><span class="header-section-number">3.3</span> Add unit tests to your package</a></li>
+  <li><a href="#check-your-package" id="toc-check-your-package" class="nav-link" data-scroll-target="#check-your-package"><span class="header-section-number">3.4</span> Check your package</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day3_Examples-test-data.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -379,6 +380,7 @@ Aims
 <li>Adding supporting data</li>
 <li>Adding examples</li>
 <li>Adding unit tests</li>
+<li>Check package</li>
 </ul>
 </div>
 </div>
@@ -523,6 +525,33 @@ Tip
 </div>
 <div class="callout-body-container callout-body">
 <p>An example of a working test file is availabe in <code>Share/Day3//</code></p>
+</div>
+</div>
+</section>
+<section id="check-your-package" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="check-your-package"><span class="header-section-number">3.4</span> Check your package</h2>
+<p>Several <code>check</code> functions are available. They each check your package in a specific way.</p>
+<ul>
+<li><code>devtools::check()</code> verifies the basic structure of the package, the documentation, the examples and unit tests;</li>
+<li><code>rcmdcheck::rcmdcheck()</code> does somewhat the same job but builds the package first;</li>
+<li><code>BiocCheck::BiocCheck()</code> checks the compliance of the package with <code>Bioconductor</code> requirements.</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">check</span>()</span>
+<span id="cb4-2"><a href="#cb4-2"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="fu">BiocCheck</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Attempt to fix the <code>ERROR</code> and <code>WARNING</code> returned by <code>check()</code> and <code>BiocCheck()</code>.</p>
 </div>
 </div>
 

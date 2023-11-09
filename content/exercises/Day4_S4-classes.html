@@ -340,12 +340,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#framework" id="toc-framework" class="nav-link active" data-scroll-target="#framework"><span class="header-section-number">4.1</span> Framework</a></li>
-  <li><a href="#preliminary-checks" id="toc-preliminary-checks" class="nav-link" data-scroll-target="#preliminary-checks"><span class="header-section-number">4.2</span> 1. Preliminary checks</a></li>
-  <li><a href="#parsing-bigwig-files" id="toc-parsing-bigwig-files" class="nav-link" data-scroll-target="#parsing-bigwig-files"><span class="header-section-number">4.3</span> 2. Parsing bigwig files</a></li>
-  <li><a href="#preparing-rowdata" id="toc-preparing-rowdata" class="nav-link" data-scroll-target="#preparing-rowdata"><span class="header-section-number">4.4</span> 3. Preparing rowData</a></li>
-  <li><a href="#building-the-aggregatedcoverage-class" id="toc-building-the-aggregatedcoverage-class" class="nav-link" data-scroll-target="#building-the-aggregatedcoverage-class"><span class="header-section-number">4.5</span> 4. Building the <code>AggregatedCoverage</code> class</a></li>
-  <li><a href="#plotting-aggregatedcoverage-objects" id="toc-plotting-aggregatedcoverage-objects" class="nav-link" data-scroll-target="#plotting-aggregatedcoverage-objects"><span class="header-section-number">4.6</span> 5. Plotting <code>AggregatedCoverage</code> objects</a></li>
-  <li><a href="#session-info" id="toc-session-info" class="nav-link" data-scroll-target="#session-info"><span class="header-section-number">4.7</span> Session Info</a></li>
+  <li><a href="#preparing-coldata" id="toc-preparing-coldata" class="nav-link" data-scroll-target="#preparing-coldata"><span class="header-section-number">4.2</span> Preparing colData</a></li>
+  <li><a href="#preparing-rowdata" id="toc-preparing-rowdata" class="nav-link" data-scroll-target="#preparing-rowdata"><span class="header-section-number">4.3</span> Preparing rowData</a></li>
+  <li><a href="#preparing-assays" id="toc-preparing-assays" class="nav-link" data-scroll-target="#preparing-assays"><span class="header-section-number">4.4</span> Preparing <code>assays</code></a></li>
+  <li><a href="#build-an-aggregatedcoverage-object" id="toc-build-an-aggregatedcoverage-object" class="nav-link" data-scroll-target="#build-an-aggregatedcoverage-object"><span class="header-section-number">4.5</span> Build an <code>AggregatedCoverage</code> object</a></li>
+  <li><a href="#build-an-aggregatedcoverage-constructor" id="toc-build-an-aggregatedcoverage-constructor" class="nav-link" data-scroll-target="#build-an-aggregatedcoverage-constructor"><span class="header-section-number">4.6</span> Build an <code>AggregatedCoverage</code> constructor</a></li>
+  <li><a href="#implement-this-class-and-constructor-in-the-package" id="toc-implement-this-class-and-constructor-in-the-package" class="nav-link" data-scroll-target="#implement-this-class-and-constructor-in-the-package"><span class="header-section-number">4.7</span> Implement this class and constructor in the package</a></li>
+  <li><a href="#plot-aggregatedcoverage-objects" id="toc-plot-aggregatedcoverage-objects" class="nav-link" data-scroll-target="#plot-aggregatedcoverage-objects"><span class="header-section-number">4.8</span> Plot <code>AggregatedCoverage</code> objects</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day4_S4-classes.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -380,8 +381,8 @@ Aims
 </div>
 <div class="callout-body-container callout-body">
 <ul>
-<li>Put together the set of functions from Day 2 into a single workflow;</li>
-<li>Document a new S4 class and its constructor;</li>
+<li>Create and document a new S4 class <code>AggregatedCoverage</code>;</li>
+<li>Put together the set of functions from Day 1, 2 and 3 into a single constructor of <code>AggregatedCoverage</code> objects;</li>
 <li>Create a method to handle plotting for your new S4 class</li>
 </ul>
 </div>
@@ -416,356 +417,389 @@ Reminder
 <section id="framework" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="framework"><span class="header-section-number">4.1</span> Framework</h2>
 <p>Functions developed in Day 2 work well for a specific couple of <code>.bigwig</code>/<code>.bed</code> files. However, the more used to Bioconductor you get, the more you will realize that you might already have your genomic features of interest (TSSs, genebodies, regulatory elements, binding motifs, …) already imported in R.</p>
-<p>To make this package more “usable” by a broader Bioconductor audience, we will move to a more generic framework. We will create a single S4 class named <code>AggregatedCoverage</code>. The <code>AggregatedCoverage</code> constructor function will take 2 inputs:</p>
+<p>To make this package more “usable” by a broader Bioconductor audience, we will move to a more “Bioconductor-friendly” framework. We will create a single S4 class named <code>AggregatedCoverage</code>. The <code>AggregatedCoverage</code> constructor function will take 3 inputs:</p>
 <ol type="1">
-<li>a named list of <code>.RleList</code> objects (<code>RleList</code> are <code>bigwig</code> files imported in <code>R</code>);</li>
-<li>a <code>GRanges</code> object (containing genomic features of interest)</li>
+<li>The path to a single <code>bigwig</code> file;</li>
+<li>The path to a single feature file (e.g.&nbsp;a <code>bed</code> or a <code>narrowPeak</code> file);</li>
+<li>A width to use to recover the coverage around the center of each feature.</li>
 </ol>
-<p>For each <code>.bigwig</code> file, the coverage over <code>GRanges</code> will be extracted and the mean +/- conf. interval (CI) coverage scores will be computed, similarly to what has been done in Day 2.</p>
-<p>The <code>AggregatedCoverage</code> class will be a direct adaptation of the <code>SummarizedExperiment</code> class. It will contain a <code>colData</code> (refering to the “samples”, i.e.&nbsp;the bigwig files), a <code>rowData</code> (describing the genomic distance to the center of the <code>GRanges</code> of interest) and exactly 3 assays: <code>mean</code>, <code>lowCI</code> and <code>highCI</code>.</p>
+<p>The coverage (from the <code>bigwig</code> file) over each genomic feature (from the feature file) will be extracted, then the mean signal +/- confidence interval (CI) scores will be computed, similarly to what has been done in Day 2.</p>
+<p>The <code>AggregatedCoverage</code> class will be a direct adaptation of the <code>SummarizedExperiment</code> class. It will contain a <code>colData</code> (refering to the “samples”, i.e.&nbsp;the <code>bigiwg</code> file imported as <code>RleList</code>), a <code>rowData</code> (describing the genomic distance to the center of the each genomic range of interest) and exactly 3 assays: <code>mean</code>, <code>lowCI</code> and <code>upCI</code>.</p>
 </section>
-<section id="preliminary-checks" class="level2" data-number="4.2">
-<h2 data-number="4.2" class="anchored" data-anchor-id="preliminary-checks"><span class="header-section-number">4.2</span> 1. Preliminary checks</h2>
-<p>To simplify the development of this package, we will require that the provided <code>GRanges</code> are all the same width.</p>
-<blockquote class="blockquote">
-<p>Write a function that checks whether all the entries in a <code>GRanges</code> are of the same width and if so, return that width.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>check_widths <span class="ot">&lt;-</span> <span class="cf">function</span>(granges) {</span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="cf">if</span> (<span class="fu">length</span>(<span class="fu">unique</span>(GenomicRanges<span class="sc">::</span><span class="fu">width</span>(granges))) <span class="sc">!=</span> <span class="dv">1</span>) {</span>
-<span id="cb1-3"><a href="#cb1-3"></a>        <span class="fu">stop</span>(<span class="st">"The provided GRanges should all have the same width."</span>)</span>
-<span id="cb1-4"><a href="#cb1-4"></a>    }</span>
-<span id="cb1-5"><a href="#cb1-5"></a>    <span class="cf">else</span> {</span>
-<span id="cb1-6"><a href="#cb1-6"></a>        <span class="fu">return</span>(GenomicRanges<span class="sc">::</span><span class="fu">width</span>(granges[<span class="dv">1</span>]))</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    }</span>
-<span id="cb1-8"><a href="#cb1-8"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="preparing-coldata" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="preparing-coldata"><span class="header-section-number">4.2</span> Preparing colData</h2>
+<p>The <code>colData</code> slot of a <code>SummarizedExperiment</code>-derived object should be a <code>data.frame</code>. Each row represents an individual sample and each column describes a variable associated with each sample.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Create a <code>checks.R</code> file in <code>R/</code> and add your check function to it. Don’t forget to document it!!</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>usethis<span class="sc">::</span><span class="fu">use_r</span>(<span class="st">'checks'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-title-container flex-fill">
+Question
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Do you need to export this function?</p>
-</blockquote>
-</section>
-<section id="parsing-bigwig-files" class="level2" data-number="4.3">
-<h2 data-number="4.3" class="anchored" data-anchor-id="parsing-bigwig-files"><span class="header-section-number">4.3</span> 2. Parsing bigwig files</h2>
-<p>Another “module” required in this package is a function to 1) import a bigwig file in memory, 2) subset it to a provided <code>GRanges</code> and 3) compute mean and confidence interval values. The output of this function should be a data.frame, with several columns: the bp position from the center of the input <code>GRanges</code> and the mean, lower CI and higher CI values of coverage of the input <code>.bigwig</code>.</p>
-<blockquote class="blockquote">
-<p>Write a <code>parseBigWig</code> function to do this.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>parseBigWig <span class="ot">&lt;-</span> <span class="cf">function</span>(file, granges) {</span>
-<span id="cb3-2"><a href="#cb3-2"></a>    rtracklayer<span class="sc">::</span><span class="fu">import</span>(file, <span class="at">as =</span> <span class="st">"Rle"</span>)[granges] <span class="sc">|&gt;</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>        <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>        <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>        <span class="fu">as.data.frame</span>() <span class="sc">|&gt;</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">pos =</span> <span class="fu">seq</span>(<span class="sc">-</span><span class="fu">unique</span>(<span class="fu">width</span>(sub_granges))<span class="sc">/</span><span class="dv">2</span>, <span class="fu">unique</span>(<span class="fu">width</span>(sub_granges))<span class="sc">/</span><span class="dv">2-1</span>, <span class="at">by =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a>        tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>pos, <span class="at">names_to =</span> <span class="st">'idx'</span>, <span class="at">values_to =</span> <span class="st">'cov'</span>) <span class="sc">|&gt;</span></span>
-<span id="cb3-8"><a href="#cb3-8"></a>        dplyr<span class="sc">::</span><span class="fu">group_by</span>(pos) <span class="sc">|&gt;</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a>        dplyr<span class="sc">::</span><span class="fu">summarize</span>(</span>
-<span id="cb3-10"><a href="#cb3-10"></a>            <span class="at">score =</span> <span class="fu">mean</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-11"><a href="#cb3-11"></a>            <span class="at">median =</span> <span class="fu">median</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-12"><a href="#cb3-12"></a>            <span class="at">sd =</span> <span class="fu">sd</span>(cov, <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
-<span id="cb3-13"><a href="#cb3-13"></a>            <span class="at">count =</span> dplyr<span class="sc">::</span><span class="fu">n</span>()</span>
-<span id="cb3-14"><a href="#cb3-14"></a>        ) <span class="sc">|&gt;</span></span>
-<span id="cb3-15"><a href="#cb3-15"></a>        dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb3-16"><a href="#cb3-16"></a>            <span class="at">se =</span> sd<span class="sc">/</span><span class="fu">sqrt</span>(count),</span>
-<span id="cb3-17"><a href="#cb3-17"></a>            <span class="at">ci_low =</span> score <span class="sc">-</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se,</span>
-<span id="cb3-18"><a href="#cb3-18"></a>            <span class="at">ci_high =</span> score <span class="sc">+</span> <span class="fu">qt</span>(<span class="dv">1</span> <span class="sc">-</span> (<span class="fl">0.05</span> <span class="sc">/</span> <span class="dv">2</span>), count <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> se</span>
-<span id="cb3-19"><a href="#cb3-19"></a>        )</span>
-<span id="cb3-20"><a href="#cb3-20"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Create a <code>parse.R</code> file in <code>R/</code> and add your parsing function to it. Don’t forget to document it!!</p>
-</blockquote>
-</section>
-<section id="preparing-rowdata" class="level2" data-number="4.4">
-<h2 data-number="4.4" class="anchored" data-anchor-id="preparing-rowdata"><span class="header-section-number">4.4</span> 3. Preparing rowData</h2>
-<p>Since the <code>AggregatedCoverage</code> class is adapted from the <code>SummarizedExperiment</code> class, the information regarding the genomic distance to the center of the <code>GRanges</code> of interest can be stored in a <code>rowData</code> object.</p>
-<blockquote class="blockquote">
-<p>Write a simple <code>prepareRowData</code> function which takes a <code>width</code> argument (the width of the <code>GRanges</code>) and returns a data.frame which contains a single <code>pos</code> column of that length, centered at 0 (e.g.&nbsp;for <code>width</code> == 2000, the <code>pos</code> column would be a sequence from -1000 to 999 (length of 2000)).</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>prepareRowData <span class="ot">&lt;-</span> <span class="cf">function</span>(width) {</span>
-<span id="cb4-2"><a href="#cb4-2"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb4-3"><a href="#cb4-3"></a>        <span class="at">pos =</span> <span class="fu">seq</span>(<span class="sc">-</span>width_gr<span class="sc">/</span><span class="dv">2</span>, width_gr<span class="sc">/</span><span class="dv">2-1</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
-<span id="cb4-4"><a href="#cb4-4"></a>    )</span>
-<span id="cb4-5"><a href="#cb4-5"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-body-container callout-body">
+<p>Create a <code>colData</code> object for a single sample, e.g.&nbsp;the <code>Scc1-vs-input</code> <code>bigwig</code> file.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Add this function to a <code>utils.R</code> file.</p>
-</blockquote>
-</section>
-<section id="building-the-aggregatedcoverage-class" class="level2" data-number="4.5">
-<h2 data-number="4.5" class="anchored" data-anchor-id="building-the-aggregatedcoverage-class"><span class="header-section-number">4.5</span> 4. Building the <code>AggregatedCoverage</code> class</h2>
-<p>Everything is now ready to create an <code>AggregatedCoverage</code> object.</p>
-<blockquote class="blockquote">
-<p>Fill out the <code>...</code> fields in this template to create an <code>AggregatedCoverage</code> object, using a <code>granges</code> and a colData containig a list of <code>.bigwig</code> files as inputs (see below).</p>
-</blockquote>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>granges <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day3/Scc1-peaks.narrowPeak'</span>))</span>
-<span id="cb5-2"><a href="#cb5-2"></a>granges <span class="ot">&lt;-</span> <span class="fu">resize</span>(granges, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">fix =</span> <span class="st">'center'</span>) <span class="sc">|&gt;</span> <span class="fu">resize</span>(<span class="at">width =</span> <span class="dv">5000</span>, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a>colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb5-4"><a href="#cb5-4"></a>    <span class="at">file =</span> <span class="fu">c</span>(</span>
-<span id="cb5-5"><a href="#cb5-5"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day4/Scc1-calibrated_rep1.bw'</span>),</span>
-<span id="cb5-6"><a href="#cb5-6"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day4/Scc1-calibrated_rep2.bw'</span>)</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="at">file =</span> bw_file,</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="at">sample =</span> <span class="st">'Scc1-vs-input'</span>, </span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="at">type =</span> <span class="st">'ChIPseq'</span>, </span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="at">target =</span> <span class="st">'Scc1'</span> </span>
+<span id="cb1-7"><a href="#cb1-7"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="preparing-rowdata" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="preparing-rowdata"><span class="header-section-number">4.3</span> Preparing rowData</h2>
+<p>The <code>rowData</code> slot of a <code>SummarizedExperiment</code>-derived object should also be a <code>data.frame</code>. In our case, each row will represent the genomic distance to the center of the set of genomic ranges of interest.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a <code>data.frame</code> which contains a single <code>distance</code> column, which will be a numerical vector centered at 0 and whose length is half of a provided <code>width</code> variable (e.g.&nbsp;for <code>width</code> == 2000, the <code>distance</code> column would be a sequence from <code>-1000</code> to <code>999</code> (length of <code>2000</code>))</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>rowData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2-1</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="preparing-assays" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="preparing-assays"><span class="header-section-number">4.4</span> Preparing <code>assays</code></h2>
+<p>The <code>assays</code> stored in a <code>SummarizedExperiment</code>-derived object should be a list of numerical matrices, with as many rows as rows in the matching <code>rowData</code> and as many columns as rows in the matching <code>colData</code>.</p>
+<p>In our case, each matrix will represent a different metric:</p>
+<ul>
+<li>The <strong>mean</strong> signal of a sample (from <code>colData</code>) at the corresponding distance from a genomic range of interest (from <code>rowData</code>)</li>
+<li>The <strong>upper confidence intervale</strong> value of a signal of a sample (from <code>colData</code>) at the corresponding distance from a genomic range of interest (from <code>rowData</code>)</li>
+<li>The <strong>lower confidence intervale</strong> value of a signal of a sample (from <code>colData</code>) at the corresponding distance from a genomic range of interest (from <code>rowData</code>)</li>
+</ul>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Prepare a list of three matrices as indicated hereabove. Use the functions defined in the previous exercises and the datasets provided as <code>extdata</code>.</p>
+<ul>
+<li>Each matrix should have 1 column, since there is only 1 example <code>bigwig</code>.</li>
+<li>Each matrix should have as many rows as the chosen <code>width</code> variable.</li>
+</ul>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-peaks.narrowPeak"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, bed_file, <span class="at">width =</span> width) <span class="sc">|&gt;</span> </span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="fu">filterGRanges</span>()</span>
+<span id="cb3-4"><a href="#cb3-4"></a>df <span class="ot">&lt;-</span> <span class="fu">computeCoverage</span>(l)</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a>assays <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="st">'mean'</span> <span class="ot">=</span> <span class="fu">matrix</span>(df<span class="sc">$</span>mean, <span class="at">ncol =</span> <span class="dv">1</span>), </span>
+<span id="cb3-8"><a href="#cb3-8"></a>    <span class="st">'upCI'</span> <span class="ot">=</span> <span class="fu">matrix</span>(df<span class="sc">$</span>ci_high, <span class="at">ncol =</span> <span class="dv">1</span>), </span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="st">'lowCI'</span> <span class="ot">=</span> <span class="fu">matrix</span>(df<span class="sc">$</span>ci_low, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb3-10"><a href="#cb3-10"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="build-an-aggregatedcoverage-object" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="build-an-aggregatedcoverage-object"><span class="header-section-number">4.5</span> Build an <code>AggregatedCoverage</code> object</h2>
+<p>Everything is now ready to manually create an <code>AggregatedCoverage</code> object.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Define a new <code>AggregatedCoverage</code> class, containing a <code>SummarizedExperiment</code>-derived object with two additional slots, named <code>features</code> (storing a <code>GRanges</code> object corresponding to the imported genomic loci of interest) and <code>width</code> (storing the <code>width</code> at which each genomic locus is resized).</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(SummarizedExperiment)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>methods<span class="sc">::</span><span class="fu">setClass</span>(</span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="st">"AggregatedCoverage"</span>, </span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="at">contains =</span> <span class="fu">c</span>(<span class="st">"SummarizedExperiment"</span>), </span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="at">slots =</span> <span class="fu">list</span>(</span>
+<span id="cb4-6"><a href="#cb4-6"></a>        <span class="at">features =</span> <span class="st">'GRanges'</span>, </span>
+<span id="cb4-7"><a href="#cb4-7"></a>        <span class="at">width =</span> <span class="st">'integer'</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>    )</span>
+<span id="cb4-9"><a href="#cb4-9"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>You can now manually create a new <code>AggregatedCoverage</code> object with the <code>methods::new()</code> function. Start by creating a <code>SummarizedExperiment</code>, and then fill out the two extra slots manually.</p>
+<p><strong>Tip:</strong> You can edit the slots using the <code>object@slot &lt;- ...</code> notation.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>AC <span class="ot">&lt;-</span> methods<span class="sc">::</span><span class="fu">new</span>(</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="st">"AggregatedCoverage"</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>    SummarizedExperiment<span class="sc">::</span><span class="fu">SummarizedExperiment</span>(</span>
+<span id="cb5-4"><a href="#cb5-4"></a>        <span class="at">rowData =</span> rowData,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        <span class="at">colData =</span> colData,</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="at">assays =</span> assays</span>
 <span id="cb5-7"><a href="#cb5-7"></a>    )</span>
-<span id="cb5-8"><a href="#cb5-8"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-8"><a href="#cb5-8"></a>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a>AC<span class="sc">@</span>features <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
+<span id="cb5-10"><a href="#cb5-10"></a>AC<span class="sc">@</span>width <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(width)</span>
+<span id="cb5-11"><a href="#cb5-11"></a>AC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># 1. Check width of input GRanges</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a>width_gr <span class="ot">&lt;-</span> <span class="fu">check_widths</span>(...)</span>
-<span id="cb6-3"><a href="#cb6-3"></a></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># 2. For each bigwig: import it and compute stats over granges</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a>l_cvgs <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(colData)), <span class="cf">function</span>(K){</span>
-<span id="cb6-6"><a href="#cb6-6"></a>    <span class="fu">message</span>(<span class="st">"Parsing sample "</span>, K, <span class="st">"/"</span>, <span class="fu">nrow</span>(colData))</span>
-<span id="cb6-7"><a href="#cb6-7"></a>    file <span class="ot">&lt;-</span> colData[K, <span class="st">'...'</span>]</span>
-<span id="cb6-8"><a href="#cb6-8"></a>    <span class="fu">parseBigWig</span>(file, ...)</span>
-<span id="cb6-9"><a href="#cb6-9"></a>})</span>
-<span id="cb6-10"><a href="#cb6-10"></a></span>
-<span id="cb6-11"><a href="#cb6-11"></a><span class="co"># 2. Prepare rowData</span></span>
-<span id="cb6-12"><a href="#cb6-12"></a>rowData <span class="ot">&lt;-</span> <span class="fu">prepareRowData</span>(...)</span>
-<span id="cb6-13"><a href="#cb6-13"></a></span>
-<span id="cb6-14"><a href="#cb6-14"></a><span class="co"># 3. Create an `AggregatedCoverage` object</span></span>
-<span id="cb6-15"><a href="#cb6-15"></a>AC <span class="ot">&lt;-</span> methods<span class="sc">::</span><span class="fu">new</span>(</span>
-<span id="cb6-16"><a href="#cb6-16"></a>    <span class="st">"..."</span>,</span>
-<span id="cb6-17"><a href="#cb6-17"></a>    SummarizedExperiment<span class="sc">::</span><span class="fu">SummarizedExperiment</span>(</span>
-<span id="cb6-18"><a href="#cb6-18"></a>        <span class="at">rowData =</span> ...,</span>
-<span id="cb6-19"><a href="#cb6-19"></a>        <span class="at">colData =</span> ...,</span>
-<span id="cb6-20"><a href="#cb6-20"></a>        <span class="at">assays =</span> <span class="fu">list</span>(</span>
-<span id="cb6-21"><a href="#cb6-21"></a>            <span class="st">'mean'</span> <span class="ot">=</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(<span class="at">... =</span> , <span class="st">'[['</span>, <span class="st">'...'</span>)),</span>
-<span id="cb6-22"><a href="#cb6-22"></a>            <span class="st">'lowCI'</span> <span class="ot">=</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(..., <span class="st">'[['</span>, <span class="st">'...'</span>)),</span>
-<span id="cb6-23"><a href="#cb6-23"></a>            <span class="st">'highCI'</span> <span class="ot">=</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(..., <span class="st">'[['</span>, <span class="st">'...'</span>))</span>
-<span id="cb6-24"><a href="#cb6-24"></a>        )</span>
-<span id="cb6-25"><a href="#cb6-25"></a>    )</span>
-<span id="cb6-26"><a href="#cb6-26"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<p>Once you have it working, you need to turn it into a constructor! But first, you need to properly define the S4 class you’re creating in this package.</p>
-<blockquote class="blockquote">
-<p>Create a <code>AllClass.R</code> file and set a new method in this file.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>methods<span class="sc">::</span><span class="fu">setClass</span>(<span class="st">"AggregatedCoverage"</span>, <span class="at">contains =</span> <span class="fu">c</span>(<span class="st">"SummarizedExperiment"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>In the same file, create a constructor function, wrapping the previous chunk in which you created a single <code>AggregatedCoverage</code> object. By convention, the constructor function bears the same name than the class itself (<code>AggregatedCoverage</code>).</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>AggregatedCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(granges, colData) {</span>
-<span id="cb8-2"><a href="#cb8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3"></a>    <span class="co"># Check width of input GRanges</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a>    width_gr <span class="ot">&lt;-</span> <span class="fu">check_widths</span>(granges)</span>
-<span id="cb8-5"><a href="#cb8-5"></a></span>
-<span id="cb8-6"><a href="#cb8-6"></a>    <span class="co"># Import each bigwig and compute stats</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a>    l_cvgs <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(<span class="fu">nrow</span>(colData)), <span class="cf">function</span>(K){</span>
-<span id="cb8-8"><a href="#cb8-8"></a>        <span class="fu">message</span>(<span class="st">"Parsing sample "</span>, K, <span class="st">"/"</span>, <span class="fu">nrow</span>(colData))</span>
-<span id="cb8-9"><a href="#cb8-9"></a>        file <span class="ot">&lt;-</span> colData[K, <span class="st">'file'</span>]</span>
-<span id="cb8-10"><a href="#cb8-10"></a>        <span class="fu">parseBigWig</span>(file, rowRanges)</span>
-<span id="cb8-11"><a href="#cb8-11"></a>    })</span>
-<span id="cb8-12"><a href="#cb8-12"></a></span>
-<span id="cb8-13"><a href="#cb8-13"></a>    <span class="co"># Prepare rowData</span></span>
-<span id="cb8-14"><a href="#cb8-14"></a>    rowData <span class="ot">&lt;-</span> <span class="fu">prepareRowData</span>(width_gr)</span>
-<span id="cb8-15"><a href="#cb8-15"></a></span>
-<span id="cb8-16"><a href="#cb8-16"></a>    <span class="co"># Create an `AggregatedCoverage` object</span></span>
-<span id="cb8-17"><a href="#cb8-17"></a>    AC <span class="ot">&lt;-</span> methods<span class="sc">::</span><span class="fu">new</span>(</span>
-<span id="cb8-18"><a href="#cb8-18"></a>        <span class="st">"AggregatedCoverage"</span>,</span>
-<span id="cb8-19"><a href="#cb8-19"></a>        SummarizedExperiment<span class="sc">::</span><span class="fu">SummarizedExperiment</span>(</span>
-<span id="cb8-20"><a href="#cb8-20"></a>            <span class="at">rowData =</span> rowData,</span>
-<span id="cb8-21"><a href="#cb8-21"></a>            <span class="at">colData =</span> colData,</span>
-<span id="cb8-22"><a href="#cb8-22"></a>            <span class="at">assays =</span> <span class="fu">list</span>(</span>
-<span id="cb8-23"><a href="#cb8-23"></a>                <span class="st">'mean'</span> <span class="ot">=</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(l_cvgs, <span class="st">'[['</span>, <span class="st">'score'</span>)),</span>
-<span id="cb8-24"><a href="#cb8-24"></a>                <span class="st">'lowCI'</span> <span class="ot">=</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(l_cvgs, <span class="st">'[['</span>, <span class="st">'ci_low'</span>)),</span>
-<span id="cb8-25"><a href="#cb8-25"></a>                <span class="st">'highCI'</span> <span class="ot">=</span> <span class="fu">do.call</span>(cbind, <span class="fu">lapply</span>(l_cvgs, <span class="st">'[['</span>, <span class="st">'ci_high'</span>))</span>
-<span id="cb8-26"><a href="#cb8-26"></a>            )</span>
-<span id="cb8-27"><a href="#cb8-27"></a>        )</span>
-<span id="cb8-28"><a href="#cb8-28"></a>    )</span>
-<span id="cb8-29"><a href="#cb8-29"></a>    <span class="fu">return</span>(AC)</span>
-<span id="cb8-30"><a href="#cb8-30"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Now add documentation to this new file. Which function should you export?</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Try your function.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>granges <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day3/Scc1-peaks.narrowPeak'</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a>granges <span class="ot">&lt;-</span> <span class="fu">resize</span>(granges, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">fix =</span> <span class="st">'center'</span>) <span class="sc">|&gt;</span> <span class="fu">resize</span>(<span class="at">width =</span> <span class="dv">5000</span>, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
-<span id="cb9-3"><a href="#cb9-3"></a>colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb9-4"><a href="#cb9-4"></a>    <span class="at">file =</span> <span class="fu">c</span>(</span>
-<span id="cb9-5"><a href="#cb9-5"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day3/Scc1-calibrated_rep1.bw'</span>),</span>
-<span id="cb9-6"><a href="#cb9-6"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">'../../../Share/Day3/Scc1-calibrated_rep2.bw'</span>)</span>
-<span id="cb9-7"><a href="#cb9-7"></a>    )</span>
-<span id="cb9-8"><a href="#cb9-8"></a>)</span>
-<span id="cb9-9"><a href="#cb9-9"></a>AC <span class="ot">&lt;-</span> <span class="fu">AggregatedCoverage</span>(granges, colData)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Does it work? What do you need to adapt? Change the <code>parseBigWig</code> function to only retain <code>GRanges</code> contained within the input coverage track.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>parseBigWig <span class="ot">&lt;-</span> <span class="cf">function</span>(file, granges) {</span>
-<span id="cb10-2"><a href="#cb10-2"></a>    cov <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(file, <span class="at">as =</span> <span class="st">"Rle"</span>)</span>
-<span id="cb10-3"><a href="#cb10-3"></a>    l <span class="ot">&lt;-</span> <span class="fu">filterGRanges</span>(<span class="fu">list</span>(<span class="at">coverage =</span> cov, <span class="at">features =</span> granges))</span>
-<span id="cb10-4"><a href="#cb10-4"></a>    sub_granges <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
-<span id="cb10-5"><a href="#cb10-5"></a>    cov[sub_granges] <span class="sc">|&gt;</span></span>
-<span id="cb10-6"><a href="#cb10-6"></a>        <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-7"><a href="#cb10-7"></a>        <span class="fu">t</span>() <span class="sc">|&gt;</span></span>
-<span id="cb10-8"><a href="#cb10-8"></a>        ...</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p></p>
-</details>
-<p><br></p>
 </section>
-<section id="plotting-aggregatedcoverage-objects" class="level2" data-number="4.6">
-<h2 data-number="4.6" class="anchored" data-anchor-id="plotting-aggregatedcoverage-objects"><span class="header-section-number">4.6</span> 5. Plotting <code>AggregatedCoverage</code> objects</h2>
-<p>Now that we have a working S4 class, we can think about setting a new <em>method</em> to plot these scores. The plot method can be adapted from that developed in Day 2, but will not be a dedicated <strong>function</strong>, but a <strong>method</strong> associated with the <code>plot</code> generic function.</p>
-<blockquote class="blockquote">
-<p>In the <code>plot.R</code> file, set a new <code>plot</code> method (<code>setMethod</code>) for the <code>AggregatedCoverage</code> signature.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">setMethod</span>(<span class="st">"plot"</span>, <span class="st">"AggregatedCoverage"</span>, <span class="cf">function</span>(x) {</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    df <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(<span class="fu">ncol</span>(x)), <span class="cf">function</span>(K) {</span>
-<span id="cb11-3"><a href="#cb11-3"></a>        <span class="fu">data.frame</span>(</span>
-<span id="cb11-4"><a href="#cb11-4"></a>            <span class="at">file =</span> <span class="fu">colData</span>(x)<span class="sc">$</span>file[K],</span>
-<span id="cb11-5"><a href="#cb11-5"></a>            <span class="at">K =</span> K,</span>
-<span id="cb11-6"><a href="#cb11-6"></a>            <span class="at">pos =</span> <span class="fu">rowData</span>(x)<span class="sc">$</span>pos,</span>
-<span id="cb11-7"><a href="#cb11-7"></a>            <span class="at">mean =</span> <span class="fu">assay</span>(x, <span class="st">'mean'</span>)[, K],</span>
-<span id="cb11-8"><a href="#cb11-8"></a>            <span class="at">lowCI =</span> <span class="fu">assay</span>(x, <span class="st">'lowCI'</span>)[, K],</span>
-<span id="cb11-9"><a href="#cb11-9"></a>            <span class="at">highCI =</span> <span class="fu">assay</span>(x, <span class="st">'highCI'</span>)[, K]</span>
-<span id="cb11-10"><a href="#cb11-10"></a>        )</span>
-<span id="cb11-11"><a href="#cb11-11"></a>    }) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>()</span>
-<span id="cb11-12"><a href="#cb11-12"></a>    <span class="fu">ggplot</span>(df, <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
-<span id="cb11-13"><a href="#cb11-13"></a>        <span class="at">x =</span> pos, <span class="at">y =</span> mean, <span class="at">ymin =</span> lowCI, <span class="at">ymax =</span> highCI,</span>
-<span id="cb11-14"><a href="#cb11-14"></a>        <span class="at">col =</span> <span class="fu">basename</span>(file), <span class="at">fill =</span> <span class="fu">basename</span>(file)</span>
-<span id="cb11-15"><a href="#cb11-15"></a>    )) <span class="sc">+</span></span>
-<span id="cb11-16"><a href="#cb11-16"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
-<span id="cb11-17"><a href="#cb11-17"></a>        <span class="fu">geom_ribbon</span>(<span class="at">col =</span> <span class="cn">NA</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
-<span id="cb11-18"><a href="#cb11-18"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="build-an-aggregatedcoverage-constructor" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="build-an-aggregatedcoverage-constructor"><span class="header-section-number">4.6</span> Build an <code>AggregatedCoverage</code> constructor</h2>
+<p>Instead of manually using the <code>methods::new()</code> function, developers generally provide <em>constructor</em> functions to initiate an S4 object.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<p></p>
-</details>
-<p><br></p>
-<blockquote class="blockquote">
-<p>Try plotting your <code>AC</code> object.</p>
-</blockquote>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-</p><div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">plot</span>(AC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout-title-container flex-fill">
+Question
 </div>
-<p></p>
-</details>
-<p><br></p>
-</section>
-<section id="session-info" class="level2" data-number="4.7">
-<h2 data-number="4.7" class="anchored" data-anchor-id="session-info"><span class="header-section-number">4.7</span> Session Info</h2>
+</div>
+<div class="callout-body-container callout-body">
+<p>Wrap all the previous steps together in a single constructor function. By convention, this constructor function is named after the class of object it creates, here <code>AggregatedCoverage</code>.</p>
+<p>The constructor should take three arguments:</p>
+<ol type="1">
+<li>The path to a single <code>bigwig</code> file;</li>
+<li>The path to a single feature file (e.g.&nbsp;a <code>bed</code> or a <code>narrowPeak</code> file);</li>
+<li>A width to use to recover the coverage around the center of each feature.</li>
+</ol>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">sessionInfo</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>R version 4.3.2 (2023-10-31)
-Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 22.04.3 LTS
-
-Matrix products: default
-BLAS:   /usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3 
-LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so;  LAPACK version 3.10.0
-
-locale:
- [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
- [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
- [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
-
-time zone: UTC
-tzcode source: system (glibc)
-
-attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
-
-loaded via a namespace (and not attached):
- [1] compiler_4.3.2  fastmap_1.1.1   cli_3.6.1       tools_4.3.2    
- [5] htmltools_0.5.7 rmarkdown_2.25  knitr_1.45      jsonlite_1.8.7 
- [9] xfun_0.41       digest_0.6.33   rlang_1.1.2     evaluate_0.23  </code></pre>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>AggregatedCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-3"><a href="#cb6-3"></a>        <span class="at">file =</span> bw_file</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    )</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    rowData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb6-6"><a href="#cb6-6"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2-1</span>, <span class="at">by =</span> <span class="dv">1</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a>    )</span>
+<span id="cb6-8"><a href="#cb6-8"></a>    l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, features_file, <span class="at">width =</span> width) <span class="sc">|&gt;</span> </span>
+<span id="cb6-9"><a href="#cb6-9"></a>        <span class="fu">filterGRanges</span>()</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    df <span class="ot">&lt;-</span> <span class="fu">computeCoverage</span>(l)</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    assays <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb6-12"><a href="#cb6-12"></a>        <span class="st">'mean'</span> <span class="ot">=</span> <span class="fu">matrix</span>(df<span class="sc">$</span>mean, <span class="at">ncol =</span> <span class="dv">1</span>), </span>
+<span id="cb6-13"><a href="#cb6-13"></a>        <span class="st">'upCI'</span> <span class="ot">=</span> <span class="fu">matrix</span>(df<span class="sc">$</span>ci_high, <span class="at">ncol =</span> <span class="dv">1</span>), </span>
+<span id="cb6-14"><a href="#cb6-14"></a>        <span class="st">'lowCI'</span> <span class="ot">=</span> <span class="fu">matrix</span>(df<span class="sc">$</span>ci_low, <span class="at">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    )</span>
+<span id="cb6-16"><a href="#cb6-16"></a>    AC <span class="ot">&lt;-</span> methods<span class="sc">::</span><span class="fu">new</span>(</span>
+<span id="cb6-17"><a href="#cb6-17"></a>        <span class="st">"AggregatedCoverage"</span>,</span>
+<span id="cb6-18"><a href="#cb6-18"></a>        SummarizedExperiment<span class="sc">::</span><span class="fu">SummarizedExperiment</span>(</span>
+<span id="cb6-19"><a href="#cb6-19"></a>            <span class="at">rowData =</span> rowData,</span>
+<span id="cb6-20"><a href="#cb6-20"></a>            <span class="at">colData =</span> colData,</span>
+<span id="cb6-21"><a href="#cb6-21"></a>            <span class="at">assays =</span> assays</span>
+<span id="cb6-22"><a href="#cb6-22"></a>        )</span>
+<span id="cb6-23"><a href="#cb6-23"></a>    )</span>
+<span id="cb6-24"><a href="#cb6-24"></a>    AC<span class="sc">@</span>features <span class="ot">&lt;-</span> l[[<span class="st">'features'</span>]]</span>
+<span id="cb6-25"><a href="#cb6-25"></a>    AC<span class="sc">@</span>width <span class="ot">&lt;-</span> <span class="fu">as.integer</span>(width)</span>
+<span id="cb6-26"><a href="#cb6-26"></a>    <span class="fu">return</span>(AC)</span>
+<span id="cb6-27"><a href="#cb6-27"></a>}</span>
+<span id="cb6-28"><a href="#cb6-28"></a>AC <span class="ot">&lt;-</span> <span class="fu">AggregatedCoverage</span>(bw_file, bed_file, width)</span>
+<span id="cb6-29"><a href="#cb6-29"></a>AC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="implement-this-class-and-constructor-in-the-package" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="implement-this-class-and-constructor-in-the-package"><span class="header-section-number">4.7</span> Implement this class and constructor in the package</h2>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Add the new class definition to your package source code in a file named <code>AllClasses.R</code>.</p></li>
+<li><p>Add the new constructor to your package source code in a file named <code>AggregatedCoverage.R</code>.</p></li>
+<li><p>Document each file accordingly.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="plot-aggregatedcoverage-objects" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="plot-aggregatedcoverage-objects"><span class="header-section-number">4.8</span> Plot <code>AggregatedCoverage</code> objects</h2>
+<p>Now that we have a dedicated class to store aggregated coverage signal metrics over a set of genomic features of interest, we can provide a <code>plot</code> method that will be used to dispatch an <code>AggregatedCoverage</code> object to the right function when passed to the <code>plot()</code> generic function.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a method with <code>setMethod(&lt;generic&gt;, &lt;class&gt;, &lt;fct&gt;)</code> to plot <code>AggregatedCoverage</code> objects. You can reuse the <code>plotCoverage()</code> function defined in Day 2.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">setMethod</span>(<span class="st">"plot"</span>, <span class="st">"AggregatedCoverage"</span>, <span class="cf">function</span>(x) {</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    df <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_len</span>(<span class="fu">ncol</span>(x)), <span class="cf">function</span>(K) {</span>
+<span id="cb7-3"><a href="#cb7-3"></a>        <span class="fu">data.frame</span>(</span>
+<span id="cb7-4"><a href="#cb7-4"></a>            <span class="at">file =</span> SummarizedExperiment<span class="sc">::</span><span class="fu">colData</span>(x)<span class="sc">$</span>file[K],</span>
+<span id="cb7-5"><a href="#cb7-5"></a>            <span class="at">K =</span> K,</span>
+<span id="cb7-6"><a href="#cb7-6"></a>            <span class="at">distance =</span> SummarizedExperiment<span class="sc">::</span><span class="fu">rowData</span>(x)<span class="sc">$</span>distance,</span>
+<span id="cb7-7"><a href="#cb7-7"></a>            <span class="at">score =</span> SummarizedExperiment<span class="sc">::</span><span class="fu">assay</span>(x, <span class="st">'score'</span>)[, K],</span>
+<span id="cb7-8"><a href="#cb7-8"></a>            <span class="at">upCI =</span> SummarizedExperiment<span class="sc">::</span><span class="fu">assay</span>(x, <span class="st">'upCI'</span>)[, K], </span>
+<span id="cb7-9"><a href="#cb7-9"></a>            <span class="at">lowCI =</span> SummarizedExperiment<span class="sc">::</span><span class="fu">assay</span>(x, <span class="st">'lowCI'</span>)[, K]</span>
+<span id="cb7-10"><a href="#cb7-10"></a>        )</span>
+<span id="cb7-11"><a href="#cb7-11"></a>    }) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">bind_rows</span>()</span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="fu">ggplot</span>(df, <span class="at">mapping =</span> <span class="fu">aes</span>(</span>
+<span id="cb7-13"><a href="#cb7-13"></a>        <span class="at">x =</span> distance, <span class="at">y =</span> score, <span class="at">ymin =</span> lowCI, <span class="at">ymax =</span> upCI,</span>
+<span id="cb7-14"><a href="#cb7-14"></a>        <span class="at">col =</span> <span class="fu">basename</span>(file), <span class="at">fill =</span> <span class="fu">basename</span>(file)</span>
+<span id="cb7-15"><a href="#cb7-15"></a>    )) <span class="sc">+</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a>        <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a>        <span class="fu">geom_ribbon</span>(<span class="at">col =</span> <span class="cn">NA</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>)</span>
+<span id="cb7-18"><a href="#cb7-18"></a>})</span>
+<span id="cb7-19"><a href="#cb7-19"></a></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="fu">plot</span>(AC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Add this method to your package source code in a file named <code>AllMethods.R</code>.</p></li>
+<li><p>Document the method accordingly.</p></li>
+</ul>
 </div>
 </div>
 

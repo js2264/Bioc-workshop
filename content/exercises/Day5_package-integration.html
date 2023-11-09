@@ -338,8 +338,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#improve-examples-using-txdb-and-annotationhub-resources" id="toc-improve-examples-using-txdb-and-annotationhub-resources" class="nav-link active" data-scroll-target="#improve-examples-using-txdb-and-annotationhub-resources"><span class="header-section-number">5.1</span> 1. Improve examples using TxDb and AnnotationHub resources</a></li>
-  <li><a href="#create-pkgdown-website-and-host-it-on-github" id="toc-create-pkgdown-website-and-host-it-on-github" class="nav-link" data-scroll-target="#create-pkgdown-website-and-host-it-on-github"><span class="header-section-number">5.2</span> 2. Create pkgdown website and host it on GitHub</a></li>
+  <li><a href="#use-txdb-and-annotationhub-resources" id="toc-use-txdb-and-annotationhub-resources" class="nav-link active" data-scroll-target="#use-txdb-and-annotationhub-resources"><span class="header-section-number">5.1</span> Use <code>TxDb</code> and <code>AnnotationHub</code> resources</a>
+  <ul class="collapse">
+  <li><a href="#txdb-database" id="toc-txdb-database" class="nav-link" data-scroll-target="#txdb-database"><span class="header-section-number">5.1.1</span> <code>TxDb</code> database</a></li>
+  <li><a href="#annotationhub-database" id="toc-annotationhub-database" class="nav-link" data-scroll-target="#annotationhub-database"><span class="header-section-number">5.1.2</span> <code>AnnotationHub</code> database</a></li>
+  </ul></li>
+  <li><a href="#create-a-aggregatedcoverage-object" id="toc-create-a-aggregatedcoverage-object" class="nav-link" data-scroll-target="#create-a-aggregatedcoverage-object"><span class="header-section-number">5.2</span> Create a <code>AggregatedCoverage</code> object</a></li>
+  <li><a href="#add-a-vignette-to-your-package" id="toc-add-a-vignette-to-your-package" class="nav-link" data-scroll-target="#add-a-vignette-to-your-package"><span class="header-section-number">5.3</span> Add a vignette to your package</a></li>
+  <li><a href="#create-pkgdown-website-and-host-it-on-github" id="toc-create-pkgdown-website-and-host-it-on-github" class="nav-link" data-scroll-target="#create-pkgdown-website-and-host-it-on-github"><span class="header-section-number">5.4</span> Create pkgdown website and host it on GitHub</a></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/js2264/Bioc-workshop/edit/main/content/exercises/Day5_package-integration.Rmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/js2264/Bioc-workshop/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
@@ -363,108 +369,544 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Aims
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <ul>
-<li><p><strong>Overarching goal:</strong> Improve package embedding in Bioconductor ecosystem</p></li>
-<li><p><strong>Specific aims:</strong></p>
-<ul>
-<li>Add suppporting functions to access AnnotationHub-hosted files</li>
+<li>Add suppporting functions to access AnnotationHub-hosted files;</li>
+<li>Write a vignette to document a use case for the package;</li>
 <li>Create a pkgdown website for package documentation</li>
-</ul></li>
 </ul>
-<section id="improve-examples-using-txdb-and-annotationhub-resources" class="level2" data-number="5.1">
-<h2 data-number="5.1" class="anchored" data-anchor-id="improve-examples-using-txdb-and-annotationhub-resources"><span class="header-section-number">5.1</span> 1. Improve examples using TxDb and AnnotationHub resources</h2>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>At any time, if you are lost or do not understand how functions in the</strong> <strong>proposed solution work, type <code>?&lt;function&gt;</code> in the R console </strong> <strong>and a help menu will appear.</strong></p>
+<p>You can also check the help tab in the corresponding quadrant.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Reminder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We aim to create a package which can plot the aggregated coverage of a genomic track over a set of <code>GRanges</code> of interest (at a fixed width).</p>
+</div>
+</div>
+<section id="use-txdb-and-annotationhub-resources" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="use-txdb-and-annotationhub-resources"><span class="header-section-number">5.1</span> Use <code>TxDb</code> and <code>AnnotationHub</code> resources</h2>
+<section id="txdb-database" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="txdb-database"><span class="header-section-number">5.1.1</span> <code>TxDb</code> database</h3>
 <p><code>TxDb</code> packages provide transcript annotations for model organisms.</p>
-<blockquote class="blockquote">
-<p>Find the <code>TxDb</code> package associated with UCSC-provided human gene annotations and install it. <strong>You will need annotations from the <code>hg19</code> human genome reference!</strong></p>
-</blockquote>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Find the <code>TxDb</code> package associated with UCSC-provided human gene annotations and install it.</p>
+<p><strong>Note:</strong> You will need annotations from the <code>hg19</code> human genome reference.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">'TxDb.Hsapiens.UCSC.hg19.knownGene'</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a>txdb <span class="ot">&lt;-</span> TxDb.Hsapiens.UCSC.hg19.knownGene<span class="sc">::</span>TxDb.Hsapiens.UCSC.hg19.knownGene</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <p><code>GenomicFeatures</code> is a package designed in order to facilitate conversion of <code>TxDb</code> objects into <code>GRanges</code> objects.</p>
-<blockquote class="blockquote">
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Which function from <code>GenomicFeatures</code> can be used to find the gene loci for all genes present in the human <code>TxDb</code>?</p>
-</blockquote>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>GenomicFeatures<span class="sc">::</span><span class="fu">genes</span>(txdb)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>AnnotationHub provides extensive human NGS datasets.</p>
-<blockquote class="blockquote">
-<p>Can you query the AnnotationHub to explore which datasets are available? Which species are most represented?</p>
-</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="annotationhub-database" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="annotationhub-database"><span class="header-section-number">5.1.2</span> <code>AnnotationHub</code> database</h3>
+<p><code>AnnotationHub</code> provides access to a large number of NGS datasets.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Can you query the <code>AnnotationHub</code> to explore which datasets are available?</p></li>
+<li><p>Which species are most represented?</p></li>
+</ul>
+<p><strong>Hint:</strong> The <code>mcols()</code> function will extract metadata associated with each entry in the <code>AnnotationHub</code>.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>ah <span class="ot">&lt;-</span> AnnotationHub<span class="sc">::</span><span class="fu">AnnotationHub</span>()</span>
 <span id="cb3-2"><a href="#cb3-2"></a>ah_df <span class="ot">&lt;-</span> AnnotationHub<span class="sc">::</span><span class="fu">mcols</span>(ah)</span>
 <span id="cb3-3"><a href="#cb3-3"></a><span class="fu">table</span>(ah_df<span class="sc">$</span>species) <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">10</span>)</span>
 <span id="cb3-4"><a href="#cb3-4"></a><span class="fu">table</span>(ah_df<span class="sc">$</span>sourcetype) <span class="sc">|&gt;</span> <span class="fu">sort</span>() <span class="sc">|&gt;</span> <span class="fu">tail</span>(<span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>The Epigenome roadmap project by the Broad Institute performed H3K4me3 ChIP-seq in human. They generated a library labelled ‘LL227’ (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM409308">GEO ID: GSM409308</a>).</p>
-<blockquote class="blockquote">
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The Epigenome roadmap project by the Broad Institute performed H3K4me3 ChIP-seq in human (among other marks). They generated a library labelled ‘LL227’ (<a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSM409308">GEO ID: GSM409308</a>).</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Can you query the AnnotationHub for this library?</p>
-</blockquote>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>AnnotationHub<span class="sc">::</span><span class="fu">query</span>(ah, <span class="st">'LL227'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
-<p>Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file?</p>
-</blockquote>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file?</li>
+</ul>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>bw <span class="ot">&lt;-</span> ah[[<span class="st">'AH34904'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>What is the path of the file now stored on disk? How can you load the file in R?</p>
-</blockquote>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>BiocIO<span class="sc">::</span><span class="fu">resource</span>(bw)</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>H3K4me3_bw <span class="ot">&lt;-</span> BiocIO<span class="sc">::</span><span class="fu">resource</span>(bw)</span>
 <span id="cb6-2"><a href="#cb6-2"></a>cov <span class="ot">&lt;-</span> BiocIO<span class="sc">::</span><span class="fu">import</span>(bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
-<p>Create a <code>colData</code> data frame containing a single <code>file</code> column containing this file, then compute an <code>AggregatedCoverage</code> object over human TSSs (+/- 5kb).</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>genes <span class="ot">&lt;-</span> GenomicFeatures<span class="sc">::</span><span class="fu">genes</span>(txdb)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>tss <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(genes, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">fix =</span> <span class="st">'start'</span>)</span>
-<span id="cb7-3"><a href="#cb7-3"></a>tss_extended <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(tss, <span class="at">width =</span> <span class="dv">10000</span>, <span class="at">fix =</span> <span class="st">'center'</span>)</span>
-<span id="cb7-4"><a href="#cb7-4"></a>colData <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">file =</span> BiocIO<span class="sc">::</span><span class="fu">resource</span>(bw))</span>
-<span id="cb7-5"><a href="#cb7-5"></a>AC <span class="ot">&lt;-</span> <span class="fu">AggregatedCoverage</span>(tss_extended, colData)</span>
-<span id="cb7-6"><a href="#cb7-6"></a>AC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
-<p>Can you plot the results?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">plot</span>(AC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<blockquote class="blockquote">
-<p>Create a new vignette to illustrate use of AnnotationHub data with your package.</p>
-</blockquote>
+</div>
+</div>
+</div>
 </section>
-<section id="create-pkgdown-website-and-host-it-on-github" class="level2" data-number="5.2">
-<h2 data-number="5.2" class="anchored" data-anchor-id="create-pkgdown-website-and-host-it-on-github"><span class="header-section-number">5.2</span> 2. Create pkgdown website and host it on GitHub</h2>
-<blockquote class="blockquote">
+</section>
+<section id="create-a-aggregatedcoverage-object" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="create-a-aggregatedcoverage-object"><span class="header-section-number">5.2</span> Create a <code>AggregatedCoverage</code> object</h2>
+<p>This <code>AggregatedCoverage</code> should contain aggregated H3K4me3 coverage over the TSSs of all <strong>forward</strong> human genes.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Three arguments are required:</p>
+<ul>
+<li><code>bw_file</code>: the path to a disk-stored coverage track file (e.g.&nbsp;the path to a <code>bw</code> file)</li>
+<li><code>features_file</code>: the path to a disk-stored features file (e.g.&nbsp;the path to a <code>bed</code> file)</li>
+<li><code>width</code>: an integer specifying the width to use for each genomic locus</li>
+</ul>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ul>
+<li>Preparing <code>bw_file</code> argument:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>bw_file <span class="ot">&lt;-</span> H3K4me3_bw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Preparing <code>features_file</code> argument:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">library</span>(GenomicRanges)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">library</span>(rtracklayer)</span>
+<span id="cb8-3"><a href="#cb8-3"></a>txdb <span class="ot">&lt;-</span> TxDb.Hsapiens.UCSC.hg19.knownGene<span class="sc">::</span>TxDb.Hsapiens.UCSC.hg19.knownGene</span>
+<span id="cb8-4"><a href="#cb8-4"></a>genes <span class="ot">&lt;-</span> GenomicFeatures<span class="sc">::</span><span class="fu">genes</span>(txdb)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>forward_genes <span class="ot">&lt;-</span> genes[<span class="fu">strand</span>(genes) <span class="sc">==</span> <span class="st">'+'</span>]</span>
+<span id="cb8-6"><a href="#cb8-6"></a>forward_tss <span class="ot">&lt;-</span> <span class="fu">resize</span>(forward_genes, <span class="at">width =</span> <span class="dv">1</span>, <span class="at">fix =</span> <span class="st">'start'</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="fu">export</span>(forward_tss, <span class="st">"forward_tss.bed"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a>features_file <span class="ot">&lt;-</span> <span class="st">'forward_tss.bed'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li>Preparing <code>width</code> argument:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>width <span class="ot">&lt;-</span> 8000L</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Now that all the arguments are ready, one can create an <code>AggregatedCoverage</code> object.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Create a <code>AggregatedCoverage</code> object summarizing the coverage of H3K4me3 over the TSSs (± 4kb) of all forward human genes.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-18-contents" aria-controls="callout-18" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-18" class="callout-18-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>AC <span class="ot">&lt;-</span> <span class="fu">AggregatedCoverage</span>(bw_file, features_file, <span class="at">width =</span> width)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>AC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Plot the resulting <code>AC</code> object.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-20" class="callout-20-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">plot</span>(AC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="add-a-vignette-to-your-package" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="add-a-vignette-to-your-package"><span class="header-section-number">5.3</span> Add a vignette to your package</h2>
+<p>The previous section reuses publicly available datasets and resources provided by Bioconductor to illustrate a use case for our package.</p>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Initiate a vignette using <code>biocthis</code> template;</p></li>
+<li><p>Fill out the vignette header with relevant information (namely, the <code>author</code> field);</p></li>
+<li><p>Describe the use case developed in the previous section.</p></li>
+</ul>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_vignette</span>(<span class="at">name =</span> <span class="st">"JacquesTestPackage"</span>, <span class="at">title =</span> <span class="st">"Introduction to my package"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Because the vignette relies on several packages, these need to be declared in the DESCRIPTION file. Make sure to update it.</p>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-24-contents" aria-controls="callout-24" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-24" class="callout-24-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>(<span class="st">"BiocStyle"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>(<span class="st">"TxDb.Hsapiens.UCSC.hg19.knownGene"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>(<span class="st">"GenomicFeatures"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>(<span class="st">"GenomicRanges"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>(<span class="st">"AnnotationHub"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>usethis<span class="sc">::</span><span class="fu">use_package</span>(<span class="st">"BiocIO"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="create-pkgdown-website-and-host-it-on-github" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="create-pkgdown-website-and-host-it-on-github"><span class="header-section-number">5.4</span> Create pkgdown website and host it on GitHub</h2>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Check <code>pkgdown</code> documentation. What is the recommended way to add pkgdown support for your package?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>usethis<span class="sc">::</span><span class="fu">use_pkgdown</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-26-contents" aria-controls="callout-26" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<blockquote class="blockquote">
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-26" class="callout-26-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>usethis<span class="sc">::</span><span class="fu">use_pkgdown</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Can you now build your package? What does the building step do exactly?</p>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>pkgdown<span class="sc">::</span><span class="fu">build_site</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="icon callout callout-style-default callout-answer no-icon callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-28-contents" aria-controls="callout-28" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
 </div>
-<blockquote class="blockquote">
-<p>Comment on why setting up a pkgdown website helps with checking that your package reliably works?</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Commit your changes. Did that include your newly created <code>docs</code> folder? Why?</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Remove <code>docs</code> from <code>.gitignore</code>, then commit the <code>docs/</code> folder with git.</p>
-</blockquote>
-<blockquote class="blockquote">
-<p>Now push all your commits to your github remote repository, navigate to its webpage, and enable <code>Pages</code> deployment from the <code>docs</code> folder. Check the resulting website.</p>
-</blockquote>
+<div class="callout-title-container flex-fill">
+Answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-28" class="callout-28-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>pkgdown<span class="sc">::</span><span class="fu">build_site</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="icon callout callout-style-default callout-question no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Question
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li><p>Comment on why setting up a pkgdown website helps with checking that your package reliably works?</p></li>
+<li><p>Commit your changes. Did that include your newly created <code>docs</code> folder? Why?</p></li>
+<li><p>Remove <code>docs</code> from <code>.gitignore</code>, then commit the <code>docs/</code> folder with git.</p></li>
+<li><p>Now push all your commits to your github remote repository, navigate to its webpage, and enable <code>Pages</code> deployment from the <code>docs</code> folder. Check the resulting website.</p></li>
+</ul>
+</div>
+</div>
 
 
 </section>
