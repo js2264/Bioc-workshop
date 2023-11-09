@@ -34,7 +34,7 @@ Open the newly created project.
 Download files required for the workshop from the following Google Drive Shared folder:  
 
 ```
-https://drive.google.com/drive/folders/1XUMyPTtI6iDj_JZv2O1124YuLCA5MJ7q?usp=sharing
+https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sharing
 ```
 
 **Unzip the archive in the same directory you have created your project in.**

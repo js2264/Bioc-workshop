@@ -9,6 +9,14 @@ workshop, ed. 2023.
 
 `r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
 
+::: {.callout-important icon='true'}
+
+## Link to the `Share` folder: 
+
+[https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sharing](https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sharing)
+
+:::
+
 ## Dates {-}
 
 13-17 Nov. 2023.
