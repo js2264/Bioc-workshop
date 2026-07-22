@@ -67,6 +67,24 @@ an individual sample and each column describes a variable associated with each s
 
 Create a `colData` object for a single sample, e.g. the `Scc1-vs-input` `bigwig` file.
 
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+A `colData` is just a `data.frame` (or `DataFrame`) with one row per sample.
+For a single sample, it has a single row. Retrieve the installed file path with
+`system.file()`.
+
+```{r}
+bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+colData <- data.frame(
+    file = bw_file,
+    # TODO: any other useful sample-level metadata (sample, type, target, ...)
+)
+```
+
+:::
+
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
@@ -94,6 +112,22 @@ set of genomic ranges of interest.
 Create a `data.frame` which contains a single `distance` column, which will be 
 a numerical vector centered at 0 and whose length is half of a provided `width`
 variable (e.g. for `width` == 2000, the `distance` column would be a sequence from `-1000` to `999` (length of `2000`))
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+This is exactly the `distance` column you built in `computeCoverage()` in Day 1:
+`seq(-width/2, width/2 - 1, by = 1)`.
+
+```{r}
+width <- 2000
+rowData <- data.frame(
+    distance = seq(______, ______, by = 1)
+)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -124,8 +158,29 @@ In our case, each matrix will represent a different metric:
 Prepare a list of three matrices as indicated hereabove. Use the functions 
 defined in the previous exercises and the datasets provided as `extdata`. 
 
-- Each matrix should have 1 column, since there is only 1 example `bigwig`. 
-- Each matrix should have as many rows as the chosen `width` variable. 
+- Each matrix should have 1 column, since there is only 1 example `bigwig`.
+- Each matrix should have as many rows as the chosen `width` variable.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Run your Day 1 pipeline up to `computeCoverage()` to obtain the `mean`,
+`ci_high` and `ci_low` vectors, then wrap each into a one-column matrix with
+`matrix(..., ncol = 1)`.
+
+```{r}
+bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+l <- importFiles(bw_file, bed_file, width = width) |> filterGRanges()
+df <- computeCoverage(l)
+assays <- list(
+    'mean'  = matrix(df$mean, ncol = 1),
+    'upCI'  = matrix(______, ncol = 1),
+    'lowCI' = matrix(______, ncol = 1)
+)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -154,9 +209,30 @@ Everything is now ready to manually create an `AggregatedCoverage` object.
 
 Define a new `AggregatedCoverage` class, containing a 
 `SummarizedExperiment`-derived object with two additional slots, 
-named `features` (storing a `GRanges` object 
-corresponding to the imported genomic loci of interest) and `width` (storing the 
-`width` at which each genomic locus is resized). 
+named `features` (storing a `GRanges` object
+corresponding to the imported genomic loci of interest) and `width` (storing the
+`width` at which each genomic locus is resized).
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Use `methods::setClass()`. `contains =` declares the parent class to inherit
+from, and `slots =` is a named list mapping each new slot to the class it holds.
+
+```{r}
+library(SummarizedExperiment)
+methods::setClass(
+    "AggregatedCoverage",
+    contains = c("______"),
+    slots = list(
+        features = "GRanges",
+        width = "integer"
+    )
+)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -179,10 +255,30 @@ methods::setClass(
 ::: {.callout-question .icon .callout-note}
 
 You can now manually create a new `AggregatedCoverage` object with the `methods::new()` 
-function. Start by creating a `SummarizedExperiment`, and then fill out the 
-two extra slots manually. 
+function. Start by creating a `SummarizedExperiment`, and then fill out the
+two extra slots manually.
 
-**Tip:** You can edit the slots using the `object@slot <- ...` notation. 
+**Tip:** You can edit the slots using the `object@slot <- ...` notation.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`methods::new("AggregatedCoverage", <a SummarizedExperiment>)` creates the
+object with its two extra slots left empty; you then fill them with `@`.
+
+```{r}
+AC <- methods::new(
+    "AggregatedCoverage",
+    SummarizedExperiment::SummarizedExperiment(
+        rowData = rowData, colData = colData, assays = assays
+    )
+)
+AC@features <- ______   # the GRanges of features
+AC@width <- ______      # the width, as an integer
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -219,7 +315,28 @@ The constructor should take three arguments:
 
 1. The path to a single `bigwig` file;
 2. The path to a single feature file (e.g. a `bed` or a `narrowPeak` file);
-3. A width to use to recover the coverage around the center of each feature. 
+3. A width to use to recover the coverage around the center of each feature.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Simply move all the steps you just ran by hand (build `colData`, `rowData`,
+`assays`, the `SummarizedExperiment`, then the two extra slots) into the body of
+a single function, returning the final object.
+
+```{r}
+AggregatedCoverage <- function(bw_file, features_file, width) {
+    # TODO: colData, rowData
+    # TODO: l <- importFiles(...) |> filterGRanges(); df <- computeCoverage(l)
+    # TODO: assays
+    # TODO: AC <- methods::new("AggregatedCoverage", SummarizedExperiment(...))
+    # TODO: AC@features <- ...; AC@width <- as.integer(width)
+    return(AC)
+}
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -280,9 +397,27 @@ right function when passed to the `plot()` generic function.
 
 ::: {.callout-question .icon .callout-note}
 
-Create a method with `setMethod(<generic>, <class>, <fct>)` to 
+Create a method with `setMethod(<generic>, <class>, <fct>)` to
 plot `AggregatedCoverage` objects. You can reuse the `plotCoverage()` function
-defined in Day 2. 
+defined in Day 2.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`setMethod("plot", "AggregatedCoverage", function(x, ...) { ... })` registers a
+`plot` method for your class. Inside, pull the data back out of the object with
+`assay(x, "mean")`, `assay(x, "upCI")`, `assay(x, "lowCI")` and
+`rowData(x)$distance`, assemble a `data.frame`, and hand it to `ggplot()`.
+
+```{r}
+setMethod("plot", "AggregatedCoverage", function(x, ...) {
+    # TODO: build a data.frame from rowData(x) and the three assays
+    # TODO: ggplot(...) + geom_line() + geom_ribbon()
+})
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 

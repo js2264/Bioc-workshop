@@ -6,12 +6,13 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ::: {.callout-note icon='true'}
 
-## Aims 
+## Aims
 
 - Adding supporting data
+- Documenting how the data was generated
 - Adding examples
 - Adding unit tests
-- Check package 
+- Checking the package
 
 :::
 
@@ -19,9 +20,9 @@ knitr::opts_chunk$set(eval = FALSE)
 
 **At any time, if you are lost or do not understand how functions in the**
 **proposed solution work, type `?<function>` in the R console **
-**and a help menu will appear.** 
+**and a help menu will appear.**
 
-You can also check the help tab in the corresponding quadrant. 
+You can also check the help tab in the corresponding quadrant.
 
 :::
 
@@ -32,72 +33,182 @@ You can also check the help tab in the corresponding quadrant.
 We aim to create a package which can plot the aggregated coverage of a genomic
 track over a set of `GRanges` of interest (at a fixed width).
 
+By now, your package should contain the four functions (`importFiles()`,
+`filterGRanges()`, `computeCoverage()`, `plotCoverage()`) prototyped in Day 1
+and documented in Day 2.
+
 :::
 
-## Add supporting data to your package 
+## Add supporting data to your package
 
-You can use toy dataset files provided in `Share/Day3/`. 
+To let your users (and yourself!) run the examples and tests, a package should
+ship small example datasets. Raw data files live in `inst/extdata/`.
+
+You can use the toy dataset files provided in `Share/Day3/`
+(`Scc1-vs-input.bw` and `Scc1-peaks.narrowPeak`).
 
 ::: {.callout-question .icon .callout-note}
 
-Add them to the `inst/extdata/` folder in your package. 
+Add these two files to the `inst/extdata/` folder of your package.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`inst/extdata/` may not exist yet — create it first. You can do this from R,
+or simply from your file browser.
+
+```{r}
+dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
+file.copy(
+    from = c(
+        here::here("Share/Day3/Scc1-vs-input.bw"),
+        here::here("Share/Day3/Scc1-peaks.narrowPeak")
+    ),
+    to = "inst/extdata/"
+)
+```
 
 :::
 
+::: {.callout-answer .icon .callout-note collapse=true}
 
-You will also need to document how these raw data files have been 
-generated (or obtained). This can be done in a less "formal" manner, in a 
-`.R` file in `inst/scripts`. 
+```{r}
+dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
+file.copy(
+    from = c(
+        here::here("Share/Day3/Scc1-vs-input.bw"),
+        here::here("Share/Day3/Scc1-peaks.narrowPeak")
+    ),
+    to = "inst/extdata/"
+)
+list.files("inst/extdata")
+```
 
-::: {.callout-tip icon='true'}
+Once the files are in `inst/extdata/`, you can retrieve their installed path
+with `system.file()`:
 
-An example of such script is in `Share/Day3/make-extdata.R`. 
+```{r}
+system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+```
+
+:::
+
+:::
+
+`Bioconductor` requires that you **document how each raw data file was**
+**generated or obtained**. This is done, less formally, in a `.R` script placed
+in `inst/scripts/`.
+
+::: {.callout-question .icon .callout-note}
+
+Create an `inst/scripts/make-extdata.R` file, and describe there how the two
+example files were produced.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The script is documentation, not something that needs to run end-to-end: a mix
+of comments and (optionally) code is fine. An example is provided in
+`Share/scripts/make-extdata.R`.
+
+```{r}
+dir.create("inst/scripts", recursive = TRUE, showWarnings = FALSE)
+file.edit("inst/scripts/make-extdata.R")
+```
+
+:::
 
 :::
 
 ## Add examples to your function files
 
-Examples can be used to illustrate how your function works. They are 
-integrated in the manual pages compiled with `document()` and are often 
-the first thing a new end-user is going to read. 
+Examples illustrate how your functions work. They are integrated in the manual
+pages compiled with `document()`, and are often the first thing a new user
+reads.
 
 ::: {.callout-question .icon .callout-note}
 
-Add runnable examples to each function. 
+Add a runnable `@examples` section to each of your functions, using the example
+data you just added.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Reference the installed data with `system.file()` so that the examples work on
+any machine where the package is installed. A roxygen `@examples` block looks
+like this:
+
+```{r}
+#' @examples
+#' bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+#' bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+#' l <- importFiles(bw_file, bed_file, width = 2000)
+#' l
+```
 
 :::
 
-Once you have added examples to your functions, you can check whether these
-examples work with `run_examples()`. 
+::: {.callout-answer .icon .callout-note collapse=true}
+
+Fully worked-out function files, with `@examples` sections added, are available
+in `Share/functions/`. For instance, `importFiles()` chains into the whole
+pipeline:
 
 ```{r}
+#' @examples
+#' bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+#' bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+#' importFiles(bw_file, bed_file, width = 2000) |>
+#'     filterGRanges() |>
+#'     computeCoverage() |>
+#'     plotCoverage()
+```
+
+:::
+
+:::
+
+Once you have added examples and re-run `document()`, you can check that they all
+run without error:
+
+```{r}
+document()
 run_examples()
 ```
 
-::: {.callout-tip icon='true'}
-
-The content of the proposed function files is shown 
-in `Share/Day3/functions_with-examples/`. These files provides an 
-example of implementation to fulfill our package's requirements, 
-with examples added.
-
-:::
-
 ## Add unit tests to your package
 
-Unit tests are the best way to make sure that your package works as intended. 
-They consist of `R` code, executed and compared to an expected result. 
+Unit tests are the best way to make sure your package keeps working as intended
+as you keep editing it. Each test runs a bit of `R` code and compares the result
+to an expectation. We use the `testthat` framework.
 
-To start using unit tests, you need to declare it. We will use the `testthat` 
-framework to implement unit tests. 
+To start using unit tests, declare it once:
 
 ```{r}
 usethis::use_testthat()
 ```
 
+This creates a `tests/testthat/` folder and a `tests/testthat.R` runner.
+
 ::: {.callout-question .icon .callout-note}
 
-Once `testthat` is initiated, create a new test file and add individual tests. 
+Create a test file for your functions.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`usethis::use_test("<name>")` creates (and opens) `tests/testthat/test-<name>.R`.
+Give it a meaningful name, e.g. the function or feature under test.
+
+```{r}
+usethis::use_test("computeCoverage")
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -109,29 +220,160 @@ usethis::use_test("computeCoverage")
 
 :::
 
-::: {.callout-tip icon='true'}
+A test file is a series of `test_that("description", { ... })` blocks. Inside
+each block, you state **expectations** with the `expect_*()` family:
 
-An example of a working test file is available in `Share/Day3/tests/`
+- `expect_equal(x, y)` / `expect_identical(x, y)`: `x` equals `y`;
+- `expect_true(x)` / `expect_false(x)`: `x` is `TRUE` / `FALSE`;
+- `expect_s4_class(x, "GRanges")` / `expect_s3_class(x, "data.frame")`: `x` has the expected class;
+- `expect_named(x, c("a", "b"))`: `x` has the expected names;
+- `expect_error(f())` / `expect_warning(f())`: calling `f()` raises an error / warning.
+
+::: {.callout-question .icon .callout-note}
+
+Write a test that checks that `importFiles()` returns a list with a `coverage`
+and a `features` element, and that every feature has been resized to the
+requested width.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Load the example data with `system.file()`, call `importFiles()`, then state
+what you *know* must be true about the result.
+
+```{r}
+test_that("importFiles() resizes features to the requested width", {
+    bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+    bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+    l <- importFiles(bw_file, bed_file, width = 2000)
+    expect_named(l, c("coverage", "features"))
+    expect_true(all(GenomicRanges::width(l$features) == ______))
+})
+```
 
 :::
 
-## Check your package
-
-Several `check` functions are available. They each check your package in a 
-specific way. 
-
-- `devtools::check()` verifies the basic structure of the package, the documentation, the examples and unit tests; 
-- `rcmdcheck::rcmdcheck()` does somewhat the same job but builds the package first;
-- `BiocCheck::BiocCheck()` checks the compliance of the package with `Bioconductor` requirements. 
+::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-check()
+test_that("importFiles() resizes features to the requested width", {
+    bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+    bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+    l <- importFiles(bw_file, bed_file, width = 2000)
+
+    expect_type(l, "list")
+    expect_named(l, c("coverage", "features"))
+    expect_s4_class(l$features, "GRanges")
+    expect_true(all(GenomicRanges::width(l$features) == 2000))
+})
+```
+
+:::
+
+:::
+
+::: {.callout-question .icon .callout-note}
+
+Write a test that checks the shape and consistency of the `data.frame` returned
+by `computeCoverage()`: one row per position, the expected column names, and a
+confidence interval that always brackets the mean.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Run the full pipeline, then think about the invariants that must hold no matter
+the data: `nrow(df) == width`, the columns are `distance`/`mean`/`ci_low`/`ci_high`,
+and for every position `ci_low <= mean <= ci_high`.
+
+```{r}
+test_that("computeCoverage() returns a well-formed data.frame", {
+    # ... run the pipeline into `df` ...
+    expect_equal(nrow(df), width)
+    expect_named(df, c("distance", "mean", "ci_low", "ci_high"))
+    expect_true(all(df$ci_low <= df$mean & df$mean <= df$ci_high))
+})
+```
+
+:::
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+test_that("computeCoverage() returns a well-formed data.frame", {
+    bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
+    bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
+    width <- 2000
+    df <- importFiles(bw_file, bed_file, width = width) |>
+        filterGRanges() |>
+        computeCoverage()
+
+    expect_s3_class(df, "data.frame")
+    expect_equal(nrow(df), width)
+    expect_named(df, c("distance", "mean", "ci_low", "ci_high"))
+    expect_equal(df$distance[1], -width / 2)
+    expect_true(all(df$ci_low <= df$mean))
+    expect_true(all(df$mean <= df$ci_high))
+})
+```
+
+A complete, working example test file is available in
+`Share/tests/test-computeCoverage.R`.
+
+:::
+
+:::
+
+::: {.callout-tip icon='true'}
+
+Good tests often check **edge cases** and **error handling**, not just the happy
+path. For instance: does `computeCoverage()` error out cleanly if the features
+do not all share the same width? You could test that with
+`expect_error(...)`.
+
+:::
+
+Once your tests are written, run the whole suite:
+
+```{r}
+devtools::test()
+```
+
+## Check your package
+
+Several `check` functions are available. They each check your package in a
+specific way:
+
+- `devtools::check()` verifies the basic structure of the package, the documentation, the examples and the unit tests;
+- `rcmdcheck::rcmdcheck()` does somewhat the same job but builds the package first;
+- `BiocCheck::BiocCheck()` checks the compliance of the package with `Bioconductor` requirements.
+
+```{r}
+devtools::check()
 rcmdcheck::rcmdcheck()
-BiocCheck()
+BiocCheck::BiocCheck()
 ```
 
 ::: {.callout-question .icon .callout-note}
 
-Attempt to fix the `ERROR` and `WARNING` returned by `check()` and `BiocCheck()`. 
+Attempt to fix the `ERROR`s and `WARNING`s returned by `check()` and
+`BiocCheck()`.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Read each message carefully — they usually tell you exactly what to fix. Common
+early offenders:
+
+- missing `@return` / `@param` tags in the documentation;
+- undeclared dependencies (add them with `usethis::use_package("<pkg>")`);
+- lines longer than 80 characters (a `BiocCheck` style requirement);
+- functions used without their `pkg::` prefix or an `@importFrom` tag.
+
+Fix, re-run `document()`, then re-run the check. Iterate until it is clean.
+
+:::
 
 :::
