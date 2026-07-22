@@ -346,7 +346,7 @@ plot the distance between this motif and the center of sequences.
 
 ::: {.callout-question .icon .callout-note}
 
-Create a function which takes a set of sequences and a chosen motif as input, and returns a plot of the distance between 
+Create a function which takes a set of sequences and a chosen motif as input, and returns a plot of the distance between each motif occurrence and the center of the sequences.
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 

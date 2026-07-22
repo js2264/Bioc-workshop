@@ -248,25 +248,33 @@ devtools::build_readme()  ## To rebuild README.md
 To write your first package function, you can either create an `R/<name>.R` 
 file manually, or run `usethis::use_r(name)`.
 
-Now is time to write! Refer to the functionalities (descriped in 
-[Section 0](#package-functions)) that we are aiming to provide in this package, 
-and start writing 4 functions which, together, can fulfill these 
-functionalities. Briefly, we suggest to design functions to: 
+Now is time to write! Refer to the functionalities (described in
+[Section 0](#package-functions)) that we are aiming to provide in this package,
+and start writing 4 functions which, together, can fulfill these
+functionalities. Briefly, we suggest to design functions to:
 
-1. `import` a coverage track and a set of genomic features (scaled to a fixed width) together in a list;
-2. `filter` the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);
-3. `compute` the mean coverage and its confidence interval, for each position within the features' width;
-4. `plot` the results with `ggplot2`.
+1. `importFiles()`: import a coverage track and a set of genomic features (scaled to a fixed width) together in a list;
+2. `filterGRanges()`: filter the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);
+3. `computeCoverage()`: compute the mean coverage and its confidence interval, for each position within the features' width;
+4. `plotCoverage()`: plot the results with `ggplot2`.
+
+::: {.callout-tip icon='true'}
+
+We suggest these exact function names because the exercises for the following
+days (Day 3, 4 and 5) reuse them. Using the same names will let your package
+grow smoothly across the week.
+
+:::
 
 ::: {.callout-tip icon='true'}
 
 These functions should work in a chain: 
 
 ```{r}
-import(bw_path, features_path, width) |>
-    filter() |> 
-    compute() |> 
-    plot()
+importFiles(bw_path, features_path, width) |>
+    filterGRanges() |>
+    computeCoverage() |>
+    plotCoverage()
 ```
 
 :::
@@ -283,8 +291,8 @@ example of implementation to fulfill our package's requirements.
 
 ::: {.callout-question .icon .callout-note}
 
-Write oxygen tags (`title`, `description`, `@param`, `@return`, ...) for each 
-function. 
+Write roxygen tags (`@title`, `@description`, `@param`, `@return`, ...) for each
+function.
 
 :::
 

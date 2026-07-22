@@ -293,13 +293,13 @@ setMethod("plot", "AggregatedCoverage", function(x) {
             file = SummarizedExperiment::colData(x)$file[K],
             K = K,
             distance = SummarizedExperiment::rowData(x)$distance,
-            score = SummarizedExperiment::assay(x, 'score')[, K],
-            upCI = SummarizedExperiment::assay(x, 'upCI')[, K], 
+            mean = SummarizedExperiment::assay(x, 'mean')[, K],
+            upCI = SummarizedExperiment::assay(x, 'upCI')[, K],
             lowCI = SummarizedExperiment::assay(x, 'lowCI')[, K]
         )
     }) |> dplyr::bind_rows()
     ggplot(df, mapping = aes(
-        x = distance, y = score, ymin = lowCI, ymax = upCI,
+        x = distance, y = mean, ymin = lowCI, ymax = upCI,
         col = basename(file), fill = basename(file)
     )) +
         geom_line() +

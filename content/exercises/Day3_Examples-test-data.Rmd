@@ -102,7 +102,7 @@ Once `testthat` is initiated, create a new test file and add individual tests.
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-usethis::use_test("")
+usethis::use_test("computeCoverage")
 ```
 
 :::
@@ -111,7 +111,7 @@ usethis::use_test("")
 
 ::: {.callout-tip icon='true'}
 
-An example of a working test file is availabe in `Share/Day3//`
+An example of a working test file is available in `Share/Day3/tests/`
 
 :::
 
