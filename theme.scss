@@ -162,6 +162,11 @@ kbd, samp {
   border: 1px solid rgb(0 0 0 / 65%);
 }
 
+p code:not(.sourceCode), li code:not(.sourceCode), td code:not(.sourceCode) {
+    background-color: #e5e5e5;
+    padding: .2em;
+}
+
 .code-with-filename {
   background-color: #c0c0c080;
   border-color: #c0c0c080;

@@ -226,8 +226,8 @@ methods::setClass(
     "AggregatedCoverage",
     contains = c("______"),
     slots = list(
-        features = "GRanges",
-        width = "integer"
+        features = "______",
+        width = "______"
     )
 )
 ```
@@ -271,7 +271,7 @@ object with its two extra slots left empty; you then fill them with `@`.
 AC <- methods::new(
     "AggregatedCoverage",
     SummarizedExperiment::SummarizedExperiment(
-        rowData = rowData, colData = colData, assays = assays
+        rowData = ______, colData = ______, assays = ______
     )
 )
 AC@features <- ______   # the GRanges of features

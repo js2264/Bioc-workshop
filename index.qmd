@@ -8,12 +8,6 @@ This is the landing page for the **"Developing R/Bioconductor packages for Genom
 
 `r rebook::openingDetails(Copyright='J. Serizay', Source=.gh_url)`
 
-::: {.callout-important icon="true"}
-## Link to the `Share` folder:
-
-<https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sharing>
-:::
-
 ## Dates {.unnumbered}
 
 27-31 July 2026

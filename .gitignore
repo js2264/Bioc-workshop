@@ -6,5 +6,6 @@ Demo*
 .Rproj.user
 *Rproj
 invoice*
-Share/
-!Share/Day*/
+Share/Day*
+Share/AggregatedCoverage
+

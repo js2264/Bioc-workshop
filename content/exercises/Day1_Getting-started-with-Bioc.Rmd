@@ -53,13 +53,9 @@ importFiles(bw_file, features_file, width) |>
 Let's create a project for this course!
 In RStudio: `File` > `New Project...`, create a project entitled "Bioc-workshop".
 Open the newly created project.
-Download files required for the workshop from the following Google Drive Shared folder:
+Download files required for the workshop from the following GitHub repository:
 
-```
-https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sharing
-```
-
-**Unzip the archive in the same directory you have created your project in.**
+[https://github.com/js2264/Bioc-workshop](https://github.com/js2264/Bioc-workshop)
 
 For today, we will work with two files stored in `Share/data/`:
 
@@ -92,8 +88,8 @@ returned object.
 
 ```{r}
 library(rtracklayer)
-bw_file <- here::here("Share/data/Scc1-vs-input.bw")
-coverage <- import(bw_file, as = ______)
+bw_file <- "_____"
+coverage <- import(______, as = ______)
 ```
 
 :::
@@ -102,7 +98,7 @@ coverage <- import(bw_file, as = ______)
 
 ```{r}
 library(rtracklayer)
-bw_file <- here::here("Share/data/Scc1-vs-input.bw")
+bw_file <- "Share/data/Scc1-vs-input.bw"
 coverage <- import(bw_file, as = "RleList")
 coverage
 ```
@@ -127,10 +123,8 @@ A genome is mostly made of long stretches of identical values — think about ho
 run-length encoding stores `0 0 0 0 0 3 3 3` compactly.
 
 ```{r}
-class(coverage)
-length(coverage)
-names(coverage)
-coverage[[1]]
+names(_____)
+_____[[1]]
 ```
 
 :::
@@ -139,9 +133,11 @@ coverage[[1]]
 
 ```{r}
 class(coverage)
+
 ## One Rle per chromosome
 length(coverage)
 names(coverage)
+
 ## Each Rle stores runs of identical coverage values, instead of one value
 ## per base pair. This is extremely memory-efficient for genomic coverage,
 ## which is piecewise-constant.
@@ -171,7 +167,7 @@ The same `rtracklayer::import()` function handles `bed`/`narrowPeak` files; here
 you do **not** need the `as =` argument. The result is a `GRanges`.
 
 ```{r}
-features <- import(here::here("Share/data/______"))
+features <- ______("Share/data/______")
 ```
 
 :::
@@ -179,7 +175,7 @@ features <- import(here::here("Share/data/______"))
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-features <- import(here::here("Share/data/Scc1-peaks.narrowPeak"))
+features <- import("Share/data/Scc1-peaks.narrowPeak")
 features
 class(features)
 ```
@@ -198,13 +194,12 @@ median width?
 ## Hint
 
 `GRanges` behave a lot like vectors. Useful accessors: `length()`,
-`seqnames()`, `width()`. Wrap `seqnames()` in `table()` to count features per
-chromosome.
+`seqnames()`, `width()`. 
 
 ```{r}
-length(features)
-table(seqnames(features))
-median(width(features))
+length(______)
+table(______(features))
+median(______(features))
 ```
 
 :::
@@ -241,7 +236,7 @@ point is kept fixed while resizing: `"start"`, `"end"` or `"center"`.
 
 ```{r}
 width <- 2000
-resized <- resize(features, width = width, fix = ______)
+resized <- resize(______, width = width, fix = ______)
 ```
 
 :::
@@ -249,7 +244,6 @@ resized <- resize(features, width = width, fix = ______)
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-library(GenomicRanges)
 width <- 2000
 resized <- resize(features, width = width, fix = "center")
 resized
@@ -304,8 +298,8 @@ importFiles <- function(bw_file, features_file, width) {
 }
 
 l <- importFiles(
-    here::here("Share/data/Scc1-vs-input.bw"),
-    here::here("Share/data/Scc1-peaks.narrowPeak"),
+    "Share/data/Scc1-vs-input.bw",
+    "Share/data/Scc1-peaks.narrowPeak",
     width = 2000
 )
 l
@@ -334,7 +328,7 @@ long is each of its elements?
 The result is another `RleList`, with one element per feature.
 
 ```{r}
-cov_by_feature <- l$coverage[l$features]
+cov_by_feature <- l$______[l$______]
 ```
 
 :::
@@ -393,11 +387,11 @@ filterGRanges <- function(l) {
 ```{r}
 filterGRanges <- function(l) {
     features <- l$features
-    chroms <- as.character(GenomicRanges::seqnames(features))
+    chroms <- as.character(seqnames(features))
     chrom_lengths <- lengths(l$coverage)
     on_covered_chrom <- chroms %in% names(l$coverage)
-    within_bounds <- GenomicRanges::start(features) >= 1 &
-        GenomicRanges::end(features) <= chrom_lengths[chroms]
+    within_bounds <- start(features) >= 1 &
+        end(features) <= chrom_lengths[chroms]
     l$features <- features[on_covered_chrom & within_bounds]
     l
 }
@@ -433,9 +427,8 @@ what we need to average column by column.
 ```{r}
 mat <- matrix(
     as.numeric(unlist(l$coverage[l$features])),
-    ncol = width, byrow = TRUE
+    ncol = ______, byrow = ______
 )
-dim(mat)
 ```
 
 :::
@@ -468,7 +461,10 @@ Identify minus-strand features with `strand(l$features) == "-"`, then reverse
 the column order of those rows only: `mat[is_minus, ] <- mat[is_minus, rev(seq_len(width))]`.
 
 ```{r}
-is_minus <- as.logical(strand(l$features) == "-")
+is_minus <- as.logical(______(l$features) == "______")
+if (any(is_minus)) {
+    mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
+}
 ```
 
 :::
@@ -476,7 +472,7 @@ is_minus <- as.logical(strand(l$features) == "-")
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-is_minus <- as.logical(GenomicRanges::strand(l$features) == "-")
+is_minus <- as.logical(strand(l$features) == "-")
 if (any(is_minus)) {
     mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
 }
@@ -524,21 +520,26 @@ computeCoverage <- function(l) {
 ```{r}
 computeCoverage <- function(l) {
     features <- l$features
-    width <- unique(GenomicRanges::width(features))
+    width <- unique(width(features))
+
     ## features x positions matrix
     mat <- matrix(
         as.numeric(unlist(l$coverage[features])),
         ncol = width, byrow = TRUE
     )
+
     ## flip minus-strand features
-    is_minus <- as.logical(GenomicRanges::strand(features) == "-")
+    is_minus <- as.logical(strand(features) == "-")
     if (any(is_minus)) {
         mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
     }
+
     ## per-position mean and 95% CI
     n <- nrow(mat)
     means <- colMeans(mat, na.rm = TRUE)
     ci <- 1.96 * apply(mat, 2, sd, na.rm = TRUE) / sqrt(n)
+
+    ## return a clean data.frame
     data.frame(
         distance = seq(-width/2, width/2 - 1, by = 1),
         mean = means,
@@ -576,8 +577,8 @@ and a `geom_line()` for the mean.
 
 ```{r}
 library(ggplot2)
-ggplot(df, aes(x = distance, y = mean)) +
-    geom_ribbon(aes(ymin = ci_low, ymax = ci_high), alpha = 0.2) +
+ggplot(df, aes(x = ______, y = ______)) +
+    geom_ribbon(aes(ymin = ______, ymax = ______), alpha = 0.2) +
     geom_line()
 ```
 

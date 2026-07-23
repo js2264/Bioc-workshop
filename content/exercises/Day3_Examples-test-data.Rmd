@@ -62,10 +62,10 @@ or simply from your file browser.
 dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
 file.copy(
     from = c(
-        here::here("Share/data/Scc1-vs-input.bw"),
-        here::here("Share/data/Scc1-peaks.narrowPeak")
+        "______",
+        "______"
     ),
-    to = "inst/extdata/"
+    to = "______"
 )
 ```
 
@@ -77,8 +77,8 @@ file.copy(
 dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
 file.copy(
     from = c(
-        here::here("Share/data/Scc1-vs-input.bw"),
-        here::here("Share/data/Scc1-peaks.narrowPeak")
+        "Share/data/Scc1-vs-input.bw",
+        "Share/data/Scc1-peaks.narrowPeak"
     ),
     to = "inst/extdata/"
 )
@@ -205,7 +205,7 @@ Create a test file for your functions.
 Give it a meaningful name, e.g. the function or feature under test.
 
 ```{r}
-usethis::use_test("computeCoverage")
+usethis::use_test("______")
 ```
 
 :::
@@ -244,11 +244,11 @@ what you *know* must be true about the result.
 
 ```{r}
 test_that("importFiles() resizes features to the requested width", {
-    bw_file <- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")
-    bed_file <- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")
-    l <- importFiles(bw_file, bed_file, width = 2000)
-    expect_named(l, c("coverage", "features"))
-    expect_true(all(GenomicRanges::width(l$features) == ______))
+    bw_file <- system.file("extdata", "______", package = "______")
+    bed_file <- system.file("extdata", "______", package = "______")
+    l <- ______(bw_file, bed_file, width = 2000)
+    expect_named(l, c("______", "______"))
+    expect_true(all(______(l$features) == ______))
 })
 ```
 
@@ -290,9 +290,9 @@ and for every position `ci_low <= mean <= ci_high`.
 ```{r}
 test_that("computeCoverage() returns a well-formed data.frame", {
     # ... run the pipeline into `df` ...
-    expect_equal(nrow(df), width)
-    expect_named(df, c("distance", "mean", "ci_low", "ci_high"))
-    expect_true(all(df$ci_low <= df$mean & df$mean <= df$ci_high))
+    expect_equal(nrow(df), ______)
+    expect_named(df, c("______", "______", "______", "______"))
+    expect_true(all(df$ci_low <= df$______ & df$______ <= df$ci_high))
 })
 ```
 

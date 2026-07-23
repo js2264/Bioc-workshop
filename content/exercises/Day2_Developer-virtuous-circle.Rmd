@@ -134,7 +134,7 @@ create (so mind the parent directory — e.g. your home `~`).
 
 ```{r}
 library(devtools)
-create_package("~/______")
+create_package("______")
 ```
 
 :::
