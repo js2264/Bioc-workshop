@@ -1,6 +1,6 @@
 Package: BiocPackageDev
 Version: 1.0.0
-Date: 2023-06-14
+Date: 2026-07-23
 Authors@R:
     c(person(given = "Jacques",
            family = "Serizay",

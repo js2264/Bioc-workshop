@@ -61,7 +61,7 @@ https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sha
 
 **Unzip the archive in the same directory you have created your project in.**
 
-For today, we will work with two files stored in `Share/Day1/`:
+For today, we will work with two files stored in `Share/data/`:
 
 - `Scc1-vs-input.bw`: a **coverage track** (`bigwig` format) of a cohesin (Scc1)
   ChIP-seq experiment in yeast (*S. cerevisiae*);
@@ -92,7 +92,7 @@ returned object.
 
 ```{r}
 library(rtracklayer)
-bw_file <- here::here("Share/Day1/Scc1-vs-input.bw")
+bw_file <- here::here("Share/data/Scc1-vs-input.bw")
 coverage <- import(bw_file, as = ______)
 ```
 
@@ -102,7 +102,7 @@ coverage <- import(bw_file, as = ______)
 
 ```{r}
 library(rtracklayer)
-bw_file <- here::here("Share/Day1/Scc1-vs-input.bw")
+bw_file <- here::here("Share/data/Scc1-vs-input.bw")
 coverage <- import(bw_file, as = "RleList")
 coverage
 ```
@@ -171,7 +171,7 @@ The same `rtracklayer::import()` function handles `bed`/`narrowPeak` files; here
 you do **not** need the `as =` argument. The result is a `GRanges`.
 
 ```{r}
-features <- import(here::here("Share/Day1/______"))
+features <- import(here::here("Share/data/______"))
 ```
 
 :::
@@ -179,7 +179,7 @@ features <- import(here::here("Share/Day1/______"))
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-features <- import(here::here("Share/Day1/Scc1-peaks.narrowPeak"))
+features <- import(here::here("Share/data/Scc1-peaks.narrowPeak"))
 features
 class(features)
 ```
@@ -304,8 +304,8 @@ importFiles <- function(bw_file, features_file, width) {
 }
 
 l <- importFiles(
-    here::here("Share/Day1/Scc1-vs-input.bw"),
-    here::here("Share/Day1/Scc1-peaks.narrowPeak"),
+    here::here("Share/data/Scc1-vs-input.bw"),
+    here::here("Share/data/Scc1-peaks.narrowPeak"),
     width = 2000
 )
 l

@@ -44,7 +44,7 @@ and documented in Day 2.
 To let your users (and yourself!) run the examples and tests, a package should
 ship small example datasets. Raw data files live in `inst/extdata/`.
 
-You can use the toy dataset files provided in `Share/Day3/`
+You can use the toy dataset files provided in `Share/data/`
 (`Scc1-vs-input.bw` and `Scc1-peaks.narrowPeak`).
 
 ::: {.callout-question .icon .callout-note}
@@ -62,8 +62,8 @@ or simply from your file browser.
 dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
 file.copy(
     from = c(
-        here::here("Share/Day3/Scc1-vs-input.bw"),
-        here::here("Share/Day3/Scc1-peaks.narrowPeak")
+        here::here("Share/data/Scc1-vs-input.bw"),
+        here::here("Share/data/Scc1-peaks.narrowPeak")
     ),
     to = "inst/extdata/"
 )
@@ -77,8 +77,8 @@ file.copy(
 dir.create("inst/extdata", recursive = TRUE, showWarnings = FALSE)
 file.copy(
     from = c(
-        here::here("Share/Day3/Scc1-vs-input.bw"),
-        here::here("Share/Day3/Scc1-peaks.narrowPeak")
+        here::here("Share/data/Scc1-vs-input.bw"),
+        here::here("Share/data/Scc1-peaks.narrowPeak")
     ),
     to = "inst/extdata/"
 )

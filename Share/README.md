@@ -4,14 +4,13 @@ This folder holds the **reference code** for the package built across the
 exercises (Days 1 to 5). It is kept under version control "for the record",
 so that the reference implementation and the exercise sheets stay in sync.
 
-The bulky, per-day **data** folders (`Share/Day1/`, `Share/Day2/`, ...) are
-distributed separately (via the shared Google Drive folder) and are **not**
-tracked here — they are ignored in `.gitignore`.
-
 ## Contents
 
 ```
 Share/
+├── data/                      # Reference data for the exercises
+│   ├── Scc1-peaks.narrowPeak  #   example features
+│   └── Scc1-vs-input.bw       #   example track
 ├── functions/                 # Reference implementation of the package
 │   ├── importFiles.R          #   Day 1 & 2 : import a track + features
 │   ├── filterGRanges.R        #   Day 1 & 2 : drop un-scorable features
