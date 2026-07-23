@@ -75,4 +75,4 @@ format:
         search: true
         collapse-level: 5
 
-editor: visual
+editor: source

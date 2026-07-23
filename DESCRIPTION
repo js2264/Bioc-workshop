@@ -14,5 +14,7 @@ Description: This course aims at making `Bioconductor` package development
 License: MIT + file LICENSE
 Imports:
     rmarkdown,
-    knitr, 
-    rebook
+    knitr,
+    rebook,
+    downlit,
+    xml2
