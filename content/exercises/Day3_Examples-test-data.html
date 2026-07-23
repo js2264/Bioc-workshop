@@ -76,7 +76,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-24447e1e94a8f6031783094ca8462a86.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-27925a617dbb725fb46bf9012f76502a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-69761f52e206bf7b00b34f40260facf6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -436,10 +436,10 @@ Question
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">dir.create</span>(<span class="st">"inst/extdata"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="fu">file.copy</span>(</span>
 <span id="cb1-3"><a href="#cb1-3"></a>    <span class="at">from =</span> <span class="fu">c</span>(</span>
-<span id="cb1-4"><a href="#cb1-4"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Share/data/Scc1-vs-input.bw"</span>),</span>
-<span id="cb1-5"><a href="#cb1-5"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Share/data/Scc1-peaks.narrowPeak"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        <span class="st">"______"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5"></a>        <span class="st">"______"</span></span>
 <span id="cb1-6"><a href="#cb1-6"></a>    ),</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="at">to =</span> <span class="st">"inst/extdata/"</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="at">to =</span> <span class="st">"______"</span></span>
 <span id="cb1-8"><a href="#cb1-8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
@@ -460,8 +460,8 @@ Answer
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">dir.create</span>(<span class="st">"inst/extdata"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb2-2"><a href="#cb2-2"></a><span class="fu">file.copy</span>(</span>
 <span id="cb2-3"><a href="#cb2-3"></a>    <span class="at">from =</span> <span class="fu">c</span>(</span>
-<span id="cb2-4"><a href="#cb2-4"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Share/data/Scc1-vs-input.bw"</span>),</span>
-<span id="cb2-5"><a href="#cb2-5"></a>        here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"Share/data/Scc1-peaks.narrowPeak"</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="st">"Share/data/Scc1-vs-input.bw"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        <span class="st">"Share/data/Scc1-peaks.narrowPeak"</span></span>
 <span id="cb2-6"><a href="#cb2-6"></a>    ),</span>
 <span id="cb2-7"><a href="#cb2-7"></a>    <span class="at">to =</span> <span class="st">"inst/extdata/"</span></span>
 <span id="cb2-8"><a href="#cb2-8"></a>)</span>
@@ -604,7 +604,7 @@ Question
 <div class="callout-body-container callout-body">
 <p><code>usethis::use_test("&lt;name&gt;")</code> creates (and opens) <code>tests/testthat/test-&lt;name&gt;.R</code>. Give it a meaningful name, e.g.&nbsp;the function or feature under test.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">"computeCoverage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -665,11 +665,11 @@ Question
 <p>Load the example data with <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code>, call <code>importFiles()</code>, then state what you <em>know</em> must be true about the result.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">test_that</span>(<span class="st">"importFiles() resizes features to the requested width"</span>, {</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-peaks.narrowPeak"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
-<span id="cb11-4"><a href="#cb11-4"></a>    l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, bed_file, <span class="at">width =</span> <span class="dv">2000</span>)</span>
-<span id="cb11-5"><a href="#cb11-5"></a>    <span class="fu">expect_named</span>(l, <span class="fu">c</span>(<span class="st">"coverage"</span>, <span class="st">"features"</span>))</span>
-<span id="cb11-6"><a href="#cb11-6"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(GenomicRanges<span class="sc">::</span><span class="fu">width</span>(l<span class="sc">$</span>features) <span class="sc">==</span> ______))</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"______"</span>, <span class="at">package =</span> <span class="st">"______"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"______"</span>, <span class="at">package =</span> <span class="st">"______"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>    l <span class="ot">&lt;-</span> <span class="fu">______</span>(bw_file, bed_file, <span class="at">width =</span> <span class="dv">2000</span>)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="fu">expect_named</span>(l, <span class="fu">c</span>(<span class="st">"______"</span>, <span class="st">"______"</span>))</span>
+<span id="cb11-6"><a href="#cb11-6"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(<span class="fu">______</span>(l<span class="sc">$</span>features) <span class="sc">==</span> ______))</span>
 <span id="cb11-7"><a href="#cb11-7"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
@@ -728,9 +728,9 @@ Question
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">test_that</span>(<span class="st">"computeCoverage() returns a well-formed data.frame"</span>, {</span>
 <span id="cb13-2"><a href="#cb13-2"></a>    <span class="co"># ... run the pipeline into `df` ...</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="fu">expect_equal</span>(<span class="fu">nrow</span>(df), width)</span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="fu">expect_named</span>(df, <span class="fu">c</span>(<span class="st">"distance"</span>, <span class="st">"mean"</span>, <span class="st">"ci_low"</span>, <span class="st">"ci_high"</span>))</span>
-<span id="cb13-5"><a href="#cb13-5"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>ci_low <span class="sc">&lt;=</span> df<span class="sc">$</span>mean <span class="sc">&amp;</span> df<span class="sc">$</span>mean <span class="sc">&lt;=</span> df<span class="sc">$</span>ci_high))</span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="fu">expect_equal</span>(<span class="fu">nrow</span>(df), ______)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="fu">expect_named</span>(df, <span class="fu">c</span>(<span class="st">"______"</span>, <span class="st">"______"</span>, <span class="st">"______"</span>, <span class="st">"______"</span>))</span>
+<span id="cb13-5"><a href="#cb13-5"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>ci_low <span class="sc">&lt;=</span> df<span class="sc">$</span>______ <span class="sc">&amp;</span> df<span class="sc">$</span>______ <span class="sc">&lt;=</span> df<span class="sc">$</span>ci_high))</span>
 <span id="cb13-6"><a href="#cb13-6"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
