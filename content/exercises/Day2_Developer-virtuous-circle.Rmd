@@ -33,9 +33,11 @@ In this section, we are going to create a package which aims at:
 3. Calculating the average (+/- quantiles) of coverage of the `.bigwig` file over the `GRanges` of interest
 4. Plot the aggregated `.bigwig` coverage over the `GRanges` of interest 
 
-Eventually, the functions shipped in this package should be able to turn a pair of `.bigwig`/`.bed` files into this type of plot:
-
-...
+Eventually, the functions shipped in this package should be able to turn a pair
+of `.bigwig`/`.bed` files into an aggregated coverage profile — exactly the kind
+of plot you already produced by hand at the end of Day 1 (mean signal, with its
+confidence interval, as a function of the distance to the center of the
+features).
 
 ## Starting a new package
 
@@ -45,6 +47,17 @@ developer resources are already set-up.
 ::: {.callout-question .icon .callout-note}
 
 Make sure to install the developer toolkit packages.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+CRAN packages are installed with `remotes::install_cran()`, and `Bioconductor`
+packages with `BiocManager::install()`. You will need, among others,
+`devtools`, `usethis`, `available` (from CRAN) and `biocthis`, `BiocCheck`
+(from Bioconductor).
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -82,6 +95,19 @@ But first, you need to make sure that this package name is available.
 
 Verify that your package name is available, with the `available` package.
 
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The `available` package has a function named... `available()`. It checks a name
+against CRAN/Bioconductor, and also flags unintended meanings.
+
+```{r}
+available::available("______")
+```
+
+:::
+
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
@@ -96,8 +122,22 @@ If this name is available, let's create your package.
 
 ::: {.callout-question .icon .callout-note}
 
-Which function from `devtools` can be used to create a package skeleton? 
-Use it to create your package. 
+Which function from `devtools` can be used to create a package skeleton?
+Use it to create your package.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The function is `create_package()`. It takes the *path* of the package to
+create (so mind the parent directory — e.g. your home `~`).
+
+```{r}
+library(devtools)
+create_package("~/______")
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -116,6 +156,16 @@ When creating your package, `devtools`+`RStudio` combo automatically opens a new
 ::: {.callout-question .icon .callout-note}
 
 Make sure you're in the right project using the appropriate function from `rstudioapi` package.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`rstudioapi::getActiveProject()` returns the path of the currently active
+RStudio project. If it is not the right one, `usethis::proj_activate()` can
+switch to it.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -140,8 +190,17 @@ requirements. You should replace it by a better-fitted DESCRIPTION file.
 
 ::: {.callout-question .icon .callout-note}
 
-Find the appropriate function from `biocthis` to replace the current 
-DESCRIPTION file by one fitting BIOCONDUCTOR's requirements. 
+Find the appropriate function from `biocthis` to replace the current
+DESCRIPTION file by one fitting BIOCONDUCTOR's requirements.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`biocthis` functions all start with `use_bioc_*()`. Look for the one that ends
+in `_description`.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -161,7 +220,16 @@ Manually edit the important fields from your new DESCRIPTION file: `Title` & `Au
 
 ::: {.callout-question .icon .callout-note}
 
-Now add a LICENSE file to specify under which license you wish to publish your package. 
+Now add a LICENSE file to specify under which license you wish to publish your package.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`usethis` provides one function per common license, all named `use_*_license()`
+(e.g. `use_mit_license()`, `use_gpl3_license()`, ...).
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -184,7 +252,17 @@ let's stick with the Rmd format for your `README`.
 
 What are the benefits of having a `README.Rmd` file? 
 
-Which function from `biocthis` can create a `.Rmd` README file? 
+Which function from `biocthis` can create a `.Rmd` README file?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Again a `biocthis::use_bioc_*()` function — this time one that mentions
+`readme` and `rmd`. A `README.Rmd` lets you embed *runnable* R code (and its
+output) directly in the README.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -203,7 +281,17 @@ is present in the repository. A way to provide this is to 1)
 
 ::: {.callout-question .icon .callout-note}
 
-Parse your `README.Rmd` into `README.md` and check the differences. 
+Parse your `README.Rmd` into `README.md` and check the differences.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`devtools::build_readme()` knits `README.Rmd` into `README.md`. Load your
+package first with `devtools::load_all('.')` so that any package code used in
+the README is available.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -245,37 +333,103 @@ devtools::build_readme()  ## To rebuild README.md
 
 ## Write functions to populate your package
 
-To write your first package function, you can either create an `R/<name>.R` 
+To write your first package function, you can either create an `R/<name>.R`
 file manually, or run `usethis::use_r(name)`.
 
-Now is time to write! Refer to the functionalities (descriped in 
-[Section 0](#package-functions)) that we are aiming to provide in this package, 
-and start writing 4 functions which, together, can fulfill these 
-functionalities. Briefly, we suggest to design functions to: 
+::: {.callout-tip icon='true'}
 
-1. `import` a coverage track and a set of genomic features (scaled to a fixed width) together in a list;
-2. `filter` the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);
-3. `compute` the mean coverage and its confidence interval, for each position within the features' width;
-4. `plot` the results with `ggplot2`.
+## Reusing Day 1
+
+In Day 1, you already prototyped three of these functions (`importFiles()`,
+`filterGRanges()`, `computeCoverage()`) in a plain script. Your job today is to
+**move them into the package** (one `R/<name>.R` file each), write the missing
+fourth function (`plotCoverage()`), and document them all. Prototyping in a
+script, then "packaging", is exactly how real development goes!
+
+:::
+
+Now is time to write! Refer to the functionalities (described in
+[Section 0](#package-functions)) that we are aiming to provide in this package,
+and start writing 4 functions which, together, can fulfill these
+functionalities. Briefly, the four functions are:
+
+1. `importFiles()`: import a coverage track and a set of genomic features (scaled to a fixed width) together in a list;
+2. `filterGRanges()`: filter the imported features to only retain those fully overlapping with covered genome segments (from the coverage track);
+3. `computeCoverage()`: compute the mean coverage and its confidence interval, for each position within the features' width;
+4. `plotCoverage()`: plot the results with `ggplot2`.
+
+::: {.callout-tip icon='true'}
+
+We suggest these exact function names because the exercises for the following
+days (Day 3, 4 and 5) reuse them. Using the same names will let your package
+grow smoothly across the week.
+
+:::
 
 ::: {.callout-tip icon='true'}
 
 These functions should work in a chain: 
 
 ```{r}
-import(bw_path, features_path, width) |>
-    filter() |> 
-    compute() |> 
-    plot()
+importFiles(bw_path, features_path, width) |>
+    filterGRanges() |>
+    computeCoverage() |>
+    plotCoverage()
 ```
+
+:::
+
+The only genuinely new function today is `plotCoverage()`, which draws the
+aggregated profile you sketched at the end of Day 1.
+
+::: {.callout-question .icon .callout-note}
+
+Write a `plotCoverage(df)` function that takes the `data.frame` returned by
+`computeCoverage()` and returns a `ggplot`.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Map `distance` to `x` and `mean` to `y`. Add a `geom_ribbon()` for the
+confidence interval (`ymin = ci_low`, `ymax = ci_high`) and a `geom_line()` for
+the mean.
+
+```{r}
+plotCoverage <- function(df) {
+    ggplot2::ggplot(df, ggplot2::aes(x = distance, y = mean)) +
+        # TODO: geom_ribbon() for the confidence interval
+        # TODO: geom_line() for the mean
+        ggplot2::labs(x = "Distance to center (bp)", y = "Mean coverage")
+}
+```
+
+:::
+
+::: {.callout-answer .icon .callout-note collapse=true}
+
+```{r}
+plotCoverage <- function(df) {
+    ggplot2::ggplot(df, ggplot2::aes(x = distance, y = mean)) +
+        ggplot2::geom_ribbon(
+            ggplot2::aes(ymin = ci_low, ymax = ci_high),
+            fill = "steelblue", alpha = 0.2
+        ) +
+        ggplot2::geom_line(color = "steelblue") +
+        ggplot2::labs(x = "Distance to center (bp)", y = "Mean coverage") +
+        ggplot2::theme_bw()
+}
+```
+
+:::
 
 :::
 
 ::: {.callout-tip icon='true'}
 
-The content of the proposed function files is shown 
-in `Share/Day2/functions/`. These files provides an 
-example of implementation to fulfill our package's requirements. 
+The complete reference implementation of the four function files is available
+in `Share/functions/`. These files provide one possible implementation
+fulfilling our package's requirements.
 
 :::
 
@@ -283,12 +437,42 @@ example of implementation to fulfill our package's requirements.
 
 ::: {.callout-question .icon .callout-note}
 
-Write oxygen tags (`title`, `description`, `@param`, `@return`, ...) for each 
-function. 
+Write roxygen tags (`@title`, `@description`, `@param`, `@return`, ...) for each
+function.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+roxygen comments start with `#'` and sit directly above the function. The first
+line is the title, a blank `#'` line separates blocks, and each `@param`
+documents one argument. Do not forget `@export` (so the function is usable) and
+`@importFrom pkg fun` (to declare the functions you borrow from other packages).
+
+```{r}
+#' Import a coverage track and a set of genomic features
+#'
+#' Longer description of what the function does.
+#'
+#' @param bw_file Path to a coverage track file.
+#' @param features_file Path to a features file.
+#' @param width Integer. Width to resize each feature to.
+#'
+#' @return A named list with `coverage` and `features`.
+#'
+#' @importFrom rtracklayer import
+#' @importFrom GenomicRanges resize
+#' @export
+importFiles <- function(bw_file, features_file, width) {
+    # ...
+}
+```
 
 :::
 
-Once you have documented each function, you can regenerate the documentation with 
+:::
+
+Once you have documented each function, you can regenerate the documentation with
 `document()`.
 
 ```{r}

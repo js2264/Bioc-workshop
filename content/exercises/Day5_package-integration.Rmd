@@ -46,6 +46,17 @@ install it.
 
 **Note:** You will need annotations from the `hg19` human genome reference.
 
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`TxDb` packages follow the naming scheme
+`TxDb.<Species>.<Provider>.<Genome>.<Table>`. For UCSC human hg19 known genes,
+that is `TxDb.Hsapiens.UCSC.hg19.knownGene`. Install it with
+`BiocManager::install()`.
+
+:::
+
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
@@ -62,7 +73,16 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene::TxDb.Hsapiens.UCSC.hg19.knownGene
 
 ::: {.callout-question .icon .callout-note}
 
-Which function from `GenomicFeatures` can be used to find the gene loci for all genes present in the human `TxDb`? 
+Which function from `GenomicFeatures` can be used to find the gene loci for all genes present in the human `TxDb`?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The function is named after what it returns: `GenomicFeatures::genes()`. It
+takes the `TxDb` object and returns a `GRanges` of gene loci.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -84,8 +104,24 @@ GenomicFeatures::genes(txdb)
 
 - Which species are most represented? 
 
-**Hint:** The `mcols()` function will extract metadata associated with each 
-entry in the `AnnotationHub`. 
+**Hint:** The `mcols()` function will extract metadata associated with each
+entry in the `AnnotationHub`.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Create the hub with `AnnotationHub::AnnotationHub()`, extract its metadata
+`data.frame` with `mcols()`, then `table()` the `species` (or `sourcetype`)
+column, `sort()` it and look at the `tail()`.
+
+```{r}
+ah <- AnnotationHub::AnnotationHub()
+ah_df <- AnnotationHub::mcols(ah)
+table(ah_df$______) |> sort() |> tail(10)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -108,6 +144,15 @@ in human (among other marks). They generated a library labelled 'LL227'
 
 Can you query the AnnotationHub for this library?
 
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`AnnotationHub::query(ah, "<pattern>")` searches all metadata fields for a
+pattern. Try the library label mentioned above.
+
+:::
+
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
@@ -120,7 +165,20 @@ AnnotationHub::query(ah, 'LL227')
 
 ::: {.callout-question .icon .callout-note}
 
-- Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file? 
+- Which signal corresponds to a ChIP-seq coverage track? How can you download the associated file?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Among the query hits, look for a `BigWigFile` resource (the coverage track).
+Extracting an entry with `ah[["<AH id>"]]` downloads it (and caches it locally).
+
+```{r}
+bw <- ah[['______']]
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -135,6 +193,15 @@ bw <- ah[['AH34904']]
 ::: {.callout-question .icon .callout-note}
 
 What is the path of the file now stored on disk? How can you load the file in R?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`BiocIO::resource()` returns the local path of the cached file, and
+`BiocIO::import()` reads it into R.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -160,9 +227,28 @@ Three arguments are required:
 - `features_file`: the path to a disk-stored features file (e.g. the path to a `bed` file)
 - `width`: an integer specifying the width to use for each genomic locus
 
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+- `bw_file`: the local path returned by `BiocIO::resource(bw)`.
+- `features_file`: derive TSSs of **forward** genes from the `TxDb`
+  (`genes()`, subset `strand == "+"`, `resize(width = 1, fix = "start")`), then
+  `rtracklayer::export()` them to a `bed` file — `AggregatedCoverage()` expects
+  a *file path*, not a `GRanges`.
+- `width`: an integer, e.g. `8000L` for a ±4 kb window.
+
+```{r}
+forward_genes <- genes[strand(genes) == '+']
+forward_tss <- resize(forward_genes, width = 1, fix = 'start')
+export(forward_tss, "forward_tss.bed")
+```
+
+:::
+
 ::: {.callout-answer .icon .callout-note collapse=true}
 
-- Preparing `bw_file` argument: 
+- Preparing `bw_file` argument:
 
 ```{r}
 bw_file <- H3K4me3_bw
@@ -196,8 +282,21 @@ object.
 
 ::: {.callout-question .icon .callout-note}
 
-Create a `AggregatedCoverage` object summarizing the coverage 
+Create a `AggregatedCoverage` object summarizing the coverage
 of H3K4me3 over the TSSs (± 4kb) of all forward human genes.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+This is the very constructor you wrote in Day 4 — call it with the three
+arguments you just prepared.
+
+```{r}
+AC <- AggregatedCoverage(bw_file, features_file, width = width)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -238,6 +337,15 @@ package.
 
 - Describe the use case developed in the previous section.
 
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`biocthis::use_bioc_vignette()` scaffolds a `Bioconductor`-style vignette under
+`vignettes/`. It takes the vignette `name` and a `title`.
+
+:::
+
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
@@ -251,7 +359,17 @@ biocthis::use_bioc_vignette(name = "JacquesTestPackage", title = "Introduction t
 ::: {.callout-question .icon .callout-note}
 
 Because the vignette relies on several packages, these need to be declared in
-the DESCRIPTION file. Make sure to update it. 
+the DESCRIPTION file. Make sure to update it.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`usethis::use_package("<pkg>")` adds a package to the `Imports:` field of your
+DESCRIPTION (use `type = "Suggests"` for packages only needed by the vignette or
+tests). Call it once per dependency.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -273,8 +391,17 @@ usethis::use_package("BiocIO")
 
 ::: {.callout-question .icon .callout-note}
 
-Check `pkgdown` documentation. What is the recommended way to add pkgdown support 
-for your package? 
+Check `pkgdown` documentation. What is the recommended way to add pkgdown support
+for your package?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`usethis::use_pkgdown()` sets up everything pkgdown needs (a `_pkgdown.yml`
+config, and the relevant `.gitignore`/`.Rbuildignore` entries).
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
@@ -289,6 +416,16 @@ usethis::use_pkgdown()
 ::: {.callout-question .icon .callout-note}
 
 Can you now build your package? What does the building step do exactly?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`pkgdown::build_site()` renders the whole documentation website (home page from
+the README, function reference from the `man/` pages, and articles from the
+vignettes) into the `docs/` folder.
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 

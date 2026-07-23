@@ -53,6 +53,19 @@ div.callout-question.callout-style-default>.callout-header {
   padding-right: 0.35em;
 }
 
+div.callout-hint.callout {
+  border-left-color: #f0a30d;
+}
+
+div.callout-hint.callout-style-default>.callout-header {
+  background-color: #ffe3b0;
+}
+
+.callout-hint.icon.callout-style-default div.callout-icon-container {
+  padding-top: 0.1em;
+  padding-right: 0.35em;
+}
+
 /* Central column page ------------------------------------------------------ */
 
 // @media (min-width: 992px){

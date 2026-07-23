@@ -6,13 +6,14 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ::: {.callout-note icon='true'}
 
-## Aims 
+## Aims
 
-- Importing files from various formats in R
-- Handling `DNAStringSet`
-- Handling `GRanges`
-- Finding a specific sequence within larger ones
-- Computing distances between sets of `GRanges`
+- Importing genomic files (coverage tracks and features) into R
+- Discovering the `Rle` / `RleList` representation of genome-wide coverage
+- Manipulating `GRanges` objects (resizing, centering, filtering)
+- Extracting and aggregating a coverage signal over a set of features
+- Prototyping the first three functions of the package we will build this week:
+  `importFiles()`, `filterGRanges()` and `computeCoverage()`
 
 :::
 
@@ -20,18 +21,39 @@ knitr::opts_chunk$set(eval = FALSE)
 
 **At any time, if you are lost or do not understand how functions in the**
 **proposed solution work, type `?<function>` in the R console **
-**and a help menu will appear.** 
+**and a help menu will appear.**
 
-You can also check the help tab in the corresponding quadrant. 
+You can also check the help tab in the corresponding quadrant.
+
+:::
+
+::: {.callout-tip icon='true'}
+
+## Where we are heading
+
+Over the week, we will build a package which can **plot the aggregated coverage**
+**of a genomic track over a set of `GRanges` of interest** (at a fixed width).
+
+Today, we prototype the core steps *interactively*, in a plain R script.
+Over the next days, we will progressively turn this prototype into a proper,
+documented, tested `Bioconductor` package. By the end of today, you will have
+written draft versions of three of the four functions that make up the package:
+
+```{r}
+importFiles(bw_file, features_file, width) |>
+    filterGRanges() |>
+    computeCoverage() |>
+    plotCoverage()
+```
 
 :::
 
 ## Set up your working environment
 
-Let's create a project for this course!  
-In RStudio: `File` > `New Project...`, create a project entitled "Bioc-workshop".  
-Open the newly created project.  
-Download files required for the workshop from the following Google Drive Shared folder:  
+Let's create a project for this course!
+In RStudio: `File` > `New Project...`, create a project entitled "Bioc-workshop".
+Open the newly created project.
+Download files required for the workshop from the following Google Drive Shared folder:
 
 ```
 https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sharing
@@ -39,102 +61,127 @@ https://drive.google.com/drive/folders/1JHMSMYg8MbA9m53mxjHtcBa4_qycgaqy?usp=sha
 
 **Unzip the archive in the same directory you have created your project in.**
 
-## Importing ce11 genome sequence in R
+For today, we will work with two files stored in `Share/data/`:
 
-The `ce11` genome sequence is stored in a `.fa` file in `Share/Day1/`.  
+- `Scc1-vs-input.bw`: a **coverage track** (`bigwig` format) of a cohesin (Scc1)
+  ChIP-seq experiment in yeast (*S. cerevisiae*);
+- `Scc1-peaks.narrowPeak`: the set of Scc1 **binding sites** (genomic features),
+  as called from the same experiment.
 
-::: {.callout-question .callout-note}
+These are the very same files we will later ship inside our package, so getting
+comfortable with them now will pay off all week.
 
-Find the appropriate Bioconductor's function to import fasta files in R and 
-use it to import ce11 genome sequence.
+## Importing a coverage track in R
 
-::: {.callout-answer .callout-note collapse=true}
-
-```{r}
-library(Biostrings)
-gseq <- readDNAStringSet(here::here('Share/Day1/ce11.fa'))
-```
-
-:::
-
-:::
+A coverage track stores, for each position of the genome, how much signal
+(e.g. how many sequencing reads) was observed there. `bigwig` is the standard
+binary format to store such tracks.
 
 ::: {.callout-question .icon .callout-note}
 
-What are the chromosome names used in the fasta file? 
+Find the appropriate `Bioconductor` function to import a `bigwig` file in R.
+Import the coverage track as an `RleList` object (`as = "RleList"`).
 
-::: {.callout-answer .icon .callout-note collapse=true}
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The `rtracklayer` package provides a generic `import()` function that recognises
+many genomic file formats. Its `as =` argument controls the class of the
+returned object.
 
 ```{r}
-gseq
-names(gseq)
+library(rtracklayer)
+bw_file <- here::here("Share/data/Scc1-vs-input.bw")
+coverage <- import(bw_file, as = ______)
 ```
 
 :::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-What is the difference between the `length` and the `width` of a `DNAStringSet` object?
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-width(gseq)
-length(gseq)
-```
-
-:::
-
-:::
-
-## Importing ce11 gene annotations in R
-
-The `ce11` gene annotations are stored in a `gtf` file in `Share/Day1/`.  
-
-::: {.callout-question .icon .callout-note}
-
-Find the appropriate Bioconductor's function to import gtf files in R and 
-use it to import ce11 gene annotations.
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 library(rtracklayer)
-genes <- import(here::here('Share/Day1/ce11_annotations.gtf'))
+bw_file <- here::here("Share/data/Scc1-vs-input.bw")
+coverage <- import(bw_file, as = "RleList")
+coverage
 ```
 
 :::
 
 :::
 
-
 ::: {.callout-question .icon .callout-note}
 
-How many genes are they? What's the median gene length? Which tissues are genes expressed in?
+What kind of object is a `RleList`? How many elements does it contain, and what
+do they correspond to? What does the `Rle` ("Run-Length Encoding") representation
+buy us here?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+An `RleList` is a *list of `Rle` vectors*. Try `class(coverage)`,
+`length(coverage)`, `names(coverage)` and inspect one element with `coverage[[1]]`.
+A genome is mostly made of long stretches of identical values — think about how
+run-length encoding stores `0 0 0 0 0 3 3 3` compactly.
+
+```{r}
+class(coverage)
+length(coverage)
+names(coverage)
+coverage[[1]]
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-length(genes)
-median(width(genes))
-table(genes$tissue)
+class(coverage)
+## One Rle per chromosome
+length(coverage)
+names(coverage)
+## Each Rle stores runs of identical coverage values, instead of one value
+## per base pair. This is extremely memory-efficient for genomic coverage,
+## which is piecewise-constant.
+coverage[[1]]
+lengths(coverage)  ## the length of each Rle = the length of each chromosome
 ```
 
 :::
 
 :::
 
+## Importing genomic features in R
+
+Genomic features (peaks, genes, regulatory elements, ...) are typically stored
+as `bed`-like files. A `narrowPeak` file is a `bed` variant used for ChIP-seq
+peaks.
+
 ::: {.callout-question .icon .callout-note}
 
-What are the chromosome names used in this gene annotations file? How many genes map to each chromosome? 
+Import the `Scc1-peaks.narrowPeak` file. What class of object do you obtain?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The same `rtracklayer::import()` function handles `bed`/`narrowPeak` files; here
+you do **not** need the `as =` argument. The result is a `GRanges`.
+
+```{r}
+features <- import(here::here("Share/data/______"))
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-seqlevels(genes)
-table(seqnames(genes))
+features <- import(here::here("Share/data/Scc1-peaks.narrowPeak"))
+features
+class(features)
 ```
 
 :::
@@ -143,125 +190,296 @@ table(seqnames(genes))
 
 ::: {.callout-question .icon .callout-note}
 
-Why are the chromosome names (`seqlevels`) ordered this way? Can you reorder them? 
+How many features are there? On which chromosomes do they sit? What is their
+median width?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`GRanges` behave a lot like vectors. Useful accessors: `length()`,
+`seqnames()`, `width()`. Wrap `seqnames()` in `table()` to count features per
+chromosome.
+
+```{r}
+length(features)
+table(seqnames(features))
+median(width(features))
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-seqlevels(genes) <- seqlevels(genes)[c(5, 4, 6, 3, 1, 2, 7)]
+length(features)
+table(seqnames(features))
+median(width(features))
 ```
 
 :::
 
 :::
 
-## Wrangling gene annotations 
+## Resizing features to a fixed width
+
+To compare and aggregate the coverage across many features, every feature must
+span the **same number of positions**. We therefore resize all features to a
+fixed width, centered on the middle of each feature.
 
 ::: {.callout-question .icon .callout-note}
 
-Is mitochondrial chromosome present in the genome sequence?
+Resize every feature to a window of `width = 2000` bp, centered on the feature
+center. Which `GenomicRanges` function does this?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Look at `?GenomicRanges::resize`. Its `fix =` argument decides which anchor
+point is kept fixed while resizing: `"start"`, `"end"` or `"center"`.
+
+```{r}
+width <- 2000
+resized <- resize(features, width = width, fix = ______)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-seqlevels(gseq)
+library(GenomicRanges)
+width <- 2000
+resized <- resize(features, width = width, fix = "center")
+resized
+table(width(resized))  ## all features now span exactly 2000 bp
 ```
 
 :::
 
 :::
 
+## Wrap it up: your first function, `importFiles()`
+
+You now have all the pieces to import a coverage track and a set of
+(fixed-width) features together. Let's package these steps into a reusable
+function — the first function of our package.
+
 ::: {.callout-question .icon .callout-note}
 
-Try to prune genes to remove all those mapping over mitochondrial chromosome. 
+Write a function `importFiles(bw_file, features_file, width)` that:
+
+1. imports the coverage track as an `RleList`;
+2. imports the features as a `GRanges`;
+3. resizes the features to `width`, centered on their center;
+4. returns both in a named `list` (`coverage` and `features`).
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Start from the skeleton below and fill in the `# TODO`s with the code you just
+wrote interactively. The function should simply glue those steps together.
+
+```{r}
+importFiles <- function(bw_file, features_file, width) {
+    coverage <- # TODO: import bw_file as an RleList
+    features <- # TODO: import features_file as a GRanges
+    features <- # TODO: resize features to `width`, centered
+    list(coverage = ______, features = ______)
+}
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-genes[seqnames(genes) != 'MtDNA']
-seqlevels(genes, pruning.mode = 'coarse') <- seqlevels(genes)[1:6]
+importFiles <- function(bw_file, features_file, width) {
+    coverage <- rtracklayer::import(bw_file, as = "RleList")
+    features <- rtracklayer::import(features_file)
+    features <- GenomicRanges::resize(features, width = width, fix = "center")
+    list(coverage = coverage, features = features)
+}
+
+l <- importFiles(
+    here::here("Share/data/Scc1-vs-input.bw"),
+    here::here("Share/data/Scc1-peaks.narrowPeak"),
+    width = 2000
+)
+l
 ```
 
 :::
 
 :::
 
+## Extracting the coverage over features
+
+We can now extract the coverage track values sitting under each feature.
+Subsetting an `RleList` by a `GRanges` returns, for each feature, the `Rle` of
+coverage values spanning it.
+
 ::: {.callout-question .icon .callout-note}
 
-Compare the chromosome naming nomenclature for genes and chromosome sequences. Are they the same? Can you make them match? 
+Extract the coverage over the resized features. What object do you get, and how
+long is each of its elements?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+`RleList` objects can be subset by a `GRanges`, i.e. `coverage[features]`.
+The result is another `RleList`, with one element per feature.
+
+```{r}
+cov_by_feature <- l$coverage[l$features]
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-seqlevelsStyle(gseq)
-seqlevelsStyle(genes)
-seqlevelsStyle(genes) <- "UCSC"
+cov_by_feature <- l$coverage[l$features]
+cov_by_feature
+## Each element spans `width` positions (here 2000)
+head(lengths(cov_by_feature))
 ```
 
 :::
 
 :::
 
-## Extract tissue-specific TSSs
+## Filtering features: your second function, `filterGRanges()`
 
-Now that we have two concordant objects, we would like to focus on sets of 
-tissue-specific TSSs.
+Some features may sit too close to a chromosome end: once resized, their window
+runs *past* the chromosome boundary. Others may sit on a chromosome that is
+absent from the coverage track. In both cases, extracting the coverage would
+fail or return truncated profiles.
 
 ::: {.callout-question .icon .callout-note}
 
-Re-focus the genes to center them at their TSSs. Choose a window size that you find appropriate (hint: we'll late focus on TATA box, so the window has to at least encompass it!)
+Before extracting coverage, we should remove such problematic features. Write a
+function `filterGRanges(l)` that takes the list returned by `importFiles()` and
+keeps only the features that (a) sit on a chromosome present in the coverage
+track, and (b) are fully contained within their chromosome.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+The length of each chromosome is `lengths(l$coverage)` (a named vector). A
+feature is safe to keep if its `start()` is `>= 1` **and** its `end()` is `<=`
+the length of its chromosome. Use `%in% names(l$coverage)` to check the
+chromosome is covered.
+
+```{r}
+filterGRanges <- function(l) {
+    features <- l$features
+    chroms <- as.character(seqnames(features))
+    chrom_lengths <- lengths(l$coverage)
+    keep <- # TODO: on a covered chromosome AND within bounds
+    l$features <- features[keep]
+    l
+}
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-WINDOW_SIZE <- 300
-TSSs <- resize(genes, fix = 'start', width = 1) |> resize(fix = 'center', width = WINDOW_SIZE)
+filterGRanges <- function(l) {
+    features <- l$features
+    chroms <- as.character(GenomicRanges::seqnames(features))
+    chrom_lengths <- lengths(l$coverage)
+    on_covered_chrom <- chroms %in% names(l$coverage)
+    within_bounds <- GenomicRanges::start(features) >= 1 &
+        GenomicRanges::end(features) <= chrom_lengths[chroms]
+    l$features <- features[on_covered_chrom & within_bounds]
+    l
+}
+
+l <- filterGRanges(l)
+length(l$features)  ## possibly fewer features than before
 ```
 
 :::
 
 :::
 
-To iterate over a set of values (e.g. a set of tissues...), 
-one should favor `lapply` function rather than `for` loops. 
-`lapply` outputs a list of elements, one for each element in the vector used 
-in the input. Check `?lapply` for more information if you are not familiar 
-with it. 
+## Aggregating the coverage: your third function, `computeCoverage()`
+
+We finally turn the per-feature coverage into a single, aggregated profile: for
+each position along the window, the **mean** coverage across all features,
+together with a confidence interval.
 
 ::: {.callout-question .icon .callout-note}
 
-Make a list of 6 elements, containing **forward** TSSs specific of each of 
-the 5 main tissues, and the ubiquitous TSSs. 
+Reshape the extracted coverage into a `features x positions` numeric matrix.
+Why a matrix, and why `byrow = TRUE`?
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Unlisting the `RleList` gives one long numeric vector (feature 1's positions,
+then feature 2's, ...). Folding it back into a matrix with `ncol = width` and
+`byrow = TRUE` puts one feature per row and one position per column — exactly
+what we need to average column by column.
+
+```{r}
+mat <- matrix(
+    as.numeric(unlist(l$coverage[l$features])),
+    ncol = width, byrow = TRUE
+)
+dim(mat)
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-tissues <- c("Germline", "Neurons", "Muscle", "Hypod.", "Intest.", "Ubiq.")
-TSS_list <- lapply(tissues, function(tissue) {
-    TSSs[TSSs$tissue == tissue & strand(TSSs) == '+']
-})
-names(TSS_list) <- tissues
-lengths(TSS_list)
+mat <- matrix(
+    as.numeric(unlist(l$coverage[l$features])),
+    ncol = width, byrow = TRUE
+)
+dim(mat)  ## nrow = number of features, ncol = width
 ```
 
 :::
 
 :::
 
-## Find TATA boxes near intestine-specific TSSs
-
 ::: {.callout-question .icon .callout-note}
 
-Start by subseting full genome sequence to only the sequences at intestinal TSSs. 
-Check `?DNAStringSet` to see how to subset a `DNAStringSet`.
+Features on the **minus** strand are read 3' -> 5' along the genome. To align
+all profiles in the same 5' -> 3' orientation, the rows corresponding to
+minus-strand features must be reversed. Do it.
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Identify minus-strand features with `strand(l$features) == "-"`, then reverse
+the column order of those rows only: `mat[is_minus, ] <- mat[is_minus, rev(seq_len(width))]`.
+
+```{r}
+is_minus <- as.logical(strand(l$features) == "-")
+```
+
+:::
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-intest_TSSs <- TSS_list[['Intest.']]
-intest_TSS_seqs <- gseq[intest_TSSs]
-intest_TSS_seqs
-table(width(intest_TSS_seqs))
+is_minus <- as.logical(GenomicRanges::strand(l$features) == "-")
+if (any(is_minus)) {
+    mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
+}
 ```
 
 :::
@@ -270,202 +488,127 @@ table(width(intest_TSS_seqs))
 
 ::: {.callout-question .icon .callout-note}
 
-Read `?matchPattern` for information on how to find a given sequence in a `DNAStringSet`. What is the difference between `matchPattern()` and `vmatchPattern()`? 
+Now wrap everything into a function `computeCoverage(l)` that returns a
+`data.frame` with one row per position and the columns `distance` (from
+`-width/2` to `width/2 - 1`), `mean`, `ci_low` and `ci_high` (bounds of the 95%
+confidence interval).
+
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Per-position mean is `colMeans(mat)`. For a 95% CI, use
+`1.96 * sd / sqrt(n)`, where `sd` is `apply(mat, 2, sd)` and `n = nrow(mat)`.
+The `distance` column is `seq(-width/2, width/2 - 1, by = 1)`.
+
+```{r}
+computeCoverage <- function(l) {
+    features <- l$features
+    width <- unique(width(features))
+    mat <- # TODO: build the features x positions matrix (+ flip minus strand)
+    means <- # TODO: per-position mean
+    ci <- # TODO: 1.96 * per-position sd / sqrt(n)
+    data.frame(
+        distance = seq(-width/2, width/2 - 1, by = 1),
+        mean = means,
+        ci_low = means - ci,
+        ci_high = means + ci
+    )
+}
+```
 
 :::
-
-::: {.callout-question .icon .callout-note}
-
-Is there a TATA box ("TATAAA") in the first intestine TSS sequence?
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
-pattern <- 'TATAAA'
-seq <- intest_TSS_seqs[[1]]
-matchPattern(pattern, seq)
+computeCoverage <- function(l) {
+    features <- l$features
+    width <- unique(GenomicRanges::width(features))
+    ## features x positions matrix
+    mat <- matrix(
+        as.numeric(unlist(l$coverage[features])),
+        ncol = width, byrow = TRUE
+    )
+    ## flip minus-strand features
+    is_minus <- as.logical(GenomicRanges::strand(features) == "-")
+    if (any(is_minus)) {
+        mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
+    }
+    ## per-position mean and 95% CI
+    n <- nrow(mat)
+    means <- colMeans(mat, na.rm = TRUE)
+    ci <- 1.96 * apply(mat, 2, sd, na.rm = TRUE) / sqrt(n)
+    data.frame(
+        distance = seq(-width/2, width/2 - 1, by = 1),
+        mean = means,
+        ci_low = means - ci,
+        ci_high = means + ci
+    )
+}
+
+df <- computeCoverage(l)
+head(df)
 ```
 
 :::
 
 :::
 
+## A first look at the result
+
+We now have a tidy `data.frame` describing the aggregated coverage. Let's plot
+it — this preview is exactly what tomorrow's fourth function, `plotCoverage()`,
+will formalize.
+
 ::: {.callout-question .icon .callout-note}
 
-Map TATA boxes across all intestine TSS sequences.
+Plot `mean` (with its confidence interval ribbon) as a function of `distance`.
+Do you see an enrichment of Scc1 signal around the center of its binding sites?
 
-::: {.callout-answer .icon .callout-note collapse=true}
+::: {.callout-hint .icon .callout-note}
+
+## Hint
+
+Use `ggplot2`, mapping `distance` to `x` and `mean` to `y`. Add a
+`geom_ribbon(aes(ymin = ci_low, ymax = ci_high))` for the confidence interval
+and a `geom_line()` for the mean.
 
 ```{r}
-pattern <- 'TATAAA'
-TATA_boxes <- vmatchPattern(pattern, intest_TSS_seqs)
-TATA_boxes
+library(ggplot2)
+ggplot(df, aes(x = distance, y = mean)) +
+    geom_ribbon(aes(ymin = ci_low, ymax = ci_high), alpha = 0.2) +
+    geom_line()
 ```
 
 :::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-How to parse `MIndex` objects? Check `?MIndex` if in doubt...
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-positions <- unlist(startIndex(TATA_boxes))
-head(positions)
-```
-
-:::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-Plot the distance between TATA box and intestine-specific TSSs.
 
 ::: {.callout-answer .icon .callout-note collapse=true}
 
 ```{r}
 library(ggplot2)
-df <- data.frame(pos = positions - WINDOW_SIZE/2)
-ggplot(df, aes(x = pos)) + 
-    geom_histogram(binwidth = 10) + 
-    labs(x = "Distance to TSS", y = "# of motifs")
+ggplot(df, aes(x = distance, y = mean)) +
+    geom_ribbon(aes(ymin = ci_low, ymax = ci_high), fill = "steelblue", alpha = 0.2) +
+    geom_line(color = "steelblue") +
+    labs(x = "Distance to center (bp)", y = "Mean coverage") +
+    theme_bw()
 ```
 
 :::
 
 :::
 
-## Function wrapping
+::: {.callout-tip icon='true'}
 
-We now know how to 1) parse `GRanges`, 2) map a chosen motif ("TATAAA") over a set of sequences and 3)
-plot the distance between this motif and the center of sequences. 
+## Recap
 
-::: {.callout-question .icon .callout-note}
+In a single script, you have prototyped **three of the four functions** of our
+package (`importFiles()`, `filterGRanges()`, `computeCoverage()`) and sketched
+the fourth (`plotCoverage()`). Tomorrow, we will turn this prototype into a
+proper `Bioconductor` package: create the package skeleton, move these functions
+into `R/` files, and document them.
 
-Create a function which takes a set of sequences and a chosen motif as input, and returns a plot of the distance between 
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-plotMotifDistance <- function(seqs, motif) {
-    motif_occurences <- vmatchPattern(motif, seqs)
-    positions <- unlist(startIndex(motif_occurences))
-    df <- data.frame(pos = positions - WINDOW_SIZE/2)
-    ggplot(df, aes(x = pos)) + 
-        geom_histogram(binwidth = 10) + 
-        labs(
-            x = "Distance to TSS", 
-            y = glue::glue("# of {motif} motifs"), 
-            caption = glue::glue("{length(positions)} motifs found amongst {length(seqs)} sequences")
-        )
-}
-plotMotifDistance(intest_TSS_seqs, "TATAAA")
-```
-
-:::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-Add an argument to precise number of possible mismatches when looking for the motif. Also adapt the `vmatchPattern()` function!
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-plotMotifDistance <- function(seqs, motif, n_mismatch = 1) {
-    motif_occurences <- vmatchPattern(motif, seqs, max.mismatch = n_mismatch)
-    positions <- unlist(startIndex(motif_occurences))
-    df <- data.frame(pos = positions - WINDOW_SIZE/2)
-    ggplot(df, aes(x = pos)) + 
-        geom_histogram(binwidth = 10) + 
-        labs(
-            x = "Distance to TSS", 
-            y = glue::glue("# of {motif} motifs"), 
-            caption = glue::glue("{length(positions)} motifs found amongst {length(seqs)} sequences")
-        )
-}
-plotMotifDistance(intest_TSS_seqs, "TATAAA", n_mismatch = 0)
-```
-
-:::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-The real TATA box consensus sequence is closer to "TATAWAA". Can you further adapt `vmatchPattern()` function so it can accept all IUPAC code (e.g. W = A/T).
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-plotMotifDistance <- function(seqs, motif, n_mismatch = 1) {
-    motif_occurences <- vmatchPattern(motif, seqs, max.mismatch = n_mismatch, fixed = FALSE)
-    positions <- unlist(startIndex(motif_occurences))
-    df <- data.frame(pos = positions - WINDOW_SIZE/2)
-    ggplot(df, aes(x = pos)) + 
-        geom_histogram(binwidth = 5) + 
-        labs(
-            x = "Distance to TSS", 
-            y = glue::glue("# of {motif} motifs"), 
-            caption = glue::glue("{length(positions)} motifs found amongst {length(seqs)} sequences")
-        )
-}
-plotMotifDistance(intest_TSS_seqs, "TATAWAA", n_mismatch = 0)
-```
-
-:::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-Run this function to find TATA boxes in sequences from each set of TSSs.
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-lapply(names(TSS_list), function(tissue) {
-    TSSs <- TSS_list[[tissue]]
-    plotMotifDistance(
-        gseq[TSSs], 
-        "TATAWAA", 
-        n_mismatch = 0
-    ) + ggtitle(glue::glue("{tissue} TSSs"))
-})
-```
-
-:::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-Run this function to find PolII Initiator (Inr) motif ("YYANWYY") in sequences from each set of TSSs. Comment.
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-lapply(names(TSS_list), function(tissue) {
-    TSSs <- TSS_list[[tissue]]
-    plotMotifDistance(
-        gseq[TSSs], 
-        "YYANWYY", 
-        n_mismatch = 1
-    ) + ggtitle(glue::glue("{tissue} TSSs"))
-})
-```
-
-:::
-
-:::
-
-::: {.callout-question .icon .callout-note}
-
-How to deal with minus-oriented `GRanges`? Propose a solution.
+The reference implementation of all four functions is available in
+`Share/functions/`, should you want to compare with your own version.
 
 :::
