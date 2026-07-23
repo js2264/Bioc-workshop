@@ -1,6 +1,10 @@
 /.quarto/
-Share/Day*/
 *pptx
 NOTES.md
 docs/
 Demo*
+.Rproj.user
+*Rproj
+invoice*
+Share/
+!Share/Day*/
