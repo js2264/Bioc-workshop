@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="J. Serizay">
 <title>1&nbsp; Getting started with Bioconductor ecosystem – Developing R/Bioconductor packages for Genomics</title>
@@ -10,10 +10,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-24447e1e94a8f6031783094ca8462a86.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9506a156ca8f7ca7d76600eda5100440.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-69761f52e206bf7b00b34f40260facf6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-02e7db42b34628a31a1c5d41451ebd92.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -411,10 +414,10 @@ Tip
 <p>Over the week, we will build a package which can <strong>plot the aggregated coverage</strong> <strong>of a genomic track over a set of <code>GRanges</code> of interest</strong> (at a fixed width).</p>
 <p>Today, we prototype the core steps <em>interactively</em>, in a plain R script. Over the next days, we will progressively turn this prototype into a proper, documented, tested <code>Bioconductor</code> package. By the end of today, you will have written draft versions of three of the four functions that make up the package:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">importFiles</span>(bw_file, features_file, width) <span class="sc">|&gt;</span></span>
-<span id="cb1-2"><a href="#cb1-2"></a>    <span class="fu">filterGRanges</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">computeCoverage</span>() <span class="sc">|&gt;</span></span>
-<span id="cb1-4"><a href="#cb1-4"></a>    <span class="fu">plotCoverage</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">importFiles</span>(bw_file, features_file, width) <span class="sc">|&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>    <span class="fu">filterGRanges</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>    <span class="fu">computeCoverage</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>    <span class="fu">plotCoverage</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -456,9 +459,9 @@ Question
 <div class="callout-body-container callout-body">
 <p>The <code>rtracklayer</code> package provides a generic <code>import()</code> function that recognises many genomic file formats. Its <code>as =</code> argument controls the class of the returned object.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">library</span>(rtracklayer)</span>
-<span id="cb2-2"><a href="#cb2-2"></a>bw_file <span class="ot">&lt;-</span> <span class="st">"_____"</span></span>
-<span id="cb2-3"><a href="#cb2-3"></a>coverage <span class="ot">&lt;-</span> <span class="fu">import</span>(______, <span class="at">as =</span> ______)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="fu">library</span>(rtracklayer)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a>bw_file <span class="ot">&lt;-</span> <span class="st">"_____"</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>coverage <span class="ot">&lt;-</span> <span class="fu">import</span>(______, <span class="at">as =</span> ______)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -475,10 +478,10 @@ Answer
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">library</span>(rtracklayer)</span>
-<span id="cb3-2"><a href="#cb3-2"></a>bw_file <span class="ot">&lt;-</span> <span class="st">"Share/data/Scc1-vs-input.bw"</span></span>
-<span id="cb3-3"><a href="#cb3-3"></a>coverage <span class="ot">&lt;-</span> <span class="fu">import</span>(bw_file, <span class="at">as =</span> <span class="st">"RleList"</span>)</span>
-<span id="cb3-4"><a href="#cb3-4"></a>coverage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="fu">library</span>(rtracklayer)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-label="2"></a>bw_file <span class="ot">&lt;-</span> <span class="st">"Share/data/Scc1-vs-input.bw"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-label="3"></a>coverage <span class="ot">&lt;-</span> <span class="fu">import</span>(bw_file, <span class="at">as =</span> <span class="st">"RleList"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-label="4"></a>coverage</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -508,8 +511,8 @@ Question
 <div class="callout-body-container callout-body">
 <p>An <code>RleList</code> is a <em>list of <code>Rle</code> vectors</em>. Try <code>class(coverage)</code>, <code>length(coverage)</code>, <code>names(coverage)</code> and inspect one element with <code>coverage[[1]]</code>. A genome is mostly made of long stretches of identical values — think about how run-length encoding stores <code>0 0 0 0 0 3 3 3</code> compactly.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">names</span>(_____)</span>
-<span id="cb4-2"><a href="#cb4-2"></a>_____[[<span class="dv">1</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">names</span>(_____)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a>_____[[<span class="dv">1</span>]]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -526,17 +529,17 @@ Answer
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">class</span>(coverage)</span>
-<span id="cb5-2"><a href="#cb5-2"></a></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="do">## One Rle per chromosome</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="fu">length</span>(coverage)</span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="fu">names</span>(coverage)</span>
-<span id="cb5-6"><a href="#cb5-6"></a></span>
-<span id="cb5-7"><a href="#cb5-7"></a><span class="do">## Each Rle stores runs of identical coverage values, instead of one value</span></span>
-<span id="cb5-8"><a href="#cb5-8"></a><span class="do">## per base pair. This is extremely memory-efficient for genomic coverage,</span></span>
-<span id="cb5-9"><a href="#cb5-9"></a><span class="do">## which is piecewise-constant.</span></span>
-<span id="cb5-10"><a href="#cb5-10"></a>coverage[[<span class="dv">1</span>]]</span>
-<span id="cb5-11"><a href="#cb5-11"></a><span class="fu">lengths</span>(coverage)  <span class="do">## the length of each Rle = the length of each chromosome</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">class</span>(coverage)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a><span class="do">## One Rle per chromosome</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a><span class="fu">length</span>(coverage)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a><span class="fu">names</span>(coverage)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-label="6"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-label="7"></a><span class="do">## Each Rle stores runs of identical coverage values, instead of one value</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-label="8"></a><span class="do">## per base pair. This is extremely memory-efficient for genomic coverage,</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-label="9"></a><span class="do">## which is piecewise-constant.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-label="10"></a>coverage[[<span class="dv">1</span>]]</span>
+<span id="cb5-11"><a href="#cb5-11" aria-label="11"></a><span class="fu">lengths</span>(coverage)  <span class="do">## the length of each Rle = the length of each chromosome</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -569,7 +572,7 @@ Question
 <div class="callout-body-container callout-body">
 <p>The same <code>rtracklayer::import()</code> function handles <code>bed</code>/<code>narrowPeak</code> files; here you do <strong>not</strong> need the <code>as =</code> argument. The result is a <code>GRanges</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>features <span class="ot">&lt;-</span> <span class="fu">______</span>(<span class="st">"Share/data/______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>features <span class="ot">&lt;-</span> <span class="fu">______</span>(<span class="st">"Share/data/______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -586,9 +589,9 @@ Answer
 <div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>features <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="st">"Share/data/Scc1-peaks.narrowPeak"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a>features</span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="fu">class</span>(features)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>features <span class="ot">&lt;-</span> <span class="fu">import</span>(<span class="st">"Share/data/Scc1-peaks.narrowPeak"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a>features</span>
+<span id="cb7-3"><a href="#cb7-3" aria-label="3"></a><span class="fu">class</span>(features)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -618,9 +621,9 @@ Question
 <div class="callout-body-container callout-body">
 <p><code>GRanges</code> behave a lot like vectors. Useful accessors: <code><a href="https://rdrr.io/r/base/length.html">length()</a></code>, <code>seqnames()</code>, <code>width()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="fu">length</span>(______)</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">table</span>(<span class="fu">______</span>(features))</span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="fu">median</span>(<span class="fu">______</span>(features))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a><span class="fu">length</span>(______)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-label="2"></a><span class="fu">table</span>(<span class="fu">______</span>(features))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-label="3"></a><span class="fu">median</span>(<span class="fu">______</span>(features))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -637,9 +640,9 @@ Answer
 <div id="callout-14" class="callout-14-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="fu">length</span>(features)</span>
-<span id="cb9-2"><a href="#cb9-2"></a><span class="fu">table</span>(<span class="fu">seqnames</span>(features))</span>
-<span id="cb9-3"><a href="#cb9-3"></a><span class="fu">median</span>(<span class="fu">width</span>(features))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a><span class="fu">length</span>(features)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-label="2"></a><span class="fu">table</span>(<span class="fu">seqnames</span>(features))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-label="3"></a><span class="fu">median</span>(<span class="fu">width</span>(features))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -672,8 +675,8 @@ Question
 <div class="callout-body-container callout-body">
 <p>Look at <code>?GenomicRanges::resize</code>. Its <code>fix =</code> argument decides which anchor point is kept fixed while resizing: <code>"start"</code>, <code>"end"</code> or <code>"center"</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>resized <span class="ot">&lt;-</span> <span class="fu">resize</span>(______, <span class="at">width =</span> width, <span class="at">fix =</span> ______)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>resized <span class="ot">&lt;-</span> <span class="fu">resize</span>(______, <span class="at">width =</span> width, <span class="at">fix =</span> ______)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -690,10 +693,10 @@ Answer
 <div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>resized <span class="ot">&lt;-</span> <span class="fu">resize</span>(features, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">"center"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>resized</span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="fu">table</span>(<span class="fu">width</span>(resized))  <span class="do">## all features now span exactly 2000 bp</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a>width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>resized <span class="ot">&lt;-</span> <span class="fu">resize</span>(features, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">"center"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a>resized</span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a><span class="fu">table</span>(<span class="fu">width</span>(resized))  <span class="do">## all features now span exactly 2000 bp</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -733,12 +736,12 @@ Question
 <div class="callout-body-container callout-body">
 <p>Start from the skeleton below and fill in the <code># TODO</code>s with the code you just wrote interactively. The function should simply glue those steps together.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    coverage <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: import bw_file as an RleList</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>    features <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: import features_file as a GRanges</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>    features <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: resize features to `width`, centered</span></span>
-<span id="cb12-5"><a href="#cb12-5"></a>    <span class="fu">list</span>(<span class="at">coverage =</span> ______, <span class="at">features =</span> ______)</span>
-<span id="cb12-6"><a href="#cb12-6"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>    coverage <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: import bw_file as an RleList</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>    features <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: import features_file as a GRanges</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>    features <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: resize features to `width`, centered</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a>    <span class="fu">list</span>(<span class="at">coverage =</span> ______, <span class="at">features =</span> ______)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-label="6"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -755,19 +758,19 @@ Answer
 <div id="callout-20" class="callout-20-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
-<span id="cb13-2"><a href="#cb13-2"></a>    coverage <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(bw_file, <span class="at">as =</span> <span class="st">"RleList"</span>)</span>
-<span id="cb13-3"><a href="#cb13-3"></a>    features <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(features_file)</span>
-<span id="cb13-4"><a href="#cb13-4"></a>    features <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(features, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">"center"</span>)</span>
-<span id="cb13-5"><a href="#cb13-5"></a>    <span class="fu">list</span>(<span class="at">coverage =</span> coverage, <span class="at">features =</span> features)</span>
-<span id="cb13-6"><a href="#cb13-6"></a>}</span>
-<span id="cb13-7"><a href="#cb13-7"></a></span>
-<span id="cb13-8"><a href="#cb13-8"></a>l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(</span>
-<span id="cb13-9"><a href="#cb13-9"></a>    <span class="st">"Share/data/Scc1-vs-input.bw"</span>,</span>
-<span id="cb13-10"><a href="#cb13-10"></a>    <span class="st">"Share/data/Scc1-peaks.narrowPeak"</span>,</span>
-<span id="cb13-11"><a href="#cb13-11"></a>    <span class="at">width =</span> <span class="dv">2000</span></span>
-<span id="cb13-12"><a href="#cb13-12"></a>)</span>
-<span id="cb13-13"><a href="#cb13-13"></a>l</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a>    coverage <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(bw_file, <span class="at">as =</span> <span class="st">"RleList"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>    features <span class="ot">&lt;-</span> rtracklayer<span class="sc">::</span><span class="fu">import</span>(features_file)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>    features <span class="ot">&lt;-</span> GenomicRanges<span class="sc">::</span><span class="fu">resize</span>(features, <span class="at">width =</span> width, <span class="at">fix =</span> <span class="st">"center"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a>    <span class="fu">list</span>(<span class="at">coverage =</span> coverage, <span class="at">features =</span> features)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>}</span>
+<span id="cb13-7"><a href="#cb13-7" aria-label="7"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-label="8"></a>l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(</span>
+<span id="cb13-9"><a href="#cb13-9" aria-label="9"></a>    <span class="st">"Share/data/Scc1-vs-input.bw"</span>,</span>
+<span id="cb13-10"><a href="#cb13-10" aria-label="10"></a>    <span class="st">"Share/data/Scc1-peaks.narrowPeak"</span>,</span>
+<span id="cb13-11"><a href="#cb13-11" aria-label="11"></a>    <span class="at">width =</span> <span class="dv">2000</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-label="12"></a>)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-label="13"></a>l</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -800,7 +803,7 @@ Question
 <div class="callout-body-container callout-body">
 <p><code>RleList</code> objects can be subset by a <code>GRanges</code>, i.e.&nbsp;<code>coverage[features]</code>. The result is another <code>RleList</code>, with one element per feature.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>cov_by_feature <span class="ot">&lt;-</span> l<span class="sc">$</span>______[l<span class="sc">$</span>______]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>cov_by_feature <span class="ot">&lt;-</span> l<span class="sc">$</span>______[l<span class="sc">$</span>______]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -817,10 +820,10 @@ Answer
 <div id="callout-23" class="callout-23-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>cov_by_feature <span class="ot">&lt;-</span> l<span class="sc">$</span>coverage[l<span class="sc">$</span>features]</span>
-<span id="cb15-2"><a href="#cb15-2"></a>cov_by_feature</span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="do">## Each element spans `width` positions (here 2000)</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="fu">head</span>(<span class="fu">lengths</span>(cov_by_feature))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>cov_by_feature <span class="ot">&lt;-</span> l<span class="sc">$</span>coverage[l<span class="sc">$</span>features]</span>
+<span id="cb15-2"><a href="#cb15-2" aria-label="2"></a>cov_by_feature</span>
+<span id="cb15-3"><a href="#cb15-3" aria-label="3"></a><span class="do">## Each element spans `width` positions (here 2000)</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-label="4"></a><span class="fu">head</span>(<span class="fu">lengths</span>(cov_by_feature))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -854,14 +857,14 @@ Question
 <div class="callout-body-container callout-body">
 <p>The length of each chromosome is <code>lengths(l$coverage)</code> (a named vector). A feature is safe to keep if its <code><a href="https://rdrr.io/r/stats/start.html">start()</a></code> is <code>&gt;= 1</code> <strong>and</strong> its <code><a href="https://rdrr.io/r/stats/start.html">end()</a></code> is <code>&lt;=</code> the length of its chromosome. Use <code>%in% names(l$coverage)</code> to check the chromosome is covered.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb16-2"><a href="#cb16-2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
-<span id="cb16-3"><a href="#cb16-3"></a>    chroms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seqnames</span>(features))</span>
-<span id="cb16-4"><a href="#cb16-4"></a>    chrom_lengths <span class="ot">&lt;-</span> <span class="fu">lengths</span>(l<span class="sc">$</span>coverage)</span>
-<span id="cb16-5"><a href="#cb16-5"></a>    keep <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: on a covered chromosome AND within bounds</span></span>
-<span id="cb16-6"><a href="#cb16-6"></a>    l<span class="sc">$</span>features <span class="ot">&lt;-</span> features[keep]</span>
-<span id="cb16-7"><a href="#cb16-7"></a>    l</span>
-<span id="cb16-8"><a href="#cb16-8"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
+<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a>    chroms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seqnames</span>(features))</span>
+<span id="cb16-4"><a href="#cb16-4" aria-label="4"></a>    chrom_lengths <span class="ot">&lt;-</span> <span class="fu">lengths</span>(l<span class="sc">$</span>coverage)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-label="5"></a>    keep <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: on a covered chromosome AND within bounds</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-label="6"></a>    l<span class="sc">$</span>features <span class="ot">&lt;-</span> features[keep]</span>
+<span id="cb16-7"><a href="#cb16-7" aria-label="7"></a>    l</span>
+<span id="cb16-8"><a href="#cb16-8" aria-label="8"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -878,19 +881,19 @@ Answer
 <div id="callout-26" class="callout-26-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb17-2"><a href="#cb17-2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
-<span id="cb17-3"><a href="#cb17-3"></a>    chroms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seqnames</span>(features))</span>
-<span id="cb17-4"><a href="#cb17-4"></a>    chrom_lengths <span class="ot">&lt;-</span> <span class="fu">lengths</span>(l<span class="sc">$</span>coverage)</span>
-<span id="cb17-5"><a href="#cb17-5"></a>    on_covered_chrom <span class="ot">&lt;-</span> chroms <span class="sc">%in%</span> <span class="fu">names</span>(l<span class="sc">$</span>coverage)</span>
-<span id="cb17-6"><a href="#cb17-6"></a>    within_bounds <span class="ot">&lt;-</span> <span class="fu">start</span>(features) <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
-<span id="cb17-7"><a href="#cb17-7"></a>        <span class="fu">end</span>(features) <span class="sc">&lt;=</span> chrom_lengths[chroms]</span>
-<span id="cb17-8"><a href="#cb17-8"></a>    l<span class="sc">$</span>features <span class="ot">&lt;-</span> features[on_covered_chrom <span class="sc">&amp;</span> within_bounds]</span>
-<span id="cb17-9"><a href="#cb17-9"></a>    l</span>
-<span id="cb17-10"><a href="#cb17-10"></a>}</span>
-<span id="cb17-11"><a href="#cb17-11"></a></span>
-<span id="cb17-12"><a href="#cb17-12"></a>l <span class="ot">&lt;-</span> <span class="fu">filterGRanges</span>(l)</span>
-<span id="cb17-13"><a href="#cb17-13"></a><span class="fu">length</span>(l<span class="sc">$</span>features)  <span class="do">## possibly fewer features than before</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-label="1"></a>filterGRanges <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb17-2"><a href="#cb17-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
+<span id="cb17-3"><a href="#cb17-3" aria-label="3"></a>    chroms <span class="ot">&lt;-</span> <span class="fu">as.character</span>(<span class="fu">seqnames</span>(features))</span>
+<span id="cb17-4"><a href="#cb17-4" aria-label="4"></a>    chrom_lengths <span class="ot">&lt;-</span> <span class="fu">lengths</span>(l<span class="sc">$</span>coverage)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-label="5"></a>    on_covered_chrom <span class="ot">&lt;-</span> chroms <span class="sc">%in%</span> <span class="fu">names</span>(l<span class="sc">$</span>coverage)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-label="6"></a>    within_bounds <span class="ot">&lt;-</span> <span class="fu">start</span>(features) <span class="sc">&gt;=</span> <span class="dv">1</span> <span class="sc">&amp;</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-label="7"></a>        <span class="fu">end</span>(features) <span class="sc">&lt;=</span> chrom_lengths[chroms]</span>
+<span id="cb17-8"><a href="#cb17-8" aria-label="8"></a>    l<span class="sc">$</span>features <span class="ot">&lt;-</span> features[on_covered_chrom <span class="sc">&amp;</span> within_bounds]</span>
+<span id="cb17-9"><a href="#cb17-9" aria-label="9"></a>    l</span>
+<span id="cb17-10"><a href="#cb17-10" aria-label="10"></a>}</span>
+<span id="cb17-11"><a href="#cb17-11" aria-label="11"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-label="12"></a>l <span class="ot">&lt;-</span> <span class="fu">filterGRanges</span>(l)</span>
+<span id="cb17-13"><a href="#cb17-13" aria-label="13"></a><span class="fu">length</span>(l<span class="sc">$</span>features)  <span class="do">## possibly fewer features than before</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -924,10 +927,10 @@ Question
 <div class="callout-body-container callout-body">
 <p>Unlisting the <code>RleList</code> gives one long numeric vector (feature 1’s positions, then feature 2’s, …). Folding it back into a matrix with <code>ncol = width</code> and <code>byrow = TRUE</code> puts one feature per row and one position per column — exactly what we need to average column by column.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb18-2"><a href="#cb18-2"></a>    <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[l<span class="sc">$</span>features])),</span>
-<span id="cb18-3"><a href="#cb18-3"></a>    <span class="at">ncol =</span> ______, <span class="at">byrow =</span> ______</span>
-<span id="cb18-4"><a href="#cb18-4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-label="1"></a>mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb18-2"><a href="#cb18-2" aria-label="2"></a>    <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[l<span class="sc">$</span>features])),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-label="3"></a>    <span class="at">ncol =</span> ______, <span class="at">byrow =</span> ______</span>
+<span id="cb18-4"><a href="#cb18-4" aria-label="4"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -944,11 +947,11 @@ Answer
 <div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a>mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb19-2"><a href="#cb19-2"></a>    <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[l<span class="sc">$</span>features])),</span>
-<span id="cb19-3"><a href="#cb19-3"></a>    <span class="at">ncol =</span> width, <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a>)</span>
-<span id="cb19-5"><a href="#cb19-5"></a><span class="fu">dim</span>(mat)  <span class="do">## nrow = number of features, ncol = width</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-label="1"></a>mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb19-2"><a href="#cb19-2" aria-label="2"></a>    <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[l<span class="sc">$</span>features])),</span>
+<span id="cb19-3"><a href="#cb19-3" aria-label="3"></a>    <span class="at">ncol =</span> width, <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-label="4"></a>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-label="5"></a><span class="fu">dim</span>(mat)  <span class="do">## nrow = number of features, ncol = width</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -978,10 +981,10 @@ Question
 <div class="callout-body-container callout-body">
 <p>Identify minus-strand features with <code>strand(l$features) == "-"</code>, then reverse the column order of those rows only: <code>mat[is_minus, ] &lt;- mat[is_minus, rev(seq_len(width))]</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">______</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="st">"______"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2"></a><span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
-<span id="cb20-3"><a href="#cb20-3"></a>    mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb20-4"><a href="#cb20-4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">______</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="st">"______"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a><span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
+<span id="cb20-3"><a href="#cb20-3" aria-label="3"></a>    mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb20-4"><a href="#cb20-4" aria-label="4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -998,10 +1001,10 @@ Answer
 <div id="callout-32" class="callout-32-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">strand</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="st">"-"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
-<span id="cb21-3"><a href="#cb21-3"></a>    mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb21-4"><a href="#cb21-4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">strand</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="st">"-"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a><span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
+<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>    mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1031,19 +1034,19 @@ Question
 <div class="callout-body-container callout-body">
 <p>Per-position mean is <code>colMeans(mat)</code>. For a 95% CI, use <code>1.96 * sd / sqrt(n)</code>, where <code>sd</code> is <code>apply(mat, 2, sd)</code> and <code>n = nrow(mat)</code>. The <code>distance</code> column is <code>seq(-width/2, width/2 - 1, by = 1)</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb22-2"><a href="#cb22-2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
-<span id="cb22-3"><a href="#cb22-3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
-<span id="cb22-4"><a href="#cb22-4"></a>    mat <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: build the features x positions matrix (+ flip minus strand)</span></span>
-<span id="cb22-5"><a href="#cb22-5"></a>    means <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: per-position mean</span></span>
-<span id="cb22-6"><a href="#cb22-6"></a>    ci <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: 1.96 * per-position sd / sqrt(n)</span></span>
-<span id="cb22-7"><a href="#cb22-7"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb22-8"><a href="#cb22-8"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
-<span id="cb22-9"><a href="#cb22-9"></a>        <span class="at">mean =</span> means,</span>
-<span id="cb22-10"><a href="#cb22-10"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
-<span id="cb22-11"><a href="#cb22-11"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
-<span id="cb22-12"><a href="#cb22-12"></a>    )</span>
-<span id="cb22-13"><a href="#cb22-13"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
+<span id="cb22-3"><a href="#cb22-3" aria-label="3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
+<span id="cb22-4"><a href="#cb22-4" aria-label="4"></a>    mat <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: build the features x positions matrix (+ flip minus strand)</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-label="5"></a>    means <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: per-position mean</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-label="6"></a>    ci <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: 1.96 * per-position sd / sqrt(n)</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-label="7"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb22-8"><a href="#cb22-8" aria-label="8"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
+<span id="cb22-9"><a href="#cb22-9" aria-label="9"></a>        <span class="at">mean =</span> means,</span>
+<span id="cb22-10"><a href="#cb22-10" aria-label="10"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
+<span id="cb22-11"><a href="#cb22-11" aria-label="11"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
+<span id="cb22-12"><a href="#cb22-12" aria-label="12"></a>    )</span>
+<span id="cb22-13"><a href="#cb22-13" aria-label="13"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1060,38 +1063,38 @@ Answer
 <div id="callout-35" class="callout-35-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb23-2"><a href="#cb23-2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
-<span id="cb23-3"><a href="#cb23-3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
-<span id="cb23-4"><a href="#cb23-4"></a></span>
-<span id="cb23-5"><a href="#cb23-5"></a>    <span class="do">## features x positions matrix</span></span>
-<span id="cb23-6"><a href="#cb23-6"></a>    mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb23-7"><a href="#cb23-7"></a>        <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[features])),</span>
-<span id="cb23-8"><a href="#cb23-8"></a>        <span class="at">ncol =</span> width, <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
-<span id="cb23-9"><a href="#cb23-9"></a>    )</span>
-<span id="cb23-10"><a href="#cb23-10"></a></span>
-<span id="cb23-11"><a href="#cb23-11"></a>    <span class="do">## flip minus-strand features</span></span>
-<span id="cb23-12"><a href="#cb23-12"></a>    is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">strand</span>(features) <span class="sc">==</span> <span class="st">"-"</span>)</span>
-<span id="cb23-13"><a href="#cb23-13"></a>    <span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
-<span id="cb23-14"><a href="#cb23-14"></a>        mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb23-15"><a href="#cb23-15"></a>    }</span>
-<span id="cb23-16"><a href="#cb23-16"></a></span>
-<span id="cb23-17"><a href="#cb23-17"></a>    <span class="do">## per-position mean and 95% CI</span></span>
-<span id="cb23-18"><a href="#cb23-18"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mat)</span>
-<span id="cb23-19"><a href="#cb23-19"></a>    means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(mat, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-20"><a href="#cb23-20"></a>    ci <span class="ot">&lt;-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">apply</span>(mat, <span class="dv">2</span>, sd, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
-<span id="cb23-21"><a href="#cb23-21"></a></span>
-<span id="cb23-22"><a href="#cb23-22"></a>    <span class="do">## return a clean data.frame</span></span>
-<span id="cb23-23"><a href="#cb23-23"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb23-24"><a href="#cb23-24"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
-<span id="cb23-25"><a href="#cb23-25"></a>        <span class="at">mean =</span> means,</span>
-<span id="cb23-26"><a href="#cb23-26"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
-<span id="cb23-27"><a href="#cb23-27"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
-<span id="cb23-28"><a href="#cb23-28"></a>    )</span>
-<span id="cb23-29"><a href="#cb23-29"></a>}</span>
-<span id="cb23-30"><a href="#cb23-30"></a></span>
-<span id="cb23-31"><a href="#cb23-31"></a>df <span class="ot">&lt;-</span> <span class="fu">computeCoverage</span>(l)</span>
-<span id="cb23-32"><a href="#cb23-32"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
+<span id="cb23-3"><a href="#cb23-3" aria-label="3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
+<span id="cb23-4"><a href="#cb23-4" aria-label="4"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-label="5"></a>    <span class="do">## features x positions matrix</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-label="6"></a>    mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb23-7"><a href="#cb23-7" aria-label="7"></a>        <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[features])),</span>
+<span id="cb23-8"><a href="#cb23-8" aria-label="8"></a>        <span class="at">ncol =</span> width, <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-label="9"></a>    )</span>
+<span id="cb23-10"><a href="#cb23-10" aria-label="10"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-label="11"></a>    <span class="do">## flip minus-strand features</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-label="12"></a>    is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">strand</span>(features) <span class="sc">==</span> <span class="st">"-"</span>)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-label="13"></a>    <span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
+<span id="cb23-14"><a href="#cb23-14" aria-label="14"></a>        mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb23-15"><a href="#cb23-15" aria-label="15"></a>    }</span>
+<span id="cb23-16"><a href="#cb23-16" aria-label="16"></a></span>
+<span id="cb23-17"><a href="#cb23-17" aria-label="17"></a>    <span class="do">## per-position mean and 95% CI</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-label="18"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mat)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-label="19"></a>    means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(mat, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-20"><a href="#cb23-20" aria-label="20"></a>    ci <span class="ot">&lt;-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">apply</span>(mat, <span class="dv">2</span>, sd, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb23-21"><a href="#cb23-21" aria-label="21"></a></span>
+<span id="cb23-22"><a href="#cb23-22" aria-label="22"></a>    <span class="do">## return a clean data.frame</span></span>
+<span id="cb23-23"><a href="#cb23-23" aria-label="23"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb23-24"><a href="#cb23-24" aria-label="24"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
+<span id="cb23-25"><a href="#cb23-25" aria-label="25"></a>        <span class="at">mean =</span> means,</span>
+<span id="cb23-26"><a href="#cb23-26" aria-label="26"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
+<span id="cb23-27"><a href="#cb23-27" aria-label="27"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
+<span id="cb23-28"><a href="#cb23-28" aria-label="28"></a>    )</span>
+<span id="cb23-29"><a href="#cb23-29" aria-label="29"></a>}</span>
+<span id="cb23-30"><a href="#cb23-30" aria-label="30"></a></span>
+<span id="cb23-31"><a href="#cb23-31" aria-label="31"></a>df <span class="ot">&lt;-</span> <span class="fu">computeCoverage</span>(l)</span>
+<span id="cb23-32"><a href="#cb23-32" aria-label="32"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1124,10 +1127,10 @@ Question
 <div class="callout-body-container callout-body">
 <p>Use <code>ggplot2</code>, mapping <code>distance</code> to <code>x</code> and <code>mean</code> to <code>y</code>. Add a <code>geom_ribbon(aes(ymin = ci_low, ymax = ci_high))</code> for the confidence interval and a <code>geom_line()</code> for the mean.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb24-2"><a href="#cb24-2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> ______, <span class="at">y =</span> ______)) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ______, <span class="at">ymax =</span> ______), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4"></a>    <span class="fu">geom_line</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> ______, <span class="at">y =</span> ______)) <span class="sc">+</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-label="3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ______, <span class="at">ymax =</span> ______), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-label="4"></a>    <span class="fu">geom_line</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1144,12 +1147,12 @@ Answer
 <div id="callout-38" class="callout-38-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high), <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4"></a>    <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb25-5"><a href="#cb25-5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>) <span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-label="2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-label="3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high), <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-label="4"></a>    <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-label="5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>) <span class="sc">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-label="6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>

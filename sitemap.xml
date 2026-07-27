@@ -2,86 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/index.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/program.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/prerequisites.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/extra.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day1/Lecture0_course-overview.html</loc>
-    <lastmod>2026-07-23T15:40:56.993Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.232Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day1/Lecture1_Package_architecture.html</loc>
-    <lastmod>2026-07-23T15:40:57.006Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.247Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day1/Lecture2_Bioconductor_101.html</loc>
-    <lastmod>2026-07-23T15:40:57.023Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.266Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day1/Lecture3_Developer-toolkit.html</loc>
-    <lastmod>2026-07-23T15:40:57.031Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.276Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day2/Lecture4_Continuous_development-writing-documenting-testing.html</loc>
-    <lastmod>2026-07-23T15:40:57.041Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.287Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day2/Lecture5_Bioconductor_201.html</loc>
-    <lastmod>2026-07-23T15:40:57.063Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.312Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day3/Lecture6_Git_versionning.html</loc>
-    <lastmod>2026-07-23T15:40:57.079Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.331Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day3/Lecture7_Improving_package-data_vignettes-....html</loc>
-    <lastmod>2026-07-23T15:40:57.101Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.357Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day4/Lecture8_S4_classes.html</loc>
-    <lastmod>2026-07-23T15:40:57.109Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.366Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day4/Lecture9_Bioconductor_submission.html</loc>
-    <lastmod>2026-07-23T15:40:57.159Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.425Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day5/Lecture10_Other_package_types.html</loc>
-    <lastmod>2026-07-23T15:40:57.174Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.443Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/day5/Lecture11_Package_dissemination.html</loc>
-    <lastmod>2026-07-23T15:40:57.242Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.522Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/exercises/Day1_Getting-started-with-Bioc.html</loc>
-    <lastmod>2026-07-23T15:40:57.242Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.522Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/exercises/Day2_Developer-virtuous-circle.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/exercises/Day3_Examples-test-data.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/exercises/Day4_S4-classes.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
   <url>
     <loc>https://js2264.github.io/Bioc-workshop/content/exercises/Day5_package-integration.html</loc>
-    <lastmod>2026-07-23T15:40:57.243Z</lastmod>
+    <lastmod>2026-07-27T11:48:41.524Z</lastmod>
   </url>
 </urlset>

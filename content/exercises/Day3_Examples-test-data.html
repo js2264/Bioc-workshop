@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="J. Serizay">
 <title>3&nbsp; Enriching package functionalities – Developing R/Bioconductor packages for Genomics</title>
@@ -10,10 +10,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-24447e1e94a8f6031783094ca8462a86.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9506a156ca8f7ca7d76600eda5100440.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-69761f52e206bf7b00b34f40260facf6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-02e7db42b34628a31a1c5d41451ebd92.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -433,14 +436,14 @@ Question
 <div class="callout-body-container callout-body">
 <p><code>inst/extdata/</code> may not exist yet — create it first. You can do this from R, or simply from your file browser.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">dir.create</span>(<span class="st">"inst/extdata"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">file.copy</span>(</span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="at">from =</span> <span class="fu">c</span>(</span>
-<span id="cb1-4"><a href="#cb1-4"></a>        <span class="st">"______"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5"></a>        <span class="st">"______"</span></span>
-<span id="cb1-6"><a href="#cb1-6"></a>    ),</span>
-<span id="cb1-7"><a href="#cb1-7"></a>    <span class="at">to =</span> <span class="st">"______"</span></span>
-<span id="cb1-8"><a href="#cb1-8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">dir.create</span>(<span class="st">"inst/extdata"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a><span class="fu">file.copy</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>    <span class="at">from =</span> <span class="fu">c</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>        <span class="st">"______"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>        <span class="st">"______"</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>    ),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>    <span class="at">to =</span> <span class="st">"______"</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -457,19 +460,19 @@ Answer
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">dir.create</span>(<span class="st">"inst/extdata"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">file.copy</span>(</span>
-<span id="cb2-3"><a href="#cb2-3"></a>    <span class="at">from =</span> <span class="fu">c</span>(</span>
-<span id="cb2-4"><a href="#cb2-4"></a>        <span class="st">"Share/data/Scc1-vs-input.bw"</span>,</span>
-<span id="cb2-5"><a href="#cb2-5"></a>        <span class="st">"Share/data/Scc1-peaks.narrowPeak"</span></span>
-<span id="cb2-6"><a href="#cb2-6"></a>    ),</span>
-<span id="cb2-7"><a href="#cb2-7"></a>    <span class="at">to =</span> <span class="st">"inst/extdata/"</span></span>
-<span id="cb2-8"><a href="#cb2-8"></a>)</span>
-<span id="cb2-9"><a href="#cb2-9"></a><span class="fu">list.files</span>(<span class="st">"inst/extdata"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a><span class="fu">dir.create</span>(<span class="st">"inst/extdata"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-label="2"></a><span class="fu">file.copy</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" aria-label="3"></a>    <span class="at">from =</span> <span class="fu">c</span>(</span>
+<span id="cb2-4"><a href="#cb2-4" aria-label="4"></a>        <span class="st">"Share/data/Scc1-vs-input.bw"</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-label="5"></a>        <span class="st">"Share/data/Scc1-peaks.narrowPeak"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-label="6"></a>    ),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-label="7"></a>    <span class="at">to =</span> <span class="st">"inst/extdata/"</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-label="8"></a>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-label="9"></a><span class="fu">list.files</span>(<span class="st">"inst/extdata"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Once the files are in <code>inst/extdata/</code>, you can retrieve their installed path with <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a><span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -500,8 +503,8 @@ Question
 <div class="callout-body-container callout-body">
 <p>The script is documentation, not something that needs to run end-to-end: a mix of comments and (optionally) code is fine. An example is provided in <code>Share/scripts/make-extdata.R</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">dir.create</span>(<span class="st">"inst/scripts"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">file.edit</span>(<span class="st">"inst/scripts/make-extdata.R"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">dir.create</span>(<span class="st">"inst/scripts"</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="fu">file.edit</span>(<span class="st">"inst/scripts/make-extdata.R"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -533,11 +536,11 @@ Question
 <div class="callout-body-container callout-body">
 <p>Reference the installed data with <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code> so that the examples work on any machine where the package is installed. A roxygen <code>@examples</code> block looks like this:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co">#' @examples</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#' bw_file &lt;- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")</span></span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#' bed_file &lt;- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")</span></span>
-<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#' l &lt;- importFiles(bw_file, bed_file, width = 2000)</span></span>
-<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#' l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="co">#' @examples</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a><span class="co">#' bw_file &lt;- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a><span class="co">#' bed_file &lt;- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-label="4"></a><span class="co">#' l &lt;- importFiles(bw_file, bed_file, width = 2000)</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-label="5"></a><span class="co">#' l</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -555,13 +558,13 @@ Answer
 <div class="callout-body-container callout-body">
 <p>Fully worked-out function files, with <code>@examples</code> sections added, are available in <code>Share/functions/</code>. For instance, <code>importFiles()</code> chains into the whole pipeline:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co">#' @examples</span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#' bw_file &lt;- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#' bed_file &lt;- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#' importFiles(bw_file, bed_file, width = 2000) |&gt;</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#'     filterGRanges() |&gt;</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#'     computeCoverage() |&gt;</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#'     plotCoverage()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a><span class="co">#' @examples</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a><span class="co">#' bw_file &lt;- system.file("extdata", "Scc1-vs-input.bw", package = "JacquesTestPackage")</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-label="3"></a><span class="co">#' bed_file &lt;- system.file("extdata", "Scc1-peaks.narrowPeak", package = "JacquesTestPackage")</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-label="4"></a><span class="co">#' importFiles(bw_file, bed_file, width = 2000) |&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-label="5"></a><span class="co">#'     filterGRanges() |&gt;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-label="6"></a><span class="co">#'     computeCoverage() |&gt;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-label="7"></a><span class="co">#'     plotCoverage()</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -570,15 +573,15 @@ Answer
 </div>
 <p>Once you have added examples and re-run <code>document()</code>, you can check that they all run without error:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">document</span>()</span>
-<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">run_examples</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a><span class="fu">document</span>()</span>
+<span id="cb7-2"><a href="#cb7-2" aria-label="2"></a><span class="fu">run_examples</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="add-unit-tests-to-your-package" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="add-unit-tests-to-your-package">
 <span class="header-section-number">3.3</span> Add unit tests to your package</h2>
 <p>Unit tests are the best way to make sure your package keeps working as intended as you keep editing it. Each test runs a bit of <code>R</code> code and compares the result to an expectation. We use the <code>testthat</code> framework.</p>
 <p>To start using unit tests, declare it once:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>usethis<span class="sc">::</span><span class="fu">use_testthat</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_testthat</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>This creates a <code>tests/testthat/</code> folder and a <code>tests/testthat.R</code> runner.</p>
 <div class="icon callout callout-style-default callout-question callout-titled">
@@ -604,7 +607,7 @@ Question
 <div class="callout-body-container callout-body">
 <p><code>usethis::use_test("&lt;name&gt;")</code> creates (and opens) <code>tests/testthat/test-&lt;name&gt;.R</code>. Give it a meaningful name, e.g.&nbsp;the function or feature under test.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -621,7 +624,7 @@ Answer
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">"computeCoverage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_test</span>(<span class="st">"computeCoverage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -664,13 +667,13 @@ Question
 <div class="callout-body-container callout-body">
 <p>Load the example data with <code><a href="https://rdrr.io/r/base/system.file.html">system.file()</a></code>, call <code>importFiles()</code>, then state what you <em>know</em> must be true about the result.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="fu">test_that</span>(<span class="st">"importFiles() resizes features to the requested width"</span>, {</span>
-<span id="cb11-2"><a href="#cb11-2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"______"</span>, <span class="at">package =</span> <span class="st">"______"</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"______"</span>, <span class="at">package =</span> <span class="st">"______"</span>)</span>
-<span id="cb11-4"><a href="#cb11-4"></a>    l <span class="ot">&lt;-</span> <span class="fu">______</span>(bw_file, bed_file, <span class="at">width =</span> <span class="dv">2000</span>)</span>
-<span id="cb11-5"><a href="#cb11-5"></a>    <span class="fu">expect_named</span>(l, <span class="fu">c</span>(<span class="st">"______"</span>, <span class="st">"______"</span>))</span>
-<span id="cb11-6"><a href="#cb11-6"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(<span class="fu">______</span>(l<span class="sc">$</span>features) <span class="sc">==</span> ______))</span>
-<span id="cb11-7"><a href="#cb11-7"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a><span class="fu">test_that</span>(<span class="st">"importFiles() resizes features to the requested width"</span>, {</span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"______"</span>, <span class="at">package =</span> <span class="st">"______"</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"______"</span>, <span class="at">package =</span> <span class="st">"______"</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a>    l <span class="ot">&lt;-</span> <span class="fu">______</span>(bw_file, bed_file, <span class="at">width =</span> <span class="dv">2000</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-label="5"></a>    <span class="fu">expect_named</span>(l, <span class="fu">c</span>(<span class="st">"______"</span>, <span class="st">"______"</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-label="6"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(<span class="fu">______</span>(l<span class="sc">$</span>features) <span class="sc">==</span> ______))</span>
+<span id="cb11-7"><a href="#cb11-7" aria-label="7"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -687,16 +690,16 @@ Answer
 <div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">test_that</span>(<span class="st">"importFiles() resizes features to the requested width"</span>, {</span>
-<span id="cb12-2"><a href="#cb12-2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
-<span id="cb12-3"><a href="#cb12-3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-peaks.narrowPeak"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
-<span id="cb12-4"><a href="#cb12-4"></a>    l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, bed_file, <span class="at">width =</span> <span class="dv">2000</span>)</span>
-<span id="cb12-5"><a href="#cb12-5"></a></span>
-<span id="cb12-6"><a href="#cb12-6"></a>    <span class="fu">expect_type</span>(l, <span class="st">"list"</span>)</span>
-<span id="cb12-7"><a href="#cb12-7"></a>    <span class="fu">expect_named</span>(l, <span class="fu">c</span>(<span class="st">"coverage"</span>, <span class="st">"features"</span>))</span>
-<span id="cb12-8"><a href="#cb12-8"></a>    <span class="fu">expect_s4_class</span>(l<span class="sc">$</span>features, <span class="st">"GRanges"</span>)</span>
-<span id="cb12-9"><a href="#cb12-9"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(GenomicRanges<span class="sc">::</span><span class="fu">width</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="dv">2000</span>))</span>
-<span id="cb12-10"><a href="#cb12-10"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">test_that</span>(<span class="st">"importFiles() resizes features to the requested width"</span>, {</span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-peaks.narrowPeak"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>    l <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, bed_file, <span class="at">width =</span> <span class="dv">2000</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-label="5"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-label="6"></a>    <span class="fu">expect_type</span>(l, <span class="st">"list"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-label="7"></a>    <span class="fu">expect_named</span>(l, <span class="fu">c</span>(<span class="st">"coverage"</span>, <span class="st">"features"</span>))</span>
+<span id="cb12-8"><a href="#cb12-8" aria-label="8"></a>    <span class="fu">expect_s4_class</span>(l<span class="sc">$</span>features, <span class="st">"GRanges"</span>)</span>
+<span id="cb12-9"><a href="#cb12-9" aria-label="9"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(GenomicRanges<span class="sc">::</span><span class="fu">width</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="dv">2000</span>))</span>
+<span id="cb12-10"><a href="#cb12-10" aria-label="10"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -726,12 +729,12 @@ Question
 <div class="callout-body-container callout-body">
 <p>Run the full pipeline, then think about the invariants that must hold no matter the data: <code>nrow(df) == width</code>, the columns are <code>distance</code>/<code>mean</code>/<code>ci_low</code>/<code>ci_high</code>, and for every position <code>ci_low &lt;= mean &lt;= ci_high</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="fu">test_that</span>(<span class="st">"computeCoverage() returns a well-formed data.frame"</span>, {</span>
-<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co"># ... run the pipeline into `df` ...</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>    <span class="fu">expect_equal</span>(<span class="fu">nrow</span>(df), ______)</span>
-<span id="cb13-4"><a href="#cb13-4"></a>    <span class="fu">expect_named</span>(df, <span class="fu">c</span>(<span class="st">"______"</span>, <span class="st">"______"</span>, <span class="st">"______"</span>, <span class="st">"______"</span>))</span>
-<span id="cb13-5"><a href="#cb13-5"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>ci_low <span class="sc">&lt;=</span> df<span class="sc">$</span>______ <span class="sc">&amp;</span> df<span class="sc">$</span>______ <span class="sc">&lt;=</span> df<span class="sc">$</span>ci_high))</span>
-<span id="cb13-6"><a href="#cb13-6"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a><span class="fu">test_that</span>(<span class="st">"computeCoverage() returns a well-formed data.frame"</span>, {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a>    <span class="co"># ... run the pipeline into `df` ...</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>    <span class="fu">expect_equal</span>(<span class="fu">nrow</span>(df), ______)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>    <span class="fu">expect_named</span>(df, <span class="fu">c</span>(<span class="st">"______"</span>, <span class="st">"______"</span>, <span class="st">"______"</span>, <span class="st">"______"</span>))</span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>ci_low <span class="sc">&lt;=</span> df<span class="sc">$</span>______ <span class="sc">&amp;</span> df<span class="sc">$</span>______ <span class="sc">&lt;=</span> df<span class="sc">$</span>ci_high))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -748,21 +751,21 @@ Answer
 <div id="callout-19" class="callout-19-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="fu">test_that</span>(<span class="st">"computeCoverage() returns a well-formed data.frame"</span>, {</span>
-<span id="cb14-2"><a href="#cb14-2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
-<span id="cb14-3"><a href="#cb14-3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-peaks.narrowPeak"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
-<span id="cb14-4"><a href="#cb14-4"></a>    width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
-<span id="cb14-5"><a href="#cb14-5"></a>    df <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, bed_file, <span class="at">width =</span> width) <span class="sc">|&gt;</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>        <span class="fu">filterGRanges</span>() <span class="sc">|&gt;</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a>        <span class="fu">computeCoverage</span>()</span>
-<span id="cb14-8"><a href="#cb14-8"></a></span>
-<span id="cb14-9"><a href="#cb14-9"></a>    <span class="fu">expect_s3_class</span>(df, <span class="st">"data.frame"</span>)</span>
-<span id="cb14-10"><a href="#cb14-10"></a>    <span class="fu">expect_equal</span>(<span class="fu">nrow</span>(df), width)</span>
-<span id="cb14-11"><a href="#cb14-11"></a>    <span class="fu">expect_named</span>(df, <span class="fu">c</span>(<span class="st">"distance"</span>, <span class="st">"mean"</span>, <span class="st">"ci_low"</span>, <span class="st">"ci_high"</span>))</span>
-<span id="cb14-12"><a href="#cb14-12"></a>    <span class="fu">expect_equal</span>(df<span class="sc">$</span>distance[<span class="dv">1</span>], <span class="sc">-</span>width <span class="sc">/</span> <span class="dv">2</span>)</span>
-<span id="cb14-13"><a href="#cb14-13"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>ci_low <span class="sc">&lt;=</span> df<span class="sc">$</span>mean))</span>
-<span id="cb14-14"><a href="#cb14-14"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>mean <span class="sc">&lt;=</span> df<span class="sc">$</span>ci_high))</span>
-<span id="cb14-15"><a href="#cb14-15"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a><span class="fu">test_that</span>(<span class="st">"computeCoverage() returns a well-formed data.frame"</span>, {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a>    bw_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-vs-input.bw"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-label="3"></a>    bed_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">"extdata"</span>, <span class="st">"Scc1-peaks.narrowPeak"</span>, <span class="at">package =</span> <span class="st">"JacquesTestPackage"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-label="4"></a>    width <span class="ot">&lt;-</span> <span class="dv">2000</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-label="5"></a>    df <span class="ot">&lt;-</span> <span class="fu">importFiles</span>(bw_file, bed_file, <span class="at">width =</span> width) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-label="6"></a>        <span class="fu">filterGRanges</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-label="7"></a>        <span class="fu">computeCoverage</span>()</span>
+<span id="cb14-8"><a href="#cb14-8" aria-label="8"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-label="9"></a>    <span class="fu">expect_s3_class</span>(df, <span class="st">"data.frame"</span>)</span>
+<span id="cb14-10"><a href="#cb14-10" aria-label="10"></a>    <span class="fu">expect_equal</span>(<span class="fu">nrow</span>(df), width)</span>
+<span id="cb14-11"><a href="#cb14-11" aria-label="11"></a>    <span class="fu">expect_named</span>(df, <span class="fu">c</span>(<span class="st">"distance"</span>, <span class="st">"mean"</span>, <span class="st">"ci_low"</span>, <span class="st">"ci_high"</span>))</span>
+<span id="cb14-12"><a href="#cb14-12" aria-label="12"></a>    <span class="fu">expect_equal</span>(df<span class="sc">$</span>distance[<span class="dv">1</span>], <span class="sc">-</span>width <span class="sc">/</span> <span class="dv">2</span>)</span>
+<span id="cb14-13"><a href="#cb14-13" aria-label="13"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>ci_low <span class="sc">&lt;=</span> df<span class="sc">$</span>mean))</span>
+<span id="cb14-14"><a href="#cb14-14" aria-label="14"></a>    <span class="fu">expect_true</span>(<span class="fu">all</span>(df<span class="sc">$</span>mean <span class="sc">&lt;=</span> df<span class="sc">$</span>ci_high))</span>
+<span id="cb14-15"><a href="#cb14-15" aria-label="15"></a>})</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>A complete, working example test file is available in <code>Share/tests/test-computeCoverage.R</code>.</p>
 </div>
@@ -785,7 +788,7 @@ Tip
 </div>
 <p>Once your tests are written, run the whole suite:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>devtools<span class="sc">::</span><span class="fu">test</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a>devtools<span class="sc">::</span><span class="fu">test</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="check-your-package" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="check-your-package">
 <span class="header-section-number">3.4</span> Check your package</h2>
@@ -799,9 +802,9 @@ Tip
 <code>BiocCheck::BiocCheck()</code> checks the compliance of the package with <code>Bioconductor</code> requirements.</li>
 </ul>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>devtools<span class="sc">::</span><span class="fu">check</span>()</span>
-<span id="cb16-2"><a href="#cb16-2"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span>
-<span id="cb16-3"><a href="#cb16-3"></a>BiocCheck<span class="sc">::</span><span class="fu">BiocCheck</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a>devtools<span class="sc">::</span><span class="fu">check</span>()</span>
+<span id="cb16-2"><a href="#cb16-2" aria-label="2"></a>rcmdcheck<span class="sc">::</span><span class="fu">rcmdcheck</span>()</span>
+<span id="cb16-3"><a href="#cb16-3" aria-label="3"></a>BiocCheck<span class="sc">::</span><span class="fu">BiocCheck</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="icon callout callout-style-default callout-question callout-titled">
 <div class="callout-header d-flex align-content-center">

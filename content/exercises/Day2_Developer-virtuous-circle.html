@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.38">
+<meta name="generator" content="quarto-1.10.18">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="J. Serizay">
 <title>2&nbsp; Kickstarting an R package – Developing R/Bioconductor packages for Genomics</title>
@@ -10,10 +10,13 @@
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
 */
-code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-div.columns{display: flex; gap: min(4vw, 1.5em);}
-div.column{flex: auto; overflow-x: auto;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
@@ -73,10 +76,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-24447e1e94a8f6031783094ca8462a86.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-9506a156ca8f7ca7d76600eda5100440.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-69761f52e206bf7b00b34f40260facf6.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-02e7db42b34628a31a1c5d41451ebd92.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -440,25 +443,25 @@ Answer
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
-<span id="cb1-2"><a href="#cb1-2"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(</span>
-<span id="cb1-3"><a href="#cb1-3"></a>    <span class="fu">c</span>(</span>
-<span id="cb1-4"><a href="#cb1-4"></a>        <span class="st">"available"</span>,</span>
-<span id="cb1-5"><a href="#cb1-5"></a>        <span class="st">"devtools"</span>,</span>
-<span id="cb1-6"><a href="#cb1-6"></a>        <span class="st">"rcmdcheck"</span>, </span>
-<span id="cb1-7"><a href="#cb1-7"></a>        <span class="st">"knitr"</span>,</span>
-<span id="cb1-8"><a href="#cb1-8"></a>        <span class="st">"pkgdown"</span>,</span>
-<span id="cb1-9"><a href="#cb1-9"></a>        <span class="st">"RefManageR"</span>,</span>
-<span id="cb1-10"><a href="#cb1-10"></a>        <span class="st">"rmarkdown"</span>,</span>
-<span id="cb1-11"><a href="#cb1-11"></a>        <span class="st">"rstudioapi"</span>,</span>
-<span id="cb1-12"><a href="#cb1-12"></a>        <span class="st">"sessioninfo"</span>,</span>
-<span id="cb1-13"><a href="#cb1-13"></a>        <span class="st">"styler"</span>,</span>
-<span id="cb1-14"><a href="#cb1-14"></a>        <span class="st">"usethis"</span>,</span>
-<span id="cb1-15"><a href="#cb1-15"></a>        <span class="st">"gert"</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a>    )</span>
-<span id="cb1-17"><a href="#cb1-17"></a>)</span>
-<span id="cb1-18"><a href="#cb1-18"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(<span class="st">"BiocManager"</span>)</span>
-<span id="cb1-19"><a href="#cb1-19"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"BiocStyle"</span>, <span class="st">"BiocCheck"</span>, <span class="st">"biocthis"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-label="1"></a><span class="fu">install.packages</span>(<span class="st">"remotes"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-label="2"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(</span>
+<span id="cb1-3"><a href="#cb1-3" aria-label="3"></a>    <span class="fu">c</span>(</span>
+<span id="cb1-4"><a href="#cb1-4" aria-label="4"></a>        <span class="st">"available"</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-label="5"></a>        <span class="st">"devtools"</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-label="6"></a>        <span class="st">"rcmdcheck"</span>, </span>
+<span id="cb1-7"><a href="#cb1-7" aria-label="7"></a>        <span class="st">"knitr"</span>,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-label="8"></a>        <span class="st">"pkgdown"</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-label="9"></a>        <span class="st">"RefManageR"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-label="10"></a>        <span class="st">"rmarkdown"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-label="11"></a>        <span class="st">"rstudioapi"</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-label="12"></a>        <span class="st">"sessioninfo"</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-label="13"></a>        <span class="st">"styler"</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-label="14"></a>        <span class="st">"usethis"</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-label="15"></a>        <span class="st">"gert"</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-label="16"></a>    )</span>
+<span id="cb1-17"><a href="#cb1-17" aria-label="17"></a>)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-label="18"></a>remotes<span class="sc">::</span><span class="fu">install_cran</span>(<span class="st">"BiocManager"</span>)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-label="19"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="fu">c</span>(<span class="st">"BiocStyle"</span>, <span class="st">"BiocCheck"</span>, <span class="st">"biocthis"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -489,7 +492,7 @@ Question
 <div class="callout-body-container callout-body">
 <p>The <code>available</code> package has a function named… <code>available()</code>. It checks a name against CRAN/Bioconductor, and also flags unintended meanings.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>available<span class="sc">::</span><span class="fu">available</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-label="1"></a>available<span class="sc">::</span><span class="fu">available</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -506,7 +509,7 @@ Answer
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>available<span class="sc">::</span><span class="fu">available</span>(<span class="st">"JacquesTestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-label="1"></a>available<span class="sc">::</span><span class="fu">available</span>(<span class="st">"JacquesTestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -537,8 +540,8 @@ Question
 <div class="callout-body-container callout-body">
 <p>The function is <code>create_package()</code>. It takes the <em>path</em> of the package to create (so mind the parent directory — e.g.&nbsp;your home <code>~</code>).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">create_package</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-label="1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-label="2"></a><span class="fu">create_package</span>(<span class="st">"______"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -555,9 +558,9 @@ Answer
 <div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">library</span>(devtools)</span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">setwd</span>(<span class="st">"~"</span>)</span>
-<span id="cb5-3"><a href="#cb5-3"></a><span class="fu">create_package</span>(<span class="st">"JacquesTestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-label="1"></a><span class="fu">library</span>(devtools)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-label="2"></a><span class="fu">setwd</span>(<span class="st">"~"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-label="3"></a><span class="fu">create_package</span>(<span class="st">"JacquesTestPackage"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -602,8 +605,8 @@ Answer
 <div id="callout-13" class="callout-13-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>usethis<span class="sc">::</span><span class="fu">proj_activate</span>(<span class="st">"~/JacquesTestPackage/"</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>rstudioapi<span class="sc">::</span><span class="fu">getActiveProject</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">proj_activate</span>(<span class="st">"~/JacquesTestPackage/"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-label="2"></a>rstudioapi<span class="sc">::</span><span class="fu">getActiveProject</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -661,7 +664,7 @@ Answer
 <div id="callout-17" class="callout-17-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_description</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-label="1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_description</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -718,7 +721,7 @@ Answer
 <div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>usethis<span class="sc">::</span><span class="fu">use_mit_license</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-label="1"></a>usethis<span class="sc">::</span><span class="fu">use_mit_license</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -764,7 +767,7 @@ Answer
 <div id="callout-24" class="callout-24-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_readme_rmd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-label="1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_readme_rmd</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -809,10 +812,10 @@ Answer
 <div id="callout-27" class="callout-27-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>(<span class="st">'.'</span>)</span>
-<span id="cb10-2"><a href="#cb10-2"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()</span>
-<span id="cb10-3"><a href="#cb10-3"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.Rmd"</span>)</span>
-<span id="cb10-4"><a href="#cb10-4"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.md"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-label="1"></a>devtools<span class="sc">::</span><span class="fu">load_all</span>(<span class="st">'.'</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-label="2"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()</span>
+<span id="cb10-3"><a href="#cb10-3" aria-label="3"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.Rmd"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-label="4"></a>rstudioapi<span class="sc">::</span><span class="fu">documentOpen</span>(<span class="st">"README.md"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -844,13 +847,13 @@ Answer
 <div id="callout-29" class="callout-29-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_news_md</span>()  <span class="do">## To add a NEWS.md file</span></span>
-<span id="cb11-2"><a href="#cb11-2"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_coc</span>()  <span class="do">## To add a .github/CODE_OF_CONDUCT.md file</span></span>
-<span id="cb11-3"><a href="#cb11-3"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_support</span>()  <span class="do">## To add a .github/SUPPORT.md file</span></span>
-<span id="cb11-4"><a href="#cb11-4"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_issue_template</span>()  <span class="do">## To add a .github/ISSUE_TEMPLATE/issue_template.md file</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_citation</span>()  <span class="do">## To add a inst/CITATION file</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a>usethis<span class="sc">::</span><span class="fu">use_lifecycle_badge</span>(<span class="st">"Experimental"</span>)  <span class="do">## To add a "Experimental" badge to your README.Rmd</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()  <span class="do">## To rebuild README.md</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-label="1"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_news_md</span>()  <span class="do">## To add a NEWS.md file</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-label="2"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_coc</span>()  <span class="do">## To add a .github/CODE_OF_CONDUCT.md file</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-label="3"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_support</span>()  <span class="do">## To add a .github/SUPPORT.md file</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-label="4"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_issue_template</span>()  <span class="do">## To add a .github/ISSUE_TEMPLATE/issue_template.md file</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-label="5"></a>biocthis<span class="sc">::</span><span class="fu">use_bioc_citation</span>()  <span class="do">## To add a inst/CITATION file</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-label="6"></a>usethis<span class="sc">::</span><span class="fu">use_lifecycle_badge</span>(<span class="st">"Experimental"</span>)  <span class="do">## To add a "Experimental" badge to your README.Rmd</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-label="7"></a>devtools<span class="sc">::</span><span class="fu">build_readme</span>()  <span class="do">## To rebuild README.md</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -909,10 +912,10 @@ Tip
 <div class="callout-body-container callout-body">
 <p>These functions should work in a chain:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="fu">importFiles</span>(bw_path, features_path, width) <span class="sc">|&gt;</span></span>
-<span id="cb12-2"><a href="#cb12-2"></a>    <span class="fu">filterGRanges</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-3"><a href="#cb12-3"></a>    <span class="fu">computeCoverage</span>() <span class="sc">|&gt;</span></span>
-<span id="cb12-4"><a href="#cb12-4"></a>    <span class="fu">plotCoverage</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-label="1"></a><span class="fu">importFiles</span>(bw_path, features_path, width) <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-label="2"></a>    <span class="fu">filterGRanges</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-label="3"></a>    <span class="fu">computeCoverage</span>() <span class="sc">|&gt;</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-label="4"></a>    <span class="fu">plotCoverage</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -940,12 +943,12 @@ Question
 <div class="callout-body-container callout-body">
 <p>Map <code>distance</code> to <code>x</code> and <code>mean</code> to <code>y</code>. Add a <code>geom_ribbon()</code> for the confidence interval (<code>ymin = ci_low</code>, <code>ymax = ci_high</code>) and a <code>geom_line()</code> for the mean.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb13-2"><a href="#cb13-2"></a>    ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(df, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
-<span id="cb13-3"><a href="#cb13-3"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: geom_ribbon() for the confidence interval</span></span>
-<span id="cb13-4"><a href="#cb13-4"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: geom_line() for the mean</span></span>
-<span id="cb13-5"><a href="#cb13-5"></a>        ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>)</span>
-<span id="cb13-6"><a href="#cb13-6"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-label="1"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb13-2"><a href="#cb13-2" aria-label="2"></a>    ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(df, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-label="3"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: geom_ribbon() for the confidence interval</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-label="4"></a>        <span class="co"># </span><span class="al">TODO</span><span class="co">: geom_line() for the mean</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-label="5"></a>        ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-label="6"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -962,16 +965,16 @@ Answer
 <div id="callout-35" class="callout-35-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb14-2"><a href="#cb14-2"></a>    ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(df, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>        ggplot2<span class="sc">::</span><span class="fu">geom_ribbon</span>(</span>
-<span id="cb14-4"><a href="#cb14-4"></a>            ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high),</span>
-<span id="cb14-5"><a href="#cb14-5"></a>            <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span></span>
-<span id="cb14-6"><a href="#cb14-6"></a>        ) <span class="sc">+</span></span>
-<span id="cb14-7"><a href="#cb14-7"></a>        ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb14-8"><a href="#cb14-8"></a>        ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>) <span class="sc">+</span></span>
-<span id="cb14-9"><a href="#cb14-9"></a>        ggplot2<span class="sc">::</span><span class="fu">theme_bw</span>()</span>
-<span id="cb14-10"><a href="#cb14-10"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-label="1"></a>plotCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb14-2"><a href="#cb14-2" aria-label="2"></a>    ggplot2<span class="sc">::</span><span class="fu">ggplot</span>(df, ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-label="3"></a>        ggplot2<span class="sc">::</span><span class="fu">geom_ribbon</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-label="4"></a>            ggplot2<span class="sc">::</span><span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-label="5"></a>            <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-label="6"></a>        ) <span class="sc">+</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-label="7"></a>        ggplot2<span class="sc">::</span><span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-label="8"></a>        ggplot2<span class="sc">::</span><span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>) <span class="sc">+</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-label="9"></a>        ggplot2<span class="sc">::</span><span class="fu">theme_bw</span>()</span>
+<span id="cb14-10"><a href="#cb14-10" aria-label="10"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1016,22 +1019,22 @@ Question
 <div class="callout-body-container callout-body">
 <p>roxygen comments start with <code>#'</code> and sit directly above the function. The first line is the title, a blank <code>#'</code> line separates blocks, and each <code>@param</code> documents one argument. Do not forget <code>@export</code> (so the function is usable) and <code>@importFrom pkg fun</code> (to declare the functions you borrow from other packages).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co">#' Import a coverage track and a set of genomic features</span></span>
-<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#'</span></span>
-<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#' Longer description of what the function does.</span></span>
-<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#'</span></span>
-<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#' @param bw_file Path to a coverage track file.</span></span>
-<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#' @param features_file Path to a features file.</span></span>
-<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#' @param width Integer. Width to resize each feature to.</span></span>
-<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#'</span></span>
-<span id="cb15-9"><a href="#cb15-9"></a><span class="co">#' @return A named list with `coverage` and `features`.</span></span>
-<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#'</span></span>
-<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#' @importFrom rtracklayer import</span></span>
-<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#' @importFrom GenomicRanges resize</span></span>
-<span id="cb15-13"><a href="#cb15-13"></a><span class="co">#' @export</span></span>
-<span id="cb15-14"><a href="#cb15-14"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
-<span id="cb15-15"><a href="#cb15-15"></a>    <span class="co"># ...</span></span>
-<span id="cb15-16"><a href="#cb15-16"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-label="1"></a><span class="co">#' Import a coverage track and a set of genomic features</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-label="2"></a><span class="co">#'</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-label="3"></a><span class="co">#' Longer description of what the function does.</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-label="4"></a><span class="co">#'</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-label="5"></a><span class="co">#' @param bw_file Path to a coverage track file.</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-label="6"></a><span class="co">#' @param features_file Path to a features file.</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-label="7"></a><span class="co">#' @param width Integer. Width to resize each feature to.</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-label="8"></a><span class="co">#'</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-label="9"></a><span class="co">#' @return A named list with `coverage` and `features`.</span></span>
+<span id="cb15-10"><a href="#cb15-10" aria-label="10"></a><span class="co">#'</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-label="11"></a><span class="co">#' @importFrom rtracklayer import</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-label="12"></a><span class="co">#' @importFrom GenomicRanges resize</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-label="13"></a><span class="co">#' @export</span></span>
+<span id="cb15-14"><a href="#cb15-14" aria-label="14"></a>importFiles <span class="ot">&lt;-</span> <span class="cf">function</span>(bw_file, features_file, width) {</span>
+<span id="cb15-15"><a href="#cb15-15" aria-label="15"></a>    <span class="co"># ...</span></span>
+<span id="cb15-16"><a href="#cb15-16" aria-label="16"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1039,7 +1042,7 @@ Question
 </div>
 <p>Once you have documented each function, you can regenerate the documentation with <code>document()</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="fu">document</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-label="1"></a><span class="fu">document</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 
 
