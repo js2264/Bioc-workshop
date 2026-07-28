@@ -447,40 +447,6 @@ dim(mat)  ## nrow = number of features, ncol = width
 
 :::
 
-::: {.callout-question .icon .callout-note}
-
-Features on the **minus** strand are read 3' -> 5' along the genome. To align
-all profiles in the same 5' -> 3' orientation, the rows corresponding to
-minus-strand features must be reversed. Do it.
-
-::: {.callout-hint .icon .callout-note}
-
-## Hint
-
-Identify minus-strand features with `strand(l$features) == "-"`, then reverse
-the column order of those rows only: `mat[is_minus, ] <- mat[is_minus, rev(seq_len(width))]`.
-
-```{r}
-is_minus <- as.logical(______(l$features) == "______")
-if (any(is_minus)) {
-    mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
-}
-```
-
-:::
-
-::: {.callout-answer .icon .callout-note collapse=true}
-
-```{r}
-is_minus <- as.logical(strand(l$features) == "-")
-if (any(is_minus)) {
-    mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
-}
-```
-
-:::
-
-:::
 
 ::: {.callout-question .icon .callout-note}
 
@@ -501,7 +467,7 @@ The `distance` column is `seq(-width/2, width/2 - 1, by = 1)`.
 computeCoverage <- function(l) {
     features <- l$features
     width <- unique(width(features))
-    mat <- # TODO: build the features x positions matrix (+ flip minus strand)
+    mat <- # TODO: build the features x positions matrix
     means <- # TODO: per-position mean
     ci <- # TODO: 1.96 * per-position sd / sqrt(n)
     data.frame(
@@ -527,12 +493,6 @@ computeCoverage <- function(l) {
         as.numeric(unlist(l$coverage[features])),
         ncol = width, byrow = TRUE
     )
-
-    ## flip minus-strand features
-    is_minus <- as.logical(strand(features) == "-")
-    if (any(is_minus)) {
-        mat[is_minus, ] <- mat[is_minus, rev(seq_len(width)), drop = FALSE]
-    }
 
     ## per-position mean and 95% CI
     n <- nrow(mat)
