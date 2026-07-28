@@ -968,7 +968,7 @@ Question
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Features on the <strong>minus</strong> strand are read 3’ -&gt; 5’ along the genome. To align all profiles in the same 5’ -&gt; 3’ orientation, the rows corresponding to minus-strand features must be reversed. Do it.</p>
+<p>Now wrap everything into a function <code>computeCoverage(l)</code> that returns a <code>data.frame</code> with one row per position and the columns <code>distance</code> (from <code>-width/2</code> to <code>width/2 - 1</code>), <code>mean</code>, <code>ci_low</code> and <code>ci_high</code> (bounds of the 95% confidence interval).</p>
 <div class="icon callout callout-style-default callout-hint callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -979,12 +979,21 @@ Question
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Identify minus-strand features with <code>strand(l$features) == "-"</code>, then reverse the column order of those rows only: <code>mat[is_minus, ] &lt;- mat[is_minus, rev(seq_len(width))]</code>.</p>
+<p>Per-position mean is <code>colMeans(mat)</code>. For a 95% CI, use <code>1.96 * sd / sqrt(n)</code>, where <code>sd</code> is <code>apply(mat, 2, sd)</code> and <code>n = nrow(mat)</code>. The <code>distance</code> column is <code>seq(-width/2, width/2 - 1, by = 1)</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">______</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="st">"______"</span>)</span>
-<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a><span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
-<span id="cb20-3"><a href="#cb20-3" aria-label="3"></a>    mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb20-4"><a href="#cb20-4" aria-label="4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-label="1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb20-2"><a href="#cb20-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
+<span id="cb20-3"><a href="#cb20-3" aria-label="3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-label="4"></a>    mat <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: build the features x positions matrix</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-label="5"></a>    means <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: per-position mean</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-label="6"></a>    ci <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: 1.96 * per-position sd / sqrt(n)</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-label="7"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb20-8"><a href="#cb20-8" aria-label="8"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
+<span id="cb20-9"><a href="#cb20-9" aria-label="9"></a>        <span class="at">mean =</span> means,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-label="10"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
+<span id="cb20-11"><a href="#cb20-11" aria-label="11"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
+<span id="cb20-12"><a href="#cb20-12" aria-label="12"></a>    )</span>
+<span id="cb20-13"><a href="#cb20-13" aria-label="13"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1001,100 +1010,32 @@ Answer
 <div id="callout-32" class="callout-32-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">strand</span>(l<span class="sc">$</span>features) <span class="sc">==</span> <span class="st">"-"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a><span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
-<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>    mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="icon callout callout-style-default callout-question callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Question
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Now wrap everything into a function <code>computeCoverage(l)</code> that returns a <code>data.frame</code> with one row per position and the columns <code>distance</code> (from <code>-width/2</code> to <code>width/2 - 1</code>), <code>mean</code>, <code>ci_low</code> and <code>ci_high</code> (bounds of the 95% confidence interval).</p>
-<div class="icon callout callout-style-default callout-hint callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Hint</span>Hint
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Per-position mean is <code>colMeans(mat)</code>. For a 95% CI, use <code>1.96 * sd / sqrt(n)</code>, where <code>sd</code> is <code>apply(mat, 2, sd)</code> and <code>n = nrow(mat)</code>. The <code>distance</code> column is <code>seq(-width/2, width/2 - 1, by = 1)</code>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb22-2"><a href="#cb22-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
-<span id="cb22-3"><a href="#cb22-3" aria-label="3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
-<span id="cb22-4"><a href="#cb22-4" aria-label="4"></a>    mat <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: build the features x positions matrix (+ flip minus strand)</span></span>
-<span id="cb22-5"><a href="#cb22-5" aria-label="5"></a>    means <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: per-position mean</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-label="6"></a>    ci <span class="ot">&lt;-</span> <span class="co"># </span><span class="al">TODO</span><span class="co">: 1.96 * per-position sd / sqrt(n)</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-label="7"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb22-8"><a href="#cb22-8" aria-label="8"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
-<span id="cb22-9"><a href="#cb22-9" aria-label="9"></a>        <span class="at">mean =</span> means,</span>
-<span id="cb22-10"><a href="#cb22-10" aria-label="10"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
-<span id="cb22-11"><a href="#cb22-11" aria-label="11"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
-<span id="cb22-12"><a href="#cb22-12" aria-label="12"></a>    )</span>
-<span id="cb22-13"><a href="#cb22-13" aria-label="13"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</div>
-</div>
-<div class="icon callout callout-style-default callout-answer callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Answer
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-35" class="callout-35-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
-<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
-<span id="cb23-3"><a href="#cb23-3" aria-label="3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
-<span id="cb23-4"><a href="#cb23-4" aria-label="4"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-label="5"></a>    <span class="do">## features x positions matrix</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-label="6"></a>    mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
-<span id="cb23-7"><a href="#cb23-7" aria-label="7"></a>        <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[features])),</span>
-<span id="cb23-8"><a href="#cb23-8" aria-label="8"></a>        <span class="at">ncol =</span> width, <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-label="9"></a>    )</span>
-<span id="cb23-10"><a href="#cb23-10" aria-label="10"></a></span>
-<span id="cb23-11"><a href="#cb23-11" aria-label="11"></a>    <span class="do">## flip minus-strand features</span></span>
-<span id="cb23-12"><a href="#cb23-12" aria-label="12"></a>    is_minus <span class="ot">&lt;-</span> <span class="fu">as.logical</span>(<span class="fu">strand</span>(features) <span class="sc">==</span> <span class="st">"-"</span>)</span>
-<span id="cb23-13"><a href="#cb23-13" aria-label="13"></a>    <span class="cf">if</span> (<span class="fu">any</span>(is_minus)) {</span>
-<span id="cb23-14"><a href="#cb23-14" aria-label="14"></a>        mat[is_minus, ] <span class="ot">&lt;-</span> mat[is_minus, <span class="fu">rev</span>(<span class="fu">seq_len</span>(width)), drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb23-15"><a href="#cb23-15" aria-label="15"></a>    }</span>
-<span id="cb23-16"><a href="#cb23-16" aria-label="16"></a></span>
-<span id="cb23-17"><a href="#cb23-17" aria-label="17"></a>    <span class="do">## per-position mean and 95% CI</span></span>
-<span id="cb23-18"><a href="#cb23-18" aria-label="18"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mat)</span>
-<span id="cb23-19"><a href="#cb23-19" aria-label="19"></a>    means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(mat, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb23-20"><a href="#cb23-20" aria-label="20"></a>    ci <span class="ot">&lt;-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">apply</span>(mat, <span class="dv">2</span>, sd, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
-<span id="cb23-21"><a href="#cb23-21" aria-label="21"></a></span>
-<span id="cb23-22"><a href="#cb23-22" aria-label="22"></a>    <span class="do">## return a clean data.frame</span></span>
-<span id="cb23-23"><a href="#cb23-23" aria-label="23"></a>    <span class="fu">data.frame</span>(</span>
-<span id="cb23-24"><a href="#cb23-24" aria-label="24"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
-<span id="cb23-25"><a href="#cb23-25" aria-label="25"></a>        <span class="at">mean =</span> means,</span>
-<span id="cb23-26"><a href="#cb23-26" aria-label="26"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
-<span id="cb23-27"><a href="#cb23-27" aria-label="27"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
-<span id="cb23-28"><a href="#cb23-28" aria-label="28"></a>    )</span>
-<span id="cb23-29"><a href="#cb23-29" aria-label="29"></a>}</span>
-<span id="cb23-30"><a href="#cb23-30" aria-label="30"></a></span>
-<span id="cb23-31"><a href="#cb23-31" aria-label="31"></a>df <span class="ot">&lt;-</span> <span class="fu">computeCoverage</span>(l)</span>
-<span id="cb23-32"><a href="#cb23-32" aria-label="32"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-label="1"></a>computeCoverage <span class="ot">&lt;-</span> <span class="cf">function</span>(l) {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-label="2"></a>    features <span class="ot">&lt;-</span> l<span class="sc">$</span>features</span>
+<span id="cb21-3"><a href="#cb21-3" aria-label="3"></a>    width <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">width</span>(features))</span>
+<span id="cb21-4"><a href="#cb21-4" aria-label="4"></a></span>
+<span id="cb21-5"><a href="#cb21-5" aria-label="5"></a>    <span class="do">## features x positions matrix</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-label="6"></a>    mat <span class="ot">&lt;-</span> <span class="fu">matrix</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-label="7"></a>        <span class="fu">as.numeric</span>(<span class="fu">unlist</span>(l<span class="sc">$</span>coverage[features])),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-label="8"></a>        <span class="at">ncol =</span> width, <span class="at">byrow =</span> <span class="cn">TRUE</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-label="9"></a>    )</span>
+<span id="cb21-10"><a href="#cb21-10" aria-label="10"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-label="11"></a>    <span class="do">## per-position mean and 95% CI</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-label="12"></a>    n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(mat)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-label="13"></a>    means <span class="ot">&lt;-</span> <span class="fu">colMeans</span>(mat, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-label="14"></a>    ci <span class="ot">&lt;-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">apply</span>(mat, <span class="dv">2</span>, sd, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-label="15"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-label="16"></a>    <span class="do">## return a clean data.frame</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-label="17"></a>    <span class="fu">data.frame</span>(</span>
+<span id="cb21-18"><a href="#cb21-18" aria-label="18"></a>        <span class="at">distance =</span> <span class="fu">seq</span>(<span class="sc">-</span>width<span class="sc">/</span><span class="dv">2</span>, width<span class="sc">/</span><span class="dv">2</span> <span class="sc">-</span> <span class="dv">1</span>, <span class="at">by =</span> <span class="dv">1</span>),</span>
+<span id="cb21-19"><a href="#cb21-19" aria-label="19"></a>        <span class="at">mean =</span> means,</span>
+<span id="cb21-20"><a href="#cb21-20" aria-label="20"></a>        <span class="at">ci_low =</span> means <span class="sc">-</span> ci,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-label="21"></a>        <span class="at">ci_high =</span> means <span class="sc">+</span> ci</span>
+<span id="cb21-22"><a href="#cb21-22" aria-label="22"></a>    )</span>
+<span id="cb21-23"><a href="#cb21-23" aria-label="23"></a>}</span>
+<span id="cb21-24"><a href="#cb21-24" aria-label="24"></a></span>
+<span id="cb21-25"><a href="#cb21-25" aria-label="25"></a>df <span class="ot">&lt;-</span> <span class="fu">computeCoverage</span>(l)</span>
+<span id="cb21-26"><a href="#cb21-26" aria-label="26"></a><span class="fu">head</span>(df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
@@ -1127,15 +1068,15 @@ Question
 <div class="callout-body-container callout-body">
 <p>Use <code>ggplot2</code>, mapping <code>distance</code> to <code>x</code> and <code>mean</code> to <code>y</code>. Add a <code>geom_ribbon(aes(ymin = ci_low, ymax = ci_high))</code> for the confidence interval and a <code>geom_line()</code> for the mean.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-label="2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> ______, <span class="at">y =</span> ______)) <span class="sc">+</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-label="3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ______, <span class="at">ymax =</span> ______), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-label="4"></a>    <span class="fu">geom_line</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-label="2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> ______, <span class="at">y =</span> ______)) <span class="sc">+</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-label="3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ______, <span class="at">ymax =</span> ______), <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-label="4"></a>    <span class="fu">geom_line</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
 <div class="icon callout callout-style-default callout-answer callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-38-contents" aria-controls="callout-38" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-35-contents" aria-controls="callout-35" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1144,15 +1085,15 @@ Answer
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-38" class="callout-38-contents callout-collapse collapse">
+<div id="callout-35" class="callout-35-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-label="2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-label="3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high), <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-label="4"></a>    <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-label="5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>) <span class="sc">+</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-label="6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-label="1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-label="2"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> distance, <span class="at">y =</span> mean)) <span class="sc">+</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-label="3"></a>    <span class="fu">geom_ribbon</span>(<span class="fu">aes</span>(<span class="at">ymin =</span> ci_low, <span class="at">ymax =</span> ci_high), <span class="at">fill =</span> <span class="st">"steelblue"</span>, <span class="at">alpha =</span> <span class="fl">0.2</span>) <span class="sc">+</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-label="4"></a>    <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"steelblue"</span>) <span class="sc">+</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-label="5"></a>    <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Distance to center (bp)"</span>, <span class="at">y =</span> <span class="st">"Mean coverage"</span>) <span class="sc">+</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-label="6"></a>    <span class="fu">theme_bw</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </div>
 </div>
